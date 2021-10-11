@@ -8,7 +8,7 @@
 		<version>2.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>study.BackendApp</groupId>
+	<groupId>main.java</groupId>
 	<artifactId>OBS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>OBS</name>
