@@ -1,4 +1,4 @@
-package study.BackendApp.OBS;
+package Backend.test.java.study.BackendApp.OBS;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package study.BackendApp.OBS;
+package main.backend.OBS;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
