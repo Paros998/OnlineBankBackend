@@ -1,6 +1,6 @@
 package com.OBS.repository;
 
-import com.OBS.auth.AppUser;
+import com.OBS.auth.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,8 @@
-package com.OBS.auth;
+package com.OBS.auth.entity;
 
+import com.OBS.auth.AppUserRole;
 import com.OBS.entity.Employee;
+import com.OBS.requestBodies.UserCredentials;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ import java.util.Collections;
 public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.AUTO
     )
     @Column(
             nullable = false,
@@ -37,19 +39,16 @@ public class AppUser implements UserDetails {
     private Boolean locked;
     private Boolean enabled;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
     private Employee employee;
 
-    public AppUser(String username,
-                   String password,
-                   String email,
-                   AppUserRole appUserRole,
+    public AppUser(UserCredentials userCredentials,
                    Boolean locked,
                    Boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.appUserRole = appUserRole;
+        this.username = userCredentials.getUsername();
+        this.password = userCredentials.getPassword();
+        this.email = userCredentials.getEmail();
+        this.appUserRole = userCredentials.getAppUserRole();
         this.locked = locked;
         this.enabled = enabled;
     }
@@ -87,6 +86,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !enabled;
+        return enabled;
     }
 }

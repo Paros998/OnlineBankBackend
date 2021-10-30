@@ -1,7 +1,7 @@
 package com.OBS.auth;
 
 public enum AppUserRole {
-    USER,
+    CLIENT,
     EMPLOYEE,
     ADMIN
 }

@@ -1,6 +1,7 @@
 package com.OBS.entity;
 
-import com.OBS.auth.AppUser;
+import com.OBS.auth.entity.AppUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,10 +21,6 @@ public class Employee implements Serializable {
     )
     private Long employeeId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private AppUser user;
-
     private String email;
     private String fullName;
     private String personalNumber;
@@ -32,6 +29,12 @@ public class Employee implements Serializable {
     private String homeAddress;
     private String city;
     private String postalCode;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private AppUser user;
+
 
     public Employee(AppUser user,
                     String fullName,
