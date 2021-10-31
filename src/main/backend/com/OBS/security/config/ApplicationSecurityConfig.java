@@ -1,6 +1,5 @@
 package com.OBS.security.config;
 
-import com.OBS.auth.AppUserRole;
 import com.OBS.service.AppUserService;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import lombok.AllArgsConstructor;
@@ -34,6 +33,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers( "/users/**").hasRole(ADMIN.name())
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
                 .anyRequest()
