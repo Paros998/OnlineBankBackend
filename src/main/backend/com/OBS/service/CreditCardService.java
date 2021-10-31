@@ -1,6 +1,7 @@
 package com.OBS.service;
 
 import com.OBS.entity.CreditCard;
+import com.OBS.repository.ClientRepository;
 import com.OBS.repository.CreditCardRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.function.Supplier;
 @AllArgsConstructor
 public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
+    private final ClientRepository clientRepository;
 
     private Supplier<IllegalStateException> handleError;
 
@@ -19,9 +21,10 @@ public class CreditCardService {
         return creditCardRepository.findAll();
     }
 
-    // TODO check if client exists
-    // TODO check if accountNumber exists
     public void addCreditCard(String accountNumber, CreditCard creditCard) {
+        if (!clientRepository.existsByAccountNumber(accountNumber)) {
+            throw new IllegalStateException("Can't find client of given account number");
+        }
         creditCardRepository.save(creditCard);
     }
 
