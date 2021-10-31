@@ -30,6 +30,7 @@ public class ClientService {
         );
     }
 
+    //TODO check for employees with same email personalNumber and Identification Number
     public void addClient(ClientUserBody body) {
         Client client = body.getClient();
         UserCredentials userCredentials = body.getUserCredentials();
@@ -46,7 +47,7 @@ public class ClientService {
         client.setUser(appUserService.createAppUser(userCredentials));
         clientRepository.save(client);
     }
-
+    //TODO check for employees with same email personalNumber and Identification Number
     @Transactional
     public void updateClient(ClientUserBody body) {
         Client newClientRecord = body.getClient();
