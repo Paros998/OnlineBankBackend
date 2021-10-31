@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @AllArgsConstructor
@@ -19,9 +20,13 @@ public class AppUserController {
         return appUserService.getUsers();
     }
 
-    @GetMapping(path = "{email}")
-    public void forgotCredentials(@PathVariable("email") String email){
-        appUserService.sendCredentialsToEmail(email);
+    @GetMapping(path = "{email}/{type}")
+    public void forgotCredentials(@PathVariable("email") String email,@PathVariable("type") String type){
+        if(Objects.equals(type, "login"))
+            appUserService.remindLoginToEmail(email);
+        else if(Objects.equals(type,"password"))
+            appUserService.resetPasswordToEmail(email);
+        else throw new IllegalStateException("Bad request type");
     }
 
     @PostMapping(path = "")
