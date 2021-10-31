@@ -30,11 +30,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and()
-                .csrf()
-                .and()
+                .csrf().disable()
+                
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*").permitAll()
-                .antMatchers("/employees/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
+                .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers( "/users/**").hasRole(ADMIN.name())
                 .anyRequest()
                 .authenticated()
