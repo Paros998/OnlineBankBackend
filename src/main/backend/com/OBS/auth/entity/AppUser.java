@@ -40,10 +40,8 @@ public class AppUser implements UserDetails {
     private Boolean locked;
     private Boolean enabled;
 
-
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
     private Employee employee;
-
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
     private Client client;
