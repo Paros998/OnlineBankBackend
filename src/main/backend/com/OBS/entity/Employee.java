@@ -32,7 +32,6 @@ public class Employee {
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JsonIgnore
     @JoinColumn(name = "user_id")
     private AppUser user;
 

@@ -30,11 +30,11 @@ public class CreditCardService {
         return creditCardRepository.findById(cardId).orElseThrow(handleError);
     }
 
-    public List<CreditCard> getClientsCreditCards(String accountNumber) {
-        if (!clientRepository.existsByAccountNumber(accountNumber)) {
-            throw new IllegalStateException("Can't find client of given account number");
+    public List<CreditCard> getClientsCreditCards(Long clientId) {
+        if (!clientRepository.existsById(clientId)) {
+            throw new IllegalStateException("Can't find client of given id");
         }
-        return creditCardRepository.findAllByAccountNumber(accountNumber);
+        return creditCardRepository.findAllByClient_clientId(clientId);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class CreditCardService {
         }
 
         client.setNumberOfCreditsCards(client.getNumberOfCreditsCards() + 1);
-        creditCard.setAccountNumber(accountNumber);
+        creditCard.setClient(client);
 
         clientRepository.save(client);
         creditCardRepository.save(creditCard);

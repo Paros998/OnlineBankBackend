@@ -1,5 +1,6 @@
 package com.OBS.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ public class CreditCard {
     private int pinNumber;
     private String cardImage;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id",nullable = false)
     private Client client;
