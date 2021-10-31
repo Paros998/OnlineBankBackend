@@ -1,8 +1,10 @@
 package com.OBS.auth.entity;
 
 import com.OBS.auth.AppUserRole;
+import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
 import com.OBS.requestBodies.UserCredentials;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,8 +40,13 @@ public class AppUser implements UserDetails {
     private Boolean locked;
     private Boolean enabled;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
     private Employee employee;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
+    private Client client;
 
     public AppUser(UserCredentials userCredentials,
                    Boolean locked,
