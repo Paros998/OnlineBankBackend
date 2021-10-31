@@ -1,6 +1,7 @@
 package com.OBS.entity;
 
 import com.OBS.auth.entity.AppUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "client")
 @Getter
 @Setter
-public class Client implements Serializable {
+public class Client {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -37,6 +38,7 @@ public class Client implements Serializable {
     private Integer numberOfCreditsCards;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private AppUser user;
 

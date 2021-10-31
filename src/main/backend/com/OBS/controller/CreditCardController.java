@@ -13,14 +13,14 @@ import java.util.List;
 public class CreditCardController {
     private final CreditCardService creditCardService;
 
-    @GetMapping(path = "")
-    public List<CreditCard> getCreditCards() {
-       return creditCardService.getCreditCards();
-    }
-
     @GetMapping(path = "{id}")
     public CreditCard getCreditCard(@PathVariable("id") Long cardId) {
         return creditCardService.getCreditCard(cardId);
+    }
+
+    @GetMapping(path = "{accountNumber}")
+    public List<CreditCard> getClientsCreditCards(@PathVariable("accountNumber") String accountNumber) {
+        return creditCardService.getClientsCreditCards(accountNumber);
     }
 
     @PostMapping(path = "{accountNumber}")

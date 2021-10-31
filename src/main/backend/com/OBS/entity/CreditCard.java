@@ -22,7 +22,7 @@ public class CreditCard {
     private Long cardId;
     private String accountNumber;
     private Boolean isActive;
-    private String number;
+    private String cardNumber;
     private LocalDate expireDate;
     private int cvvNumber;
     private int pinNumber;

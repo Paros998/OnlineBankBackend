@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "employees")
-public class Employee implements Serializable {
+public class Employee {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -32,6 +32,7 @@ public class Employee implements Serializable {
 
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private AppUser user;
 
