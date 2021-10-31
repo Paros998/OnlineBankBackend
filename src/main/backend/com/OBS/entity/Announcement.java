@@ -19,12 +19,7 @@ public class Announcement {
             updatable = false
     )
     private Long announcementID;
-
     private String announcement;
 
     public Announcement() {}
-
-    public Announcement(String text) {
-        this.announcement = text;
-    }
 }

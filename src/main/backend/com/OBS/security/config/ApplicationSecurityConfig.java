@@ -31,11 +31,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic()
                 .and()
                 .csrf().disable()
-                
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers( "/users/**").hasRole(ADMIN.name())
+                .antMatchers("/announcements/**").hasRole(ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
