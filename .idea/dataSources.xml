@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/bankingApp</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="cloudDataBase" uuid="608d9467-1de7-401e-891c-f19cf4693ea1">
+    <data-source source="LOCAL" name="d32qiiqvd12je2@ec2-63-33-239-176.eu-west-1.compute.amazonaws.com" uuid="3ea24ffe-117d-4be5-9de2-e97f62d68965">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
