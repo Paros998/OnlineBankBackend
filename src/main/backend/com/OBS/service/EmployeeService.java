@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class EmployeeService {
@@ -67,18 +66,18 @@ public class EmployeeService {
         }
         Employee currentEmployeeRecord = employeeRepository.getById(newEmployeeRecord.getEmployeeId());
 
-        if(!currentEmployeeRecord.getPersonalNumber().equals(newEmployeeRecord.getPersonalNumber()))
+        if (!currentEmployeeRecord.getPersonalNumber().equals(newEmployeeRecord.getPersonalNumber()))
             if (employeeRepository.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())) {
                 throw new IllegalStateException("This Personal Number is already taken!");
             }
-        if(!currentEmployeeRecord.getIdentificationNumber().equals(newEmployeeRecord.getIdentificationNumber()))
+        if (!currentEmployeeRecord.getIdentificationNumber().equals(newEmployeeRecord.getIdentificationNumber()))
             if (employeeRepository.existsByIdentificationNumber(newEmployeeRecord.getIdentificationNumber())) {
                 throw new IllegalStateException("This Identification Number is already taken!");
             }
 
         appUserService.updateAppUser(currentEmployeeRecord.getUser().getUserId(), newUserCredentials);
 
-        if(!newUserCredentials.getEmail().isEmpty() && !newUserCredentials.getEmail().equals(currentEmployeeRecord.getEmail()))
+        if (!newUserCredentials.getEmail().isEmpty() && !newUserCredentials.getEmail().equals(currentEmployeeRecord.getEmail()))
             newEmployeeRecord.setEmail(newUserCredentials.getEmail());
 
         newEmployeeRecord.setUser(currentEmployeeRecord.getUser());

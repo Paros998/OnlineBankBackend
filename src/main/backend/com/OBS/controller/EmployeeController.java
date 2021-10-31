@@ -2,7 +2,6 @@ package com.OBS.controller;
 
 import com.OBS.entity.Employee;
 import com.OBS.requestBodies.EmployeeUserBody;
-import com.OBS.requestBodies.UserCredentials;
 import com.OBS.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

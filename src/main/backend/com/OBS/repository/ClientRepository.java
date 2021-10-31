@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client,Long> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findAllByFullNameAndPersonalNumber(String fullName, String personalNumber);
 
     boolean existsByPersonalNumber(String personalNumber);
+
     boolean existsByIdentificationNumber(String IdentificationNumber);
 
     boolean existsByAccountNumber(String accountNumber);

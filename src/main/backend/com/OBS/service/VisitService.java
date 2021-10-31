@@ -12,7 +12,7 @@ public class VisitService {
 
     public Visit getVisit(Long id) {
         return visitRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Visit by given id:" + id +" doesn't exists in database")
+                () -> new IllegalStateException("Visit by given id:" + id + " doesn't exists in database")
         );
     }
 

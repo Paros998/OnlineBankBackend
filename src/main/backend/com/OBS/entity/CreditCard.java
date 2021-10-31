@@ -31,7 +31,7 @@ public class CreditCard {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id",nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
 

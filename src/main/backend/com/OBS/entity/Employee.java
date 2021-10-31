@@ -4,7 +4,6 @@ import com.OBS.auth.entity.AppUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -31,7 +30,7 @@ public class Employee {
     private String postalCode;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private AppUser user;
 

@@ -5,16 +5,15 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import static com.OBS.auth.AppUserRole.ADMIN;
 import static com.OBS.auth.AppUserRole.EMPLOYEE;
-import static com.OBS.auth.AppUserRole.CLIENT;
 
 @Configuration
 @EnableEncryptableProperties
@@ -34,7 +33,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .antMatchers( "/users/**").hasRole(ADMIN.name())
+                .antMatchers("/users/**").hasRole(ADMIN.name())
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
                 .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
@@ -50,7 +49,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
         provider.setUserDetailsService(appUserService);

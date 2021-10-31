@@ -23,18 +23,18 @@ public class EmailService {
 
     @Async
     public void send(String to, String email) {
-        try{
+        try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper =
-                    new MimeMessageHelper(mimeMessage,"utf-8");
-            helper.setText(email,true);
+                    new MimeMessageHelper(mimeMessage, "utf-8");
+            helper.setText(email, true);
             helper.setTo(to);
             helper.setSubject("Remember your login credentials");
             helper.setFrom("noreply.future.bank@gmail.com");
             mailSender.send(mimeMessage);
-        }catch (MessagingException e){
-            LOGGER.error("failed to send email",e);
-            throw  new IllegalStateException("failed to send email");
+        } catch (MessagingException e) {
+            LOGGER.error("failed to send email", e);
+            throw new IllegalStateException("failed to send email");
         }
     }
 

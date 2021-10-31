@@ -16,26 +16,26 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @GetMapping(path = "")
-    public List<AppUser> getUsers(){
+    public List<AppUser> getUsers() {
         return appUserService.getUsers();
     }
 
     @GetMapping(path = "{email}/{type}")
-    public void forgotCredentials(@PathVariable("email") String email,@PathVariable("type") String type){
-        if(Objects.equals(type, "login"))
+    public void forgotCredentials(@PathVariable("email") String email, @PathVariable("type") String type) {
+        if (Objects.equals(type, "login"))
             appUserService.remindLoginToEmail(email);
-        else if(Objects.equals(type,"password"))
+        else if (Objects.equals(type, "password"))
             appUserService.resetPasswordToEmail(email);
         else throw new IllegalStateException("Bad request type");
     }
 
     @PostMapping(path = "")
-    public void addUser(@RequestBody UserCredentials userCredentials){
+    public void addUser(@RequestBody UserCredentials userCredentials) {
         appUserService.createAppUser(userCredentials);
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteUser(@PathVariable("id") Long id){
+    public void deleteUser(@PathVariable("id") Long id) {
         appUserService.deleteUserById(id);
     }
 
