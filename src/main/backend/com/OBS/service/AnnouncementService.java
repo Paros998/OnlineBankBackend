@@ -33,4 +33,11 @@ public class AnnouncementService {
         oldAnnouncement.setAnnouncement(announcement.getAnnouncement());
         announcementRepository.save(oldAnnouncement);
     }
+
+    public void deleteAnnouncement(Long id) {
+        if (!announcementRepository.existsById(id)) {
+            throw new IllegalStateException("Can't find announcement of given id");
+        }
+        announcementRepository.deleteById(id);
+    }
 }
