@@ -36,7 +36,9 @@ public class EmployeeService {
     }
 
     public Employee getEmployee(Long id) {
-        return employeeRepository.findById(id).orElseThrow(IllegalAccessError::new);
+        return employeeRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("Employee with given id " + id + "doesn't exists in database")
+        );
     }
 
     public void addEmployee(EmployeeUserBody body) {
