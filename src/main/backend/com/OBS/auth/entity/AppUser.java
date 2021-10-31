@@ -23,7 +23,7 @@ import java.util.Collections;
 public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.AUTO
+            strategy = GenerationType.IDENTITY
     )
     @Column(
             nullable = false,
