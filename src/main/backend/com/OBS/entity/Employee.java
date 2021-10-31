@@ -30,7 +30,7 @@ public class Employee implements Serializable {
     private String city;
     private String postalCode;
 
-    @JsonIgnore
+
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private AppUser user;
