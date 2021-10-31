@@ -27,4 +27,15 @@ public class CreditCard {
     private int cvvNumber;
     private int pinNumber;
     private String cardImage;
+
+    public Client getManyToOne() {
+        return manyToOne;
+    }
+
+    public void setManyToOne(Client manyToOne) {
+        this.manyToOne = manyToOne;
+    }
+
+    @ManyToOne
+    private Client manyToOne;
 }

@@ -23,7 +23,7 @@ public class Client implements Serializable {
     private Long clientId;
     private String email;
     private String fullName;
-    //TODO add @OneToMany
+
     private String accountNumber;
     private Float balance;
     private String personalNumber;

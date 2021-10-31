@@ -15,7 +15,7 @@ public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
     private final ClientRepository clientRepository;
 
-    private Supplier<IllegalStateException> handleError;
+    private final Supplier<IllegalStateException> handleError;
 
     public List<CreditCard> getCreditCards() {
         return creditCardRepository.findAll();
