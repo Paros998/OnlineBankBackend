@@ -68,7 +68,7 @@ public class AppUserService implements UserDetailsService {
             Random random = new Random();
             AppUser appUser = appUserRepository.getByEmail(email);
             StringBuilder newPassword = new StringBuilder();
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 25; i++)
                 newPassword.append( (char) (random.nextInt(87) + 33));
 
             appUser.setPassword(bCryptPasswordEncoder.encode(newPassword.toString()));
