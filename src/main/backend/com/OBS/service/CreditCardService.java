@@ -15,7 +15,10 @@ public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
     private final ClientRepository clientRepository;
 
-    private final Supplier<IllegalStateException> handleError;
+    private final Supplier<IllegalStateException> handleError = () -> {
+        String errorMessage = "Can't find credit card of given account number";
+        return new IllegalStateException(errorMessage);
+    };
 
     public List<CreditCard> getCreditCards() {
         return creditCardRepository.findAll();

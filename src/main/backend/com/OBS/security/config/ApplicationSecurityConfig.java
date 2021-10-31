@@ -36,6 +36,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers( "/users/**").hasRole(ADMIN.name())
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
+                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
