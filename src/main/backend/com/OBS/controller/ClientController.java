@@ -1,9 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Client;
-import com.OBS.entity.Employee;
 import com.OBS.requestBodies.ClientUserBody;
-import com.OBS.requestBodies.EmployeeUserBody;
 import com.OBS.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

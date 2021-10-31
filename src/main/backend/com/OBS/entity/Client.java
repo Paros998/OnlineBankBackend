@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -40,7 +38,7 @@ public class Client {
     private Integer numberOfCreditsCards;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private AppUser user;
 

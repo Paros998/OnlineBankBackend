@@ -21,5 +21,6 @@ public class Announcement {
     private Long announcementID;
     private String announcement;
 
-    public Announcement() {}
+    public Announcement() {
+    }
 }

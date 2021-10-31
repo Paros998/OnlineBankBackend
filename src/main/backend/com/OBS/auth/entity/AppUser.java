@@ -4,7 +4,6 @@ import com.OBS.auth.AppUserRole;
 import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
 import com.OBS.requestBodies.UserCredentials;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,10 +40,10 @@ public class AppUser implements UserDetails {
     private Boolean locked;
     private Boolean enabled;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private Employee employee;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private Client client;
 
     public AppUser(UserCredentials userCredentials,

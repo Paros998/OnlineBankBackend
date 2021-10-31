@@ -21,7 +21,7 @@ public class ClientService {
     }
 
     public List<Client> getClients(String fullName, String personalNumber) {
-        return clientRepository.findAllByFullNameAndPersonalNumber(fullName,personalNumber);
+        return clientRepository.findAllByFullNameAndPersonalNumber(fullName, personalNumber);
     }
 
     public Client getClient(Long id) {
@@ -41,40 +41,41 @@ public class ClientService {
         if (clientRepository.existsByIdentificationNumber(client.getIdentificationNumber())) {
             throw new IllegalStateException("This Identification Number is already taken!");
         }
-        if(clientRepository.existsByAccountNumber(client.getAccountNumber())){
+        if (clientRepository.existsByAccountNumber(client.getAccountNumber())) {
             throw new IllegalStateException("This Account Number is already taken!");
         }
         client.setUser(appUserService.createAppUser(userCredentials));
         clientRepository.save(client);
     }
+
     //TODO check for employees with same email personalNumber and Identification Number
     @Transactional
     public void updateClient(ClientUserBody body) {
         Client newClientRecord = body.getClient();
         UserCredentials newUserCredentials = body.getUserCredentials();
-        if(clientRepository.existsById(newClientRecord.getClientId())){
+        if (clientRepository.existsById(newClientRecord.getClientId())) {
             throw new IllegalStateException("Client with given id:" + newClientRecord.getClientId() + " doesn't exists in database");
         }
         Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());
 
-        if(!currentClientRecord.getPersonalNumber().equals(newClientRecord.getPersonalNumber())){
-            if(clientRepository.existsByPersonalNumber(newClientRecord.getPersonalNumber()))
+        if (!currentClientRecord.getPersonalNumber().equals(newClientRecord.getPersonalNumber())) {
+            if (clientRepository.existsByPersonalNumber(newClientRecord.getPersonalNumber()))
                 throw new IllegalStateException("This Personal Number is already taken!");
         }
 
-        if(!currentClientRecord.getIdentificationNumber().equals(newClientRecord.getIdentificationNumber())){
-            if(clientRepository.existsByIdentificationNumber(newClientRecord.getIdentificationNumber()))
+        if (!currentClientRecord.getIdentificationNumber().equals(newClientRecord.getIdentificationNumber())) {
+            if (clientRepository.existsByIdentificationNumber(newClientRecord.getIdentificationNumber()))
                 throw new IllegalStateException("This Identification Number is already taken!");
         }
 
-        if(!currentClientRecord.getAccountNumber().equals(newClientRecord.getAccountNumber())){
-            if(clientRepository.existsByAccountNumber(newClientRecord.getAccountNumber()))
+        if (!currentClientRecord.getAccountNumber().equals(newClientRecord.getAccountNumber())) {
+            if (clientRepository.existsByAccountNumber(newClientRecord.getAccountNumber()))
                 throw new IllegalStateException("This Account Number is already taken!");
         }
 
-        appUserService.updateAppUser(currentClientRecord.getUser().getUserId(),newUserCredentials);
+        appUserService.updateAppUser(currentClientRecord.getUser().getUserId(), newUserCredentials);
 
-        if(!newUserCredentials.getEmail().isEmpty() && !newUserCredentials.getEmail().equals(currentClientRecord.getEmail()))
+        if (!newUserCredentials.getEmail().isEmpty() && !newUserCredentials.getEmail().equals(currentClientRecord.getEmail()))
             newClientRecord.setEmail(newUserCredentials.getEmail());
 
         newClientRecord.setUser(currentClientRecord.getUser());

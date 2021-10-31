@@ -47,37 +47,36 @@ public class AppUserService implements UserDetailsService {
     }
 
     public List<AppUser> getUsers() {
-        return  appUserRepository.findAll();
+        return appUserRepository.findAll();
     }
 
-    public void remindLoginToEmail(String email){
-        if(appUserRepository.existsByEmail(email)){
+    public void remindLoginToEmail(String email) {
+        if (appUserRepository.existsByEmail(email)) {
             AppUser appUser = appUserRepository.getByEmail(email);
 
             emailService.send(
                     appUser.getEmail(),
                     emailTemplateForLoginReminder(appUser.getUsername()));
 
-        }else
+        } else
             throw new IllegalStateException("User with given email doesn't exist!");
     }
 
     @Transactional
-    public void resetPasswordToEmail(String email){
-        if(appUserRepository.existsByEmail(email)){
+    public void resetPasswordToEmail(String email) {
+        if (appUserRepository.existsByEmail(email)) {
             Random random = new Random();
             AppUser appUser = appUserRepository.getByEmail(email);
             StringBuilder newPassword = new StringBuilder();
             for (int i = 0; i < 25; i++)
-                newPassword.append( (char) (random.nextInt(87) + 33));
+                newPassword.append((char) (random.nextInt(87) + 33));
 
             appUser.setPassword(bCryptPasswordEncoder.encode(newPassword.toString()));
 
             emailService.send(
                     appUser.getEmail(),
-                    emailTemplateForPasswordReset(appUser.getUsername(), newPassword.toString() ));
-        }
-        else
+                    emailTemplateForPasswordReset(appUser.getUsername(), newPassword.toString()));
+        } else
             throw new IllegalStateException("User with given email doesn't exist!");
 
     }
@@ -87,17 +86,17 @@ public class AppUserService implements UserDetailsService {
         AppUser appUser = appUserRepository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, userCredentials.getUsername()))
         );
-        if(!appUser.getEmail().equals(userCredentials.getEmail()))
+        if (!appUser.getEmail().equals(userCredentials.getEmail()))
             if (appUserRepository.existsByEmail(userCredentials.getEmail())) {
                 throw new IllegalStateException("This email is already taken!");
             }
-        if(!appUser.getUsername().equals(userCredentials.getUsername()))
+        if (!appUser.getUsername().equals(userCredentials.getUsername()))
             if (appUserRepository.existsByUsername(userCredentials.getUsername())) {
                 throw new IllegalStateException("This username is already taken!");
             }
         if (!userCredentials.getUsername().isEmpty())
             appUser.setUsername(userCredentials.getUsername());
-        if (!userCredentials.getPassword().isEmpty()){
+        if (!userCredentials.getPassword().isEmpty()) {
             userCredentials.setPassword(bCryptPasswordEncoder.encode(userCredentials.getPassword()));
             appUser.setPassword(userCredentials.getPassword());
         }
@@ -109,11 +108,12 @@ public class AppUserService implements UserDetailsService {
 
     public void deleteUserById(Long id) {
         AppUser appUser = appUserRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("User with given id "+id+" doesn't exist in database!")
+                () -> new IllegalStateException("User with given id " + id + " doesn't exist in database!")
         );
         appUserRepository.deleteById(id);
     }
-    private String emailTemplateForPasswordReset(String login,String password){
+
+    private String emailTemplateForPasswordReset(String login, String password) {
         return "<!DOCTYPE html>\n" +
                 "\n" +
                 "<html lang=\"en\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:v=\"urn:schemas-microsoft-com:vml\">\n" +
@@ -213,8 +213,8 @@ public class AppUserService implements UserDetailsService {
                 "                                            <td>\n" +
                 "                                                <div style=\"font-family: sans-serif\">\n" +
                 "                                                    <div style=\"font-size: 12px; mso-line-height-alt: 18px; color: #f7f7f7; line-height: 1.5; font-family: Varela Round, Trebuchet MS, Helvetica, sans-serif;\">\n" +
-                "                                                        <p style=\"margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;\"><span style=\"font-size:14px;\">Login:"+ login +"</span></p>\n" +
-                "                                                        <p style=\"margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;\"><span style=\"font-size:14px;\">Password:"+ password + "</span></p>\n" +
+                "                                                        <p style=\"margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;\"><span style=\"font-size:14px;\">Login:" + login + "</span></p>\n" +
+                "                                                        <p style=\"margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;\"><span style=\"font-size:14px;\">Password:" + password + "</span></p>\n" +
                 "                                                    </div>\n" +
                 "                                                </div>\n" +
                 "                                            </td>\n" +
@@ -329,7 +329,8 @@ public class AppUserService implements UserDetailsService {
                 "</body>\n" +
                 "</html>";
     }
-    private String emailTemplateForLoginReminder(String login){
+
+    private String emailTemplateForLoginReminder(String login) {
         return "<!DOCTYPE html>\n" +
                 "\n" +
                 "<html lang=\"en\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:v=\"urn:schemas-microsoft-com:vml\">\n" +
@@ -429,7 +430,7 @@ public class AppUserService implements UserDetailsService {
                 "                                            <td>\n" +
                 "                                                <div style=\"font-family: sans-serif\">\n" +
                 "                                                    <div style=\"font-size: 12px; mso-line-height-alt: 18px; color: #f7f7f7; line-height: 1.5; font-family: Varela Round, Trebuchet MS, Helvetica, sans-serif;\">\n" +
-                "                                                        <p style=\"margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;\"><span style=\"font-size:14px;\">Login:"+ login +"</span></p>\n" +
+                "                                                        <p style=\"margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;\"><span style=\"font-size:14px;\">Login:" + login + "</span></p>\n" +
                 "                                                    </div>\n" +
                 "                                                </div>\n" +
                 "                                            </td>\n" +
