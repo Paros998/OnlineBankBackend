@@ -41,6 +41,7 @@ public class EmployeeService {
         );
     }
 
+    //TODO check for client with same email personalNumber and Identification Number
     public void addEmployee(EmployeeUserBody body) {
         Employee employee = body.getEmployee();
         UserCredentials userCredentials = body.getUserCredentials();
@@ -56,6 +57,7 @@ public class EmployeeService {
 
     }
 
+    //TODO check for clients with same email personalNumber and Identification Number
     @Transactional
     public void updateEmployee(EmployeeUserBody body) {
         Employee newEmployeeRecord = body.getEmployee();

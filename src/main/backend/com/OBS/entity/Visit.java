@@ -5,12 +5,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
+@Entity
+@Table(name = "visits")
 @Getter
 @Setter
-@Entity
-@Table(name = "credit_cards")
-public class CreditCard {
+public class Visit {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -19,18 +20,14 @@ public class CreditCard {
             nullable = false,
             updatable = false
     )
-    private Long cardId;
-
+    private Long visit_id;
+    private LocalDate visitDate;
+    private LocalTime visitTime;
+    private String establishment;
     private Boolean isActive;
-    private String cardNumber;
-    private LocalDate expireDate;
-    private int cvvNumber;
-    private int pinNumber;
-    private String cardImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id",nullable = false)
-    private Client client;
-
+    @JoinColumn(name = "employeeId")
+    private Employee employee;
 
 }

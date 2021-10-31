@@ -4,9 +4,11 @@ import com.OBS.auth.entity.AppUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -37,6 +39,7 @@ public class Client {
     private String secPostalCode;
     private Integer numberOfCreditsCards;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "user_id")

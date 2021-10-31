@@ -30,7 +30,7 @@ public class Employee {
     private String city;
     private String postalCode;
 
-
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "user_id")
