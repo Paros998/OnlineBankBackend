@@ -1,1 +1,1 @@
-web: java -cp target/classes/;target/dependency/* com.OBS.ObsApplication --server.port=$PORT
+web: java -cp target/classes:target/dependency/* com.OBS.ObsApplication --server.port=$PORT
