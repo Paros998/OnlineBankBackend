@@ -1,1 +1,1 @@
-web: java -cp $JAVA_OPTS target/classes/ com.OBS.ObsApplication
+web: java -cp $JAVA_OPTS target/classes/com/OBS/ObsApplication.class
