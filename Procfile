@@ -1,1 +1,1 @@
-web: java -cp target/classes/ com.OBS.ObsApplication.class
+web: java -cp target/classes/ com.OBS.ObsApplication
