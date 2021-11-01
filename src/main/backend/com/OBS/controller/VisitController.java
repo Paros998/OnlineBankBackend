@@ -21,4 +21,5 @@ public class VisitController {
         visitService.addVisit(visit);
     }
 
+    //TODO add rest of endpoints
 }
