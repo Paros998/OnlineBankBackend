@@ -5,6 +5,8 @@ import com.OBS.repository.VisitRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class VisitService {
@@ -18,5 +20,9 @@ public class VisitService {
 
     public void addVisit(Visit visit) {
 
+    }
+
+    public List<Visit> getVisits() {
+        return visitRepository.findAll();
     }
 }
