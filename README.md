@@ -1,6 +1,6 @@
 # This Backend Bank App is hosted on heroku on url:
 
-## https://pip-backend-server.herokuapp.com/login
+## https://pip-backend-server.herokuapp.com
 
 # OnlineBankSystem
 ## This is not a commercial project!
