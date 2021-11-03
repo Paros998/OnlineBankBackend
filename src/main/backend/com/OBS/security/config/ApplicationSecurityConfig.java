@@ -18,6 +18,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 
 import static com.OBS.auth.AppUserRole.ADMIN;
 import static com.OBS.auth.AppUserRole.EMPLOYEE;
@@ -35,34 +38,30 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http    .httpBasic()
-                    .and()
-                .cors()
-                    .and()
-                .csrf().disable()
-
+        http.cors().and().httpBasic()
+                .and()
+                .csrf()
+                .and()
                 .authorizeRequests()
-                    .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").permitAll()
-                    .antMatchers(HttpMethod.PATCH,"/users/**").anonymous()
-                    .antMatchers(HttpMethod.POST,"/visits/**").anonymous()
-                    .antMatchers(HttpMethod.GET,
-                                "/dictionary/clients/",
-                                "/dictionary/credit-cards",
-                                "/dictionary/orders",
-                                "/dictionary/visits").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
-                    .antMatchers(HttpMethod.GET,"/dictionary/**").hasRole(ADMIN.name())
-                    .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                    .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                    .antMatchers("/users/**").hasRole(ADMIN.name())
-                    .antMatchers("/announcements/**").hasRole(ADMIN.name())
-                    .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                    .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                    .and()
-                .formLogin()
-                    .permitAll()
-                    .and()
-                .logout()
-                    .permitAll();
+                .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").permitAll()
+                .antMatchers(HttpMethod.PATCH,"/users/{type}").permitAll()
+                .antMatchers(HttpMethod.POST,"/visits/").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/dictionary/clients/",
+                        "/dictionary/credit-cards",
+                        "/dictionary/orders",
+                        "/dictionary/visits").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
+                .antMatchers(HttpMethod.GET,"/dictionary/**").hasRole(ADMIN.name())
+                .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/users/**").hasRole(ADMIN.name())
+                .antMatchers("/announcements/**").hasRole(ADMIN.name())
+                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin();
     }
 
     @Override
