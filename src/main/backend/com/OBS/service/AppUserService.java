@@ -49,7 +49,9 @@ public class AppUserService implements UserDetailsService {
     public List<AppUser> getUsers() {
         return appUserRepository.findAll();
     }
-
+    public AppUser getUser(Long id) { return appUserRepository.findById(id).orElseThrow(
+            () -> new IllegalStateException("User with given id doesn't exist!")
+    );}
     public void remindLoginToEmail(String email) {
         if (appUserRepository.existsByEmail(email)) {
             AppUser appUser = appUserRepository.getByEmail(email);
@@ -545,5 +547,6 @@ public class AppUserService implements UserDetailsService {
                 "</body>\n" +
                 "</html>";
     }
+
 
 }

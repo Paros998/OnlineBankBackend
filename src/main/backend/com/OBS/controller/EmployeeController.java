@@ -18,11 +18,6 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping
-    public List<Employee> getEmployees() {
-        return employeeService.getEmployees();
-    }
-
     @GetMapping(path = "?{fullName}&?{personalNumber}")
     public List<Employee> getEmployeesSorted(@PathVariable String fullName, @PathVariable String personalNumber) {
         return employeeService.getEmployees(fullName, personalNumber);

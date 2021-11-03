@@ -13,11 +13,6 @@ import java.util.List;
 public class AnnouncementController {
     private final AnnouncementService announcementService;
 
-    @GetMapping(path = "")
-    public List<Announcement> getAnnouncements() {
-        return announcementService.getAnnouncements();
-    }
-
     @GetMapping(path = "{id}")
     public Announcement getAnnouncement(@PathVariable("id") Long id) {
         return announcementService.getAnnouncement(id);
