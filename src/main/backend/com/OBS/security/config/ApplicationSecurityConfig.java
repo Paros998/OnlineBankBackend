@@ -38,14 +38,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().httpBasic()
+        http    .httpBasic()
                 .and()
-                .csrf()
+                .cors()
                 .and()
+                .csrf().disable()
+
                 .authorizeRequests()
-                .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").permitAll()
-                .antMatchers(HttpMethod.PATCH,"/users/{type}").permitAll()
-                .antMatchers(HttpMethod.POST,"/visits/").permitAll()
+                .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").anonymous()
+                .antMatchers(HttpMethod.PATCH,"/users/**").anonymous()
+                .antMatchers(HttpMethod.POST,"/visits/**").anonymous()
                 .antMatchers(HttpMethod.GET,
                         "/dictionary/clients/",
                         "/dictionary/credit-cards",
@@ -58,10 +60,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
                 .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .anyRequest()
-                .authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
     }
 
     @Override
