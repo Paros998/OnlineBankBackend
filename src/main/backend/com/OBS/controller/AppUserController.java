@@ -15,13 +15,13 @@ import java.util.Objects;
 public class AppUserController {
     private final AppUserService appUserService;
 
-    @GetMapping(path = "")
-    public List<AppUser> getUsers() {
-        return appUserService.getUsers();
+    @GetMapping(path = "{id}")
+    public AppUser getUser(@PathVariable("id") Long id) {
+        return appUserService.getUser(id);
     }
 
-    @GetMapping(path = "{email}/{type}")
-    public void forgotCredentials(@PathVariable("email") String email, @PathVariable("type") String type) {
+    @PatchMapping(path = "{type}")
+    public void forgotCredentials(@RequestBody String email, @PathVariable("type") String type) {
         if (Objects.equals(type, "login"))
             appUserService.remindLoginToEmail(email);
         else if (Objects.equals(type, "password"))

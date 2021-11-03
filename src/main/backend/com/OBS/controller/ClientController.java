@@ -14,11 +14,6 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
-    @GetMapping
-    public List<Client> getClients() {
-        return clientService.getClients();
-    }
-
     @GetMapping(path = "?{fullName}&?{personalNumber}")
     public List<Client> getClientsSorted(@PathVariable String fullName, @PathVariable String personalNumber) {
         return clientService.getClients(fullName, personalNumber);

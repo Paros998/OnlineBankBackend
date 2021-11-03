@@ -19,7 +19,7 @@ public class VisitService {
     }
 
     public void addVisit(Visit visit) {
-
+        visitRepository.save(visit);
     }
 
     public List<Visit> getVisits() {

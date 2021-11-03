@@ -50,6 +50,10 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findAll();
     }
 
+    public AppUser getUser(Long id) { return appUserRepository.findById(id).orElseThrow(
+            () -> new IllegalStateException("User with given id doesn't exist!")
+    );}
+
     public void remindLoginToEmail(String email) {
         if (appUserRepository.existsByEmail(email)) {
             AppUser appUser = appUserRepository.getByEmail(email);
@@ -59,7 +63,7 @@ public class AppUserService implements UserDetailsService {
                     emailTemplateForLoginReminder(appUser.getUsername()));
 
         } else
-            throw new IllegalStateException("User with given email doesn't exist!");
+            throw new IllegalStateException("User with given email: "+ email + " doesn't exist!");
     }
 
     @Transactional
@@ -545,5 +549,6 @@ public class AppUserService implements UserDetailsService {
                 "</body>\n" +
                 "</html>";
     }
+
 
 }
