@@ -37,4 +37,8 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    public Order(){
+
+    }
 }
