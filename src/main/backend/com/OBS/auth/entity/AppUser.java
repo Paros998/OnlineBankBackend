@@ -19,7 +19,6 @@ import java.util.Collections;
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class AppUser implements UserDetails {
@@ -56,6 +55,8 @@ public class AppUser implements UserDetails {
         this.locked = locked;
         this.enabled = enabled;
     }
+
+    public AppUser(){}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

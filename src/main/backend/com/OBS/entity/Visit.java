@@ -30,4 +30,5 @@ public class Visit {
     @JoinColumn(name = "employeeId")
     private Employee employee;
 
+    public Visit(){}
 }
