@@ -22,7 +22,7 @@ public class Visit {
     )
     private Long visit_id;
     private LocalDate visitDate;
-    private LocalTime visitTime;
+    private String visitTime;
     private String establishment;
     private Boolean isActive;
 
