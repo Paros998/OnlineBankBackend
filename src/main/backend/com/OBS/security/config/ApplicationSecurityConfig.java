@@ -18,12 +18,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 
 import static com.OBS.auth.AppUserRole.ADMIN;
 import static com.OBS.auth.AppUserRole.EMPLOYEE;
+import static com.OBS.auth.AppUserRole.CLIENT;
 
 @Configuration
 @EnableEncryptableProperties
