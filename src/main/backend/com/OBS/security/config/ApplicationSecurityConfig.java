@@ -1,5 +1,7 @@
 package com.OBS.security.config;
 
+import com.OBS.auth.formLogin.FormLoginUsernameAndPasswordAuthenticationFilter;
+import com.OBS.auth.jwt.JwtTokenVerifier;
 import com.OBS.service.AppUserService;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import io.swagger.v3.oas.models.ExternalDocumentation;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -36,16 +39,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http    .httpBasic()
-                .and()
-                .cors()
+        http.cors()
                 .and()
                 .csrf().disable()
-
+                .formLogin()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(new FormLoginUsernameAndPasswordAuthenticationFilter(authenticationManager()))
+                .addFilterAfter(new JwtTokenVerifier(),FormLoginUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-
                 .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").permitAll()
-
                 .antMatchers(HttpMethod.PATCH,"/users/**").anonymous()
                 .antMatchers(HttpMethod.POST,"/visits/**").anonymous()
                 .antMatchers(HttpMethod.GET,
@@ -61,11 +65,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .and()
-                .formLogin()
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+                .httpBasic();
     }
 
     @Override
