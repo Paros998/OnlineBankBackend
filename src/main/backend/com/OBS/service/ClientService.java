@@ -15,7 +15,7 @@ import java.util.List;
 public class ClientService {
     private final ClientRepository clientRepository;
     private final AppUserService appUserService;
-    private final EmployeeService employeeService;
+    private final ClientEmployeeService clientEmployeeService;
 
     public List<Client> getClients() {
         return clientRepository.findAll();
@@ -35,11 +35,11 @@ public class ClientService {
         Client client = body.getClient();
         UserCredentials userCredentials = body.getUserCredentials();
 
-        if(employeeService.existsByPersonalNumber(client.getPersonalNumber())){
+        if (clientEmployeeService.existsByPersonalNumber(client.getPersonalNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
-        if(employeeService.existsByIdentificationNumber(client.getIdentificationNumber())){
+        if (clientEmployeeService.existsByIdentificationNumber(client.getIdentificationNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
@@ -65,11 +65,11 @@ public class ClientService {
         }
         Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());
 
-        if(employeeService.existsByPersonalNumber(newClientRecord.getPersonalNumber())){
+        if (clientEmployeeService.existsByPersonalNumber(newClientRecord.getPersonalNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
-        if(employeeService.existsByIdentificationNumber(newClientRecord.getIdentificationNumber())){
+        if (clientEmployeeService.existsByIdentificationNumber(newClientRecord.getIdentificationNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
@@ -107,16 +107,8 @@ public class ClientService {
 
     public Long getClientIdByUserId(Long appUserId) {
         Client client = clientRepository.getByUser(appUserService.getUser(appUserId));
-        if(client == null)
+        if (client == null)
             return null;
         else return client.getClientId();
-    }
-
-    public boolean existsByPersonalNumber(String personalNumber) {
-        return clientRepository.existsByPersonalNumber(personalNumber);
-    }
-
-    public boolean existsByIdentificationNumber(String identificationNumber) {
-        return clientRepository.existsByIdentificationNumber(identificationNumber);
     }
 }

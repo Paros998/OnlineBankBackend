@@ -1,11 +1,9 @@
 package com.OBS.security.config;
 
 import com.OBS.auth.formLogin.FormLoginUsernameAndPasswordAuthenticationFilter;
-import com.OBS.auth.formLogin.RelationshipSearcher;
 import com.OBS.auth.jwt.JwtTokenVerifier;
 import com.OBS.service.AppUserService;
-import com.OBS.service.ClientService;
-import com.OBS.service.EmployeeService;
+import com.OBS.service.RelationshipSearcher;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -27,7 +25,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static com.OBS.auth.AppUserRole.ADMIN;
 import static com.OBS.auth.AppUserRole.EMPLOYEE;
-import static com.OBS.auth.AppUserRole.CLIENT;
 
 @Configuration
 @EnableEncryptableProperties
@@ -51,29 +48,29 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new FormLoginUsernameAndPasswordAuthenticationFilter(authenticationManager(), appUserService,relationshipSearcher))
-                .addFilterAfter(new JwtTokenVerifier(),FormLoginUsernameAndPasswordAuthenticationFilter.class)
+                .addFilter(new FormLoginUsernameAndPasswordAuthenticationFilter(authenticationManager(), appUserService, relationshipSearcher))
+                .addFilterAfter(new JwtTokenVerifier(), FormLoginUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").permitAll()
-                .antMatchers(HttpMethod.PATCH,"/users/**").anonymous()
-                .antMatchers(HttpMethod.POST,"/visits/**").anonymous()
+                .antMatchers("/index", "/css/*", "/js/*", "/swagger-ui.html").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/users/**").anonymous()
+                .antMatchers(HttpMethod.POST, "/visits/**").anonymous()
                 .antMatchers(HttpMethod.GET,
                         "/dictionary/clients/",
                         "/dictionary/credit-cards",
                         "/dictionary/orders",
-                        "/dictionary/visits").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
-                .antMatchers(HttpMethod.GET,"/dictionary/**").hasRole(ADMIN.name())
+                        "/dictionary/visits").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.GET, "/dictionary/**").hasRole(ADMIN.name())
                 .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/users/**").hasRole(ADMIN.name())
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
                 .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                ;
+        ;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
@@ -84,6 +81,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(appUserService);
         return provider;
     }
+
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
@@ -91,6 +89,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .pathsToMatch("/**")
                 .build();
     }
+
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()

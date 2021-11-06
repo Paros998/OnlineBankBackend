@@ -1,24 +1,21 @@
 package com.OBS.service;
 
-import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
 import com.OBS.repository.EmployeeRepository;
 import com.OBS.requestBodies.EmployeeUserBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final AppUserService appUserService;
-    private final ClientService clientService;
+    private final ClientEmployeeService clientEmployeeService;
 
     public List<Employee> getEmployees() {
         return employeeRepository.findAll();
@@ -41,11 +38,11 @@ public class EmployeeService {
         Employee employee = body.getEmployee();
         UserCredentials userCredentials = body.getUserCredentials();
 
-        if(clientService.existsByPersonalNumber(employee.getPersonalNumber())){
+        if (clientEmployeeService.existsByPersonalNumber(employee.getPersonalNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
-        if(clientService.existsByIdentificationNumber(employee.getIdentificationNumber())){
+        if (clientEmployeeService.existsByIdentificationNumber(employee.getIdentificationNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
@@ -69,11 +66,11 @@ public class EmployeeService {
         }
         Employee currentEmployeeRecord = employeeRepository.getById(newEmployeeRecord.getEmployeeId());
 
-        if(clientService.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())){
+        if (clientEmployeeService.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
-        if(clientService.existsByIdentificationNumber(newEmployeeRecord.getIdentificationNumber())){
+        if (clientEmployeeService.existsByIdentificationNumber(newEmployeeRecord.getIdentificationNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
         }
 
@@ -104,16 +101,8 @@ public class EmployeeService {
 
     public Long getEmployeeByUserId(Long appUserId) {
         Employee employee = employeeRepository.getByUser(appUserService.getUser(appUserId));
-        if(employee == null)
+        if (employee == null)
             return null;
         else return employee.getEmployeeId();
-    }
-
-    public boolean existsByPersonalNumber(String personalNumber) {
-        return employeeRepository.existsByPersonalNumber(personalNumber);
-    }
-
-    public boolean existsByIdentificationNumber(String identificationNumber) {
-        return employeeRepository.existsByIdentificationNumber(identificationNumber);
     }
 }

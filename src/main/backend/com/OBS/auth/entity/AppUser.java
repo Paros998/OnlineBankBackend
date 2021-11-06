@@ -6,7 +6,6 @@ import com.OBS.entity.Employee;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,7 +55,8 @@ public class AppUser implements UserDetails {
         this.enabled = enabled;
     }
 
-    public AppUser(){}
+    public AppUser() {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

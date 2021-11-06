@@ -1,14 +1,11 @@
 package com.OBS.controller;
 
 import com.OBS.auth.entity.AppUser;
-import com.OBS.entity.Client;
-import com.OBS.entity.Employee;
 import com.OBS.requestBodies.UserCredentials;
 import com.OBS.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @RestController

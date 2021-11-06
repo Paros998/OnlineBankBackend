@@ -5,8 +5,6 @@ import com.OBS.service.AnnouncementService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "/announcements")
 @AllArgsConstructor

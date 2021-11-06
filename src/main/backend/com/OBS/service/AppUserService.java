@@ -50,9 +50,11 @@ public class AppUserService implements UserDetailsService {
         return appUserRepository.findAll();
     }
 
-    public AppUser getUser(Long id) { return appUserRepository.findById(id).orElseThrow(
-            () -> new IllegalStateException("User with given id doesn't exist!")
-    );}
+    public AppUser getUser(Long id) {
+        return appUserRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("User with given id doesn't exist!")
+        );
+    }
 
     public AppUser getUser(String username) {
         return appUserRepository.getByUsername(username);
