@@ -21,7 +21,7 @@ public class Visit {
             updatable = false
     )
     private Long visit_id;
-    private LocalDate visitDate;
+    private String visitDate;
     private String visitTime;
     private String establishment;
     private Boolean isActive;

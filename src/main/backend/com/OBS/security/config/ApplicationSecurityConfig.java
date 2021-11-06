@@ -44,6 +44,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .formLogin()
                 .and()
+                .httpBasic()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new FormLoginUsernameAndPasswordAuthenticationFilter(authenticationManager()))
@@ -64,8 +66,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
                 .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .and()
-                .httpBasic();
+                ;
     }
 
     @Override
