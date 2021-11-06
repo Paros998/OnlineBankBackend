@@ -1,8 +1,11 @@
 package com.OBS.security.config;
 
 import com.OBS.auth.formLogin.FormLoginUsernameAndPasswordAuthenticationFilter;
+import com.OBS.auth.formLogin.RelationshipSearcher;
 import com.OBS.auth.jwt.JwtTokenVerifier;
 import com.OBS.service.AppUserService;
+import com.OBS.service.ClientService;
+import com.OBS.service.EmployeeService;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -30,11 +33,11 @@ import static com.OBS.auth.AppUserRole.CLIENT;
 @EnableEncryptableProperties
 @AllArgsConstructor
 @EnableWebSecurity
-
 @EnableWebMvc
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AppUserService appUserService;
+    private final RelationshipSearcher relationshipSearcher;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -48,7 +51,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new FormLoginUsernameAndPasswordAuthenticationFilter(authenticationManager()))
+                .addFilter(new FormLoginUsernameAndPasswordAuthenticationFilter(authenticationManager(), appUserService,relationshipSearcher))
                 .addFilterAfter(new JwtTokenVerifier(),FormLoginUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*","/swagger-ui.html").permitAll()

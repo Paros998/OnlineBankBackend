@@ -1,37 +1,34 @@
 package com.OBS.service;
 
+import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
 import com.OBS.repository.EmployeeRepository;
 import com.OBS.requestBodies.EmployeeUserBody;
 import com.OBS.requestBodies.UserCredentials;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final AppUserService appUserService;
-
-    @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository,
-                           AppUserService appUserService) {
-        this.employeeRepository = employeeRepository;
-        this.appUserService = appUserService;
-    }
+    private final ClientService clientService;
 
     public List<Employee> getEmployees() {
         return employeeRepository.findAll();
     }
 
     public List<Employee> getEmployees(String fullName, String personalNumber) {
-        return employeeRepository.findAllByFullNameAndPersonalNumber(fullName, personalNumber);
-//        List<Employee> employeeList = employeeRepository.findAll();
-//        employeeList.removeIf(e -> !Objects.equals(e.getFullName(), fullName));
-//        employeeList.removeIf(e -> !Objects.equals(e.getPersonalNumber(),personalNumber));
-//        return  employeeList;
+        List<Employee> employeeList = employeeRepository.findAll();
+        employeeList.removeIf(e -> !e.getFullName().contains(fullName));
+        employeeList.removeIf(e -> !e.getPersonalNumber().startsWith(personalNumber));
+        return employeeList;
     }
 
     public Employee getEmployee(Long id) {
@@ -40,10 +37,17 @@ public class EmployeeService {
         );
     }
 
-    //TODO check for client with same email personalNumber and Identification Number
     public void addEmployee(EmployeeUserBody body) {
         Employee employee = body.getEmployee();
         UserCredentials userCredentials = body.getUserCredentials();
+
+        if(clientService.existsByPersonalNumber(employee.getPersonalNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
+
+        if(clientService.existsByIdentificationNumber(employee.getIdentificationNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
 
         if (employeeRepository.existsByPersonalNumber(employee.getPersonalNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
@@ -56,7 +60,6 @@ public class EmployeeService {
 
     }
 
-    //TODO check for clients with same email personalNumber and Identification Number
     @Transactional
     public void updateEmployee(EmployeeUserBody body) {
         Employee newEmployeeRecord = body.getEmployee();
@@ -65,6 +68,14 @@ public class EmployeeService {
             throw new IllegalStateException("Employee with given id:" + newEmployeeRecord.getEmployeeId() + " doesnt exist in database!");
         }
         Employee currentEmployeeRecord = employeeRepository.getById(newEmployeeRecord.getEmployeeId());
+
+        if(clientService.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
+
+        if(clientService.existsByIdentificationNumber(newEmployeeRecord.getIdentificationNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
 
         if (!currentEmployeeRecord.getPersonalNumber().equals(newEmployeeRecord.getPersonalNumber()))
             if (employeeRepository.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())) {
@@ -89,5 +100,20 @@ public class EmployeeService {
         if (employeeRepository.existsById(id))
             employeeRepository.deleteById(id);
         else throw new IllegalStateException("Employee with given id:" + id + " doesnt exist in database!");
+    }
+
+    public Long getEmployeeByUserId(Long appUserId) {
+        Employee employee = employeeRepository.getByUser(appUserService.getUser(appUserId));
+        if(employee == null)
+            return null;
+        else return employee.getEmployeeId();
+    }
+
+    public boolean existsByPersonalNumber(String personalNumber) {
+        return employeeRepository.existsByPersonalNumber(personalNumber);
+    }
+
+    public boolean existsByIdentificationNumber(String identificationNumber) {
+        return employeeRepository.existsByIdentificationNumber(identificationNumber);
     }
 }

@@ -1,6 +1,8 @@
 package com.OBS.controller;
 
 import com.OBS.auth.entity.AppUser;
+import com.OBS.entity.Client;
+import com.OBS.entity.Employee;
 import com.OBS.requestBodies.UserCredentials;
 import com.OBS.service.AppUserService;
 import lombok.AllArgsConstructor;

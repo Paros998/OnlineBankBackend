@@ -44,6 +44,7 @@ public class CreditCardService {
         }
 
         Client client = clientRepository.findByAccountNumber(accountNumber);
+
         // TODO move logic to clientService
         if (client.getNumberOfCreditsCards() == null) {
             client.setNumberOfCreditsCards(0);
