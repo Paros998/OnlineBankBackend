@@ -28,22 +28,34 @@ public class DictionaryController {
     }
 
     @GetMapping(path = "/users")
-    public List<AppUser> getAppUsers(){return appUserService.getUsers();}
+    public List<AppUser> getAppUsers() {
+        return appUserService.getUsers();
+    }
 
     @GetMapping(path = "/clients")
-    public List<Client> getClients(){return clientService.getClients();}
+    public List<Client> getClients() {
+        return clientService.getClients();
+    }
 
     @GetMapping(path = "/employees")
-    public List<Employee> getEmployees(){return employeeService.getEmployees();}
+    public List<Employee> getEmployees() {
+        return employeeService.getEmployees();
+    }
 
     @GetMapping(path = "/announcements")
-    public List<Announcement> getAnnouncements(){return announcementService.getAnnouncements();}
+    public List<Announcement> getAnnouncements() {
+        return announcementService.getAnnouncements();
+    }
 
     @GetMapping(path = "/visits")
-    public List<Visit> getVisits(){return visitService.getVisits();}
+    public List<Visit> getVisits() {
+        return visitService.getVisits();
+    }
 
     @GetMapping(path = "/orders")
-    public List<Order> getOrders(){return orderService.getOrders();}
+    public List<Order> getOrders() {
+        return orderService.getOrders();
+    }
 
 
     // TODO add rest of get endpoints when entities are implemented

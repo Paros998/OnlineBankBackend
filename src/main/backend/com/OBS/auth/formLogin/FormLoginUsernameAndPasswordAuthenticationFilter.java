@@ -1,8 +1,7 @@
 package com.OBS.auth.formLogin;
 
 import com.OBS.service.AppUserService;
-import com.OBS.service.ClientService;
-import com.OBS.service.EmployeeService;
+import com.OBS.service.RelationshipSearcher;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
@@ -46,28 +45,34 @@ public class FormLoginUsernameAndPasswordAuthenticationFilter extends UsernamePa
             return this.getAuthenticationManager().authenticate(authRequest);
         }
     }
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-        String key = "someStringHashToHaveReallyGoodSecurityOverHereSoNoOneWithAmateurSkillsWouldn'tHackThis";
-        String username = this.obtainUsername(request);
+        try{
+            String key = "someStringHashToHaveReallyGoodSecurityOverHereSoNoOneWithAmateurSkillsWouldn'tHackThis";
+            String username = this.obtainUsername(request);
 
-        Long appUserId = appUserService.getUser(username).getUserId();
-        Long userID = relationshipSearcher.searchIdByAppUserId(appUserId);
+            Long appUserId = appUserService.getUser(username).getUserId();
+            Long userID = relationshipSearcher.searchIdByAppUserId(appUserId);
 
-        if(userID == null)
-            throw new IllegalStateException("User not assigned to any clients or employees!");
+            if (userID == null)
+                throw new IllegalStateException("User not assigned to any clients or employees!");
 
-        String token = Jwts.builder()
-                .setSubject(authResult.getName())
-                .claim("authorities", authResult.getAuthorities())
-                .claim("userId",userID)
-                .setIssuedAt(new Date())
-                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
-                .signWith(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
-                .compact();
+            String token = Jwts.builder()
+                    .setSubject(authResult.getName())
+                    .claim("authorities", authResult.getAuthorities())
+                    .claim("userId", userID)
+                    .setIssuedAt(new Date())
+                    .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
+                    .signWith(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
+                    .compact();
 
-        response.addHeader("Authorization","Bearer " + token);
-
+            response.addHeader("Authorization", "Bearer " + token);
+        }catch (Exception e){
+           if(e.equals(new IOException(e.getMessage())))
+            throw new IOException(e.getMessage());
+           else throw new ServletException(e.getMessage());
+        }
     }
 }

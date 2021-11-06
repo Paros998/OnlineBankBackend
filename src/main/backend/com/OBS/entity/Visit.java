@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "visits")
@@ -27,8 +25,9 @@ public class Visit {
     private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employeeId")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    public Visit(){}
+    public Visit() {
+    }
 }

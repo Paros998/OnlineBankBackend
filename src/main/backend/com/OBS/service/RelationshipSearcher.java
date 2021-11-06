@@ -1,7 +1,5 @@
-package com.OBS.auth.formLogin;
+package com.OBS.service;
 
-import com.OBS.service.ClientService;
-import com.OBS.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,7 @@ public class RelationshipSearcher {
     public Long searchIdByAppUserId(Long appUserId) {
         Long resultId = clientService.getClientIdByUserId(appUserId);
 
-        if(resultId == null){
+        if (resultId == null) {
             resultId = employeeService.getEmployeeByUserId(appUserId);
         }
         return resultId;
