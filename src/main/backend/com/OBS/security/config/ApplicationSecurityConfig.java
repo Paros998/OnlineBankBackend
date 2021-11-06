@@ -23,8 +23,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static com.OBS.auth.AppUserRole.ADMIN;
-import static com.OBS.auth.AppUserRole.EMPLOYEE;
+import static com.OBS.auth.AppUserRole.*;
 
 @Configuration
 @EnableEncryptableProperties
@@ -61,12 +60,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/dictionary/visits").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET, "/dictionary/**").hasRole(ADMIN.name())
                 .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.GET, "/clients/{id}").hasRole(CLIENT.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/users/**").hasRole(ADMIN.name())
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
-                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-        ;
+                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name());
     }
 
     @Override
