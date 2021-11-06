@@ -1,5 +1,6 @@
 package com.OBS.repository;
 
+import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     boolean existsByPersonalNumber(String personalNumber);
 
     boolean existsByIdentificationNumber(String identificationNumber);
+
+    Employee getByUser(AppUser user);
 }

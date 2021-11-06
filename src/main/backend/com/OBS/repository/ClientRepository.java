@@ -1,10 +1,12 @@
 package com.OBS.repository;
 
+import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
@@ -19,4 +21,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     boolean existsByEmail(String email);
 
     Client findByAccountNumber(String accountNumber);
+
+    Client getByUser(AppUser user);
 }

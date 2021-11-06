@@ -18,7 +18,7 @@ public class CreditCardController {
         return creditCardService.getCreditCard(cardId);
     }
 
-    @GetMapping(path = "{clientId}")
+    @GetMapping(path = "client/{clientId}")
     public List<CreditCard> getClientsCreditCards(@PathVariable("clientId") Long clientId) {
         return creditCardService.getClientsCreditCards(clientId);
     }

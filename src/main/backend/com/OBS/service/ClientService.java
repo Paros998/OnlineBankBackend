@@ -15,6 +15,7 @@ import java.util.List;
 public class ClientService {
     private final ClientRepository clientRepository;
     private final AppUserService appUserService;
+    private final EmployeeService employeeService;
 
     public List<Client> getClients() {
         return clientRepository.findAll();
@@ -30,10 +31,17 @@ public class ClientService {
         );
     }
 
-    //TODO check for employees with same email personalNumber and Identification Number
     public void addClient(ClientUserBody body) {
         Client client = body.getClient();
         UserCredentials userCredentials = body.getUserCredentials();
+
+        if(employeeService.existsByPersonalNumber(client.getPersonalNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
+
+        if(employeeService.existsByIdentificationNumber(client.getIdentificationNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
 
         if (clientRepository.existsByPersonalNumber(client.getPersonalNumber())) {
             throw new IllegalStateException("This Personal Number is already taken!");
@@ -48,7 +56,6 @@ public class ClientService {
         clientRepository.save(client);
     }
 
-    //TODO check for employees with same email personalNumber and Identification Number
     @Transactional
     public void updateClient(ClientUserBody body) {
         Client newClientRecord = body.getClient();
@@ -57,6 +64,14 @@ public class ClientService {
             throw new IllegalStateException("Client with given id:" + newClientRecord.getClientId() + " doesn't exists in database");
         }
         Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());
+
+        if(employeeService.existsByPersonalNumber(newClientRecord.getPersonalNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
+
+        if(employeeService.existsByIdentificationNumber(newClientRecord.getIdentificationNumber())){
+            throw new IllegalStateException("This Personal Number is already taken!");
+        }
 
         if (!currentClientRecord.getPersonalNumber().equals(newClientRecord.getPersonalNumber())) {
             if (clientRepository.existsByPersonalNumber(newClientRecord.getPersonalNumber()))
@@ -88,5 +103,20 @@ public class ClientService {
             throw new IllegalStateException("Can't find announcement of given id");
         }
         clientRepository.deleteById(id);
+    }
+
+    public Long getClientIdByUserId(Long appUserId) {
+        Client client = clientRepository.getByUser(appUserService.getUser(appUserId));
+        if(client == null)
+            return null;
+        else return client.getClientId();
+    }
+
+    public boolean existsByPersonalNumber(String personalNumber) {
+        return clientRepository.existsByPersonalNumber(personalNumber);
+    }
+
+    public boolean existsByIdentificationNumber(String identificationNumber) {
+        return clientRepository.existsByIdentificationNumber(identificationNumber);
     }
 }

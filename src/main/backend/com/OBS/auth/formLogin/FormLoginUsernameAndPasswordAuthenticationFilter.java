@@ -1,5 +1,8 @@
 package com.OBS.auth.formLogin;
 
+import com.OBS.service.AppUserService;
+import com.OBS.service.ClientService;
+import com.OBS.service.EmployeeService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
@@ -24,6 +27,8 @@ import java.util.Date;
 @Getter
 public class FormLoginUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final AppUserService appUserService;
+    private final RelationshipSearcher relationshipSearcher;
     private final boolean postOnly = true;
 
     @Override
@@ -45,10 +50,18 @@ public class FormLoginUsernameAndPasswordAuthenticationFilter extends UsernamePa
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         String key = "someStringHashToHaveReallyGoodSecurityOverHereSoNoOneWithAmateurSkillsWouldn'tHackThis";
+        String username = this.obtainUsername(request);
+
+        Long appUserId = appUserService.getUser(username).getUserId();
+        Long userID = relationshipSearcher.searchIdByAppUserId(appUserId);
+
+        if(userID == null)
+            throw new IllegalStateException("User not assigned to any clients or employees!");
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
+                .claim("userId",userID)
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(1)))
                 .signWith(Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8)))
