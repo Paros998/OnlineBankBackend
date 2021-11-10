@@ -23,14 +23,14 @@ public class CreditCardController {
         return creditCardService.getClientsCreditCards(clientId);
     }
 
-    @PostMapping(path = "{accountNumber}")
-    public void addCreditCard(@PathVariable("accountNumber") String accountNumber, @RequestBody CreditCard creditCard) {
-        creditCardService.addCreditCard(accountNumber, creditCard);
+    @PostMapping(path = "{clientId}")
+    public void addCreditCard(@PathVariable("clientId") Long clientId, @RequestBody CreditCard creditCard) {
+        creditCardService.addCreditCard(clientId, creditCard);
     }
 
-    @PutMapping(path = "{id}")
-    public void switchActiveStateOfCreditCard(@PathVariable("id") Long cardId, @RequestBody CreditCard creditCard) {
-        creditCardService.switchActiveStateOfCreditCard(cardId, creditCard);
+    @PutMapping(path = "{id}/active")
+    public void switchActiveStateOfCreditCard(@PathVariable("id") Long cardId) {
+        creditCardService.switchActiveStateOfCreditCard(cardId);
     }
 
     @DeleteMapping(path = "{id}")

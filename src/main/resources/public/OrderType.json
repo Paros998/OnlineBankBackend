@@ -1,0 +1,12 @@
+{
+  "OrderTypes": ["Edycja danych klienta",
+    "Utworzenie użytkownika",
+    "Modyfikacja użytkownika",
+    "Modyfikacja danych pracownika",
+    "Zablokowanie karty kredytowej",
+    "Odblokowanie karty kredytowej",
+    "Wyrób nowej karty kredytowej",
+    "Wycofajnie karty kredytowej",
+    "Podanie o kredyt"
+  ]
+}

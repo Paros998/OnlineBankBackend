@@ -16,10 +16,18 @@ public class VisitController {
         return visitService.getVisit(id);
     }
 
-    @PostMapping(path = "")
+    @PostMapping()
     public void addVisit(@RequestBody Visit visit) {
         visitService.addVisit(visit);
     }
 
-    //TODO add rest of endpoints
+    @PutMapping(path = "{id}/took-place")
+    public void updateVisit(@PathVariable("id") Long id){
+        visitService.setInactive(id);
+    }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteVisit(@PathVariable Long id){
+        visitService.deleteVisit(id);
+    }
 }

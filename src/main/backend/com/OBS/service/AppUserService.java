@@ -66,7 +66,9 @@ public class AppUserService implements UserDetailsService {
 
             emailService.send(
                     appUser.getEmail(),
-                    emailTemplateForLoginReminder(appUser.getUsername()));
+                    emailTemplateForLoginReminder(appUser.getUsername()),
+                    "Remember your login credentials"
+            );
 
         } else
             throw new IllegalStateException("User with given email doesn't exist!");
@@ -85,7 +87,9 @@ public class AppUserService implements UserDetailsService {
 
             emailService.send(
                     appUser.getEmail(),
-                    emailTemplateForPasswordReset(appUser.getUsername(), newPassword.toString()));
+                    emailTemplateForPasswordReset(appUser.getUsername(), newPassword.toString()),
+                    "Remember your login credentials"
+            );
         } else
             throw new IllegalStateException("User with given email doesn't exist!");
 

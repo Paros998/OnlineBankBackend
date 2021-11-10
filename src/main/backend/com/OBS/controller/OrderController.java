@@ -1,9 +1,9 @@
 package com.OBS.controller;
 
+import com.OBS.entity.Order;
 import com.OBS.service.OrderService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/orders")
@@ -11,5 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
     private final OrderService orderService;
 
-    //TODO add endpoints
+    @GetMapping(path = "{orderId}")
+    public Order getOrder(@PathVariable Long orderId){return orderService.getOrder(orderId);}
+
+    @PostMapping()
+    public void addOrder(@RequestBody Order order){
+        orderService.addOrder(order);
+    }
+
+    @PutMapping(path = "{orderId}")
+    public void finishOrder(@PathVariable Long orderId){
+        orderService.setInactive(orderId);
+    }
+
+    @DeleteMapping(path = "{orderId}")
+    public void deleteOrder(@PathVariable Long orderId){
+        orderService.deleteOrder(orderId);
+    }
 }
