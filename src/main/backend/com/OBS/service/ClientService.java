@@ -3,12 +3,16 @@ package com.OBS.service;
 import com.OBS.entity.Client;
 import com.OBS.repository.ClientRepository;
 import com.OBS.requestBodies.ClientUserBody;
+import com.OBS.requestBodies.NameAndPersonalNumBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
+
+import static com.OBS.enums.TransferType.*;
 
 @Service
 @AllArgsConstructor
@@ -21,8 +25,12 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getClients(String fullName, String personalNumber) {
-        return clientRepository.findAllByFullNameAndPersonalNumber(fullName, personalNumber);
+    public List<Client> getClients(NameAndPersonalNumBody body) {
+        String fullName = body.getFullName();
+        String personalNumber = body.getPersonalNumber();
+        List<Client> clients = clientRepository.findAll();
+        clients.removeIf(client -> !client.getFullName().contains(fullName) && !client.getPersonalNumber().startsWith(personalNumber));
+        return clients;
     }
 
     public Client getClient(Long id) {
@@ -30,6 +38,26 @@ public class ClientService {
                 () -> new IllegalStateException("Client with given id " + id + "doesn't exists in database")
         );
     }
+
+    public Client getClientOrNull(Long id) {
+        if (clientRepository.existsById(id))
+            return clientRepository.getById(id);
+        else return null;
+    }
+
+    public Long getClientIdByUserId(Long appUserId) {
+        Client client = clientRepository.getByUser(appUserService.getUser(appUserId));
+        if (client == null)
+            return null;
+        else return client.getClientId();
+    }
+
+    public Client getClientByAccountNumber(String accountNumber) {
+        if(clientRepository.existsByAccountNumber(accountNumber)){
+            return clientRepository.findByAccountNumber(accountNumber);
+        }else return null;
+    }
+
 
     public void addClient(ClientUserBody body) {
         Client client = body.getClient();
@@ -53,6 +81,7 @@ public class ClientService {
             throw new IllegalStateException("This Account Number is already taken!");
         }
         client.setUser(appUserService.createAppUser(userCredentials));
+        client.setDateOfCreation(LocalDate.now());
         clientRepository.save(client);
     }
 
@@ -100,15 +129,33 @@ public class ClientService {
 
     public void deleteClient(Long id) {
         if (!clientRepository.existsById(id)) {
-            throw new IllegalStateException("Can't find announcement of given id");
+            throw new IllegalStateException("Can't find client of given id");
         }
         clientRepository.deleteById(id);
     }
 
-    public Long getClientIdByUserId(Long appUserId) {
-        Client client = clientRepository.getByUser(appUserService.getUser(appUserId));
-        if (client == null)
-            return null;
-        else return client.getClientId();
+    @Transactional
+    public void setNumOfCreditCards(Long clientId, String type) {
+        Client client = clientRepository.findById(clientId).orElseThrow(
+                () -> new IllegalStateException("Client with given id " + clientId + "doesn't exists in database")
+        );
+
+        if (client.getNumberOfCreditsCards() == null)
+            client.setNumberOfCreditsCards(0);
+
+        if (type.equals("increment"))
+            client.setNumberOfCreditsCards(client.getNumberOfCreditsCards() + 1);
+        else client.setNumberOfCreditsCards(client.getNumberOfCreditsCards() - 1);
+        clientRepository.save(client);
+    }
+
+    @Transactional
+    public void updateClientBalance(Client client, Float amount, String type) {
+        if(type.equals(INCOMING.name()))
+            client.setBalance(client.getBalance() + amount);
+        else client.setBalance(client.getBalance() - amount);
+
+        clientRepository.save(client);
     }
 }
+

@@ -14,6 +14,7 @@ import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,7 @@ import static com.OBS.auth.AppUserRole.*;
 @AllArgsConstructor
 @EnableWebSecurity
 @EnableWebMvc
+@EnableScheduling
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AppUserService appUserService;
@@ -51,20 +53,51 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(), FormLoginUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*", "/swagger-ui.html").permitAll()
-                .antMatchers(HttpMethod.PATCH, "/users/**").anonymous()
-                .antMatchers(HttpMethod.POST, "/visits/**").anonymous()
+
                 .antMatchers(HttpMethod.GET,
                         "/dictionary/clients/",
                         "/dictionary/credit-cards",
-                        "/dictionary/orders",
-                        "/dictionary/visits").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                        "/dictionary/orders/employees",
+                        "/dictionary/visits",
+                        "/dictionary/announcements",
+                        "/dictionary/transfers",
+                        "/dictionary/cyclical-transfers",
+                        "/dictionary/loans",
+                        "/dictionary/loans-rates").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET, "/dictionary/**").hasRole(ADMIN.name())
-                .antMatchers("/employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .antMatchers(HttpMethod.GET, "/clients/{id}").hasRole(CLIENT.name())
-                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+
+                .antMatchers(HttpMethod.POST, "/visits/**").anonymous()
+                .antMatchers("/visits/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
+
+                .antMatchers(HttpMethod.PATCH, "/users/**").anonymous()
                 .antMatchers("/users/**").hasRole(ADMIN.name())
+
+                .antMatchers(HttpMethod.GET, "/employees/{id}").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
+                .antMatchers("/employees/**").hasAnyRole(ADMIN.name())
+
+                .antMatchers(HttpMethod.GET, "/clients/{id}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
-                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name());
+
+                .antMatchers(HttpMethod.GET,"/credit-cards/client/{clientId}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+
+                .antMatchers(HttpMethod.GET,"/transfers/client/{clientId}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.POST,"/transfers/**").hasRole(CLIENT.name())
+                .antMatchers("/transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+
+                .antMatchers(HttpMethod.DELETE,"/cyclical-transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+                .antMatchers("/cyclical-transfers/**").hasRole(CLIENT.name())
+
+                .antMatchers(HttpMethod.PATCH,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.DELETE,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.POST,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.PATCH,"/loans/pay-rate/{clientId}").hasRole(CLIENT.name())
+                .antMatchers(HttpMethod.GET,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+
+                .antMatchers(HttpMethod.GET,"/loans-rates/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+        ;
     }
 
     @Override

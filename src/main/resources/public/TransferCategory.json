@@ -1,0 +1,13 @@
+{
+  "Categories": ["Wynagrodzenie",
+    "Rachunki",
+    "Wydatki Bieżące",
+    "Rozrywka",
+    "Zdrowie",
+    "Inne"
+  ],
+  "Types": [
+    "Przychody",
+    "Wydatki"
+  ]
+}

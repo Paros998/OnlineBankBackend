@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 @AllArgsConstructor
 public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
 
     private final Supplier<IllegalStateException> handleError = () -> {
         String errorMessage = "Can't find credit card of given id";
@@ -31,41 +31,37 @@ public class CreditCardService {
     }
 
     public List<CreditCard> getClientsCreditCards(Long clientId) {
-        if (!clientRepository.existsById(clientId)) {
-            throw new IllegalStateException("Can't find client of given id");
-        }
-        return creditCardRepository.findAllByClient_clientId(clientId);
+        Client client = clientService.getClient(clientId);
+        return creditCardRepository.findAllByClient_clientId(client.getClientId());
     }
 
     @Transactional
-    public void addCreditCard(String accountNumber, CreditCard creditCard) {
-        if (!clientRepository.existsByAccountNumber(accountNumber)) {
-            throw new IllegalStateException("Can't find client of given account number");
-        }
+    public void addCreditCard(Long clientId, CreditCard creditCard) {
 
-        Client client = clientRepository.findByAccountNumber(accountNumber);
+        clientService.setNumOfCreditCards(clientId,"increment");
 
-        // TODO move logic to clientService
-        if (client.getNumberOfCreditsCards() == null) {
-            client.setNumberOfCreditsCards(0);
-        }
+        Client client = clientService.getClient(clientId);
 
-        client.setNumberOfCreditsCards(client.getNumberOfCreditsCards() + 1);
         creditCard.setClient(client);
 
-        clientRepository.save(client);
         creditCardRepository.save(creditCard);
     }
 
-    public void switchActiveStateOfCreditCard(Long cardId, CreditCard creditCard) {
+    @Transactional
+    public void switchActiveStateOfCreditCard(Long cardId) {
         CreditCard oldCreditCard = creditCardRepository.findById(cardId).orElseThrow(handleError);
-        oldCreditCard.setIsActive(creditCard.getIsActive());
+        oldCreditCard.setIsActive(!oldCreditCard.getIsActive());
+        creditCardRepository.save(oldCreditCard);
     }
 
     public void deleteCreditCard(Long cardId) {
         if (!creditCardRepository.existsById(cardId)) {
             throw handleError.get();
         }
+        CreditCard creditCard = creditCardRepository.getById(cardId);
+        Client client = clientService.getClient(creditCard.getClient().getClientId());
+        clientService.setNumOfCreditCards(client.getClientId(),"decrement");
+
         creditCardRepository.deleteById(cardId);
     }
 }

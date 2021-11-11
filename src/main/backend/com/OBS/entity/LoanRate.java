@@ -7,11 +7,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "credit_cards")
-public class CreditCard {
+@Table(name = "loan_rates")
+public class LoanRate {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -20,22 +20,20 @@ public class CreditCard {
             nullable = false,
             updatable = false
     )
-    private Long cardId;
-
-    private Boolean isActive;
-    private String cardNumber;
-    private LocalDate expireDate;
-    private int cvvNumber;
-    private int pinNumber;
-    //TODO change to actual image someday
-    private String cardImage;
+    private Long rateId;
+    private Float amount;
+    private LocalDate payDate;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    @JoinColumn(name = "loan_id", nullable = false)
+    private Loan loan;
 
-    public CreditCard() {
-
+    public LoanRate( Loan loan) {
+        this.amount = loan.getRateAmount();
+        this.loan = loan;
+        this.payDate = loan.getNextRatePayDay();
     }
+
+    public LoanRate(){}
 }

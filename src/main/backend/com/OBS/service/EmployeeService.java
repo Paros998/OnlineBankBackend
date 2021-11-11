@@ -3,6 +3,7 @@ package com.OBS.service;
 import com.OBS.entity.Employee;
 import com.OBS.repository.EmployeeRepository;
 import com.OBS.requestBodies.EmployeeUserBody;
+import com.OBS.requestBodies.NameAndPersonalNumBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,11 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<Employee> getEmployees(String fullName, String personalNumber) {
+    public List<Employee> getEmployees(NameAndPersonalNumBody body) {
+        String fullName = body.getFullName();
+        String personalNumber = body.getPersonalNumber();
         List<Employee> employeeList = employeeRepository.findAll();
-        employeeList.removeIf(e -> !e.getFullName().contains(fullName));
-        employeeList.removeIf(e -> !e.getPersonalNumber().startsWith(personalNumber));
+        employeeList.removeIf(employee -> !employee.getFullName().contains(fullName) && !employee.getPersonalNumber().startsWith(personalNumber));
         return employeeList;
     }
 

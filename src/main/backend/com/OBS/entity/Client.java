@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "client")
@@ -36,6 +37,7 @@ public class Client {
     private String secCity;
     private String secPostalCode;
     private Integer numberOfCreditsCards;
+    private LocalDate dateOfCreation;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -66,8 +68,9 @@ public class Client {
         this.postalCode = postalCode;
         this.numberOfCreditsCards = numberOfCreditsCards;
         this.user = user;
-    }
+        this.dateOfCreation = LocalDate.now();
 
+    }
     public Client(String email,
                   String fullName,
                   String accountNumber,
@@ -98,6 +101,7 @@ public class Client {
         this.secPostalCode = secPostalCode;
         this.numberOfCreditsCards = numberOfCreditsCards;
         this.user = user;
+        this.dateOfCreation = LocalDate.now();
     }
 
     public Client() {

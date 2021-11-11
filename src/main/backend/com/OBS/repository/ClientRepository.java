@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    List<Client> findAllByFullNameAndPersonalNumber(String fullName, String personalNumber);
 
     boolean existsByPersonalNumber(String personalNumber);
 
