@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CyclicalTransferRepository extends JpaRepository<CyclicalTransfer,Long> {
-    List<CyclicalTransfer> findAllByClient_clientID(Long clientId);
+    List<CyclicalTransfer> findAllByClient_clientId(Long clientId);
 }

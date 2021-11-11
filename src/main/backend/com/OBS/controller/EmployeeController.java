@@ -2,6 +2,7 @@ package com.OBS.controller;
 
 import com.OBS.entity.Employee;
 import com.OBS.requestBodies.EmployeeUserBody;
+import com.OBS.requestBodies.NameAndPersonalNumBody;
 import com.OBS.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,9 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping(path = "?{fullName}&?{personalNumber}")
-    public List<Employee> getEmployeesSorted(@PathVariable String fullName, @PathVariable String personalNumber) {
-        return employeeService.getEmployees(fullName, personalNumber);
+    @GetMapping("/filtered")
+    public List<Employee> getEmployeesSorted(@RequestBody NameAndPersonalNumBody body ) {
+        return employeeService.getEmployees(body);
     }
 
     @GetMapping(path = "{id}")

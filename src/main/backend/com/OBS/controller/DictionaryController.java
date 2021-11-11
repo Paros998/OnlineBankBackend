@@ -5,7 +5,6 @@ import com.OBS.entity.*;
 import com.OBS.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import static com.OBS.auth.AppUserRole.*;
@@ -24,6 +23,8 @@ public class DictionaryController {
     private final OrderService orderService;
     private final TransferService transferService;
     private final CyclicalTransferService cyclicalTransferService;
+    private final LoanService loanService;
+    private final LoanRateService loanRateService;
 
     @GetMapping(path = "/credit-cards")
     public List<CreditCard> getCreditCards() {
@@ -68,6 +69,13 @@ public class DictionaryController {
 
     @GetMapping(path = "/cyclical-transfers")
     public List<CyclicalTransfer> getCyclicalTransfers(){return cyclicalTransferService.getTransfers();}
+
+    @GetMapping(path = "/loans")
+    public List<Loan> getLoans(){return loanService.getLoans();}
+
+    @GetMapping(path = "/loans-rates")
+    public List<LoanRate> getRates(){return loanRateService.getRates();}
+
 
     // TODO add rest of get endpoints when entities are implemented
 }

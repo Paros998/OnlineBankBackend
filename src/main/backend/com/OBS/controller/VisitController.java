@@ -21,7 +21,7 @@ public class VisitController {
         visitService.addVisit(visit);
     }
 
-    @PutMapping(path = "{id}/took-place")
+    @PutMapping(path = "{id}/closed")
     public void updateVisit(@PathVariable("id") Long id){
         visitService.setInactive(id);
     }

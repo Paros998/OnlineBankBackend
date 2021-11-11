@@ -20,7 +20,7 @@ public class TransferController {
     }
 
     @PostMapping()
-    public void addTransfer(@RequestBody Transfer transfer){ transferService.addTransfer(transfer);}
+    public void addTransfer(@RequestBody Transfer transfer){ transferService.performTransfer(transfer);}
 
     @DeleteMapping(path = "{transferId}")
     public void deleteTransfer(@PathVariable long transferId){transferService.deleteTransfer(transferId);}

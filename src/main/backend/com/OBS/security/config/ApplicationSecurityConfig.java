@@ -59,7 +59,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/dictionary/credit-cards",
                         "/dictionary/orders/employees",
                         "/dictionary/visits",
-                        "/dictionary/announcements").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                        "/dictionary/announcements",
+                        "/dictionary/transfers",
+                        "/dictionary/cyclical-transfers",
+                        "/dictionary/loans",
+                        "/dictionary/loans-rates").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET, "/dictionary/**").hasRole(ADMIN.name())
 
                 .antMatchers(HttpMethod.POST, "/visits/**").anonymous()
@@ -68,16 +72,32 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH, "/users/**").anonymous()
                 .antMatchers("/users/**").hasRole(ADMIN.name())
 
-                .antMatchers(HttpMethod.GET, "/employees/{{id}}").hasRole(EMPLOYEE.name())
+                .antMatchers(HttpMethod.GET, "/employees/{id}").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
                 .antMatchers("/employees/**").hasAnyRole(ADMIN.name())
 
-                .antMatchers(HttpMethod.GET, "/clients/{{id}}").hasRole(CLIENT.name())
+                .antMatchers(HttpMethod.GET, "/clients/{id}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/clients/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
 
                 .antMatchers("/announcements/**").hasRole(ADMIN.name())
 
-                .antMatchers(HttpMethod.GET,"/credit-cards/client/{{clientId}").permitAll()
-                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name());
+                .antMatchers(HttpMethod.GET,"/credit-cards/client/{clientId}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
+                .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+
+                .antMatchers(HttpMethod.GET,"/transfers/client/{clientId}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.POST,"/transfers/**").hasRole(CLIENT.name())
+                .antMatchers("/transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+
+                .antMatchers(HttpMethod.DELETE,"/cyclical-transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+                .antMatchers("/cyclical-transfers/**").hasRole(CLIENT.name())
+
+                .antMatchers(HttpMethod.PATCH,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.DELETE,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.POST,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.PATCH,"/loans/pay-rate/{clientId}").hasRole(CLIENT.name())
+                .antMatchers(HttpMethod.GET,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+
+                .antMatchers(HttpMethod.GET,"/loans-rates/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+        ;
     }
 
     @Override

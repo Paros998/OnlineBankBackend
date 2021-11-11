@@ -1,4 +1,4 @@
-package com.OBS.auth.email;
+package com.OBS.email;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
