@@ -8,7 +8,9 @@ import com.OBS.requestBodies.FilterTransferFromClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 import javax.transaction.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,13 +43,16 @@ public class TransferService {
         transferRepository.save(transfer);
     }
 
+
     public void deleteTransfer(Long transferId) {
+
         if(!transferRepository.existsById(transferId))
             throw new IllegalStateException("Transfer with given id " + transferId + " doesn't exists");
         transferRepository.deleteById(transferId);
     }
 
     @Transactional
+
     public void performTransfer(Client client, Loan clientLoan){
         if(client == null) throw new IllegalStateException("Internal Server Error, Sender not available");
         if(client.getBalance() < clientLoan.getRateAmount()){
@@ -72,7 +77,9 @@ public class TransferService {
         addTransfer(clientRateTransfer);
     }
 
+
     @Transactional
+
     public void performTransfer(Transfer transfer){
         Client sender = clientService.getClientOrNull(transfer.getClient().getClientId());
         Client receiver = clientService.getClientByAccountNumber(transfer.getToAccountNumber());

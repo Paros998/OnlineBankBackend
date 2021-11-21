@@ -37,7 +37,9 @@ public class Loan {
     private Float toRepaidOff;
     private int ratesLeftToPay;
 
+
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+
     @JoinColumn(name = "client_id")
     private Client client;
 

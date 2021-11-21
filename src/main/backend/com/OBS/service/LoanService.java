@@ -52,7 +52,6 @@ public class LoanService {
         loanRepository.save(newLoan);
     }
 
-
     @Transactional
     public void setInactive(Long loanId) {
         Loan oldLoan = loanRepository.findById(loanId).orElseThrow(

@@ -26,5 +26,7 @@ public class LoanController {
 
     @PatchMapping(path = "/pay-rate/{clientId}")
     public void payLoanRate(@PathVariable Long clientId){loanService.realizePayment(clientId);}
+
     //TODO add endpoint for client to get future loan calculated
+
 }
