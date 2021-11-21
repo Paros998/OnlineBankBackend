@@ -49,7 +49,6 @@ public class LoanService {
             if(loan.getIsActive())
                 throw new IllegalStateException("New loan couldn't be created because there is already an active loan registered on this client");
         }
-
         loanRepository.save(newLoan);
     }
 

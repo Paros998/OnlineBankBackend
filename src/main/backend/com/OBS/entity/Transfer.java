@@ -29,7 +29,8 @@ public class Transfer {
     private String toAccountNumber;
 
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+
     @JoinColumn(name = "client_id")
     private Client client;
 

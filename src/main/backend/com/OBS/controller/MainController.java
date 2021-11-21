@@ -8,7 +8,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping(path = "/")
 public class MainController {
-
     @GetMapping()
     public RedirectView redirect() {
         return new RedirectView("/swagger-ui.html");
