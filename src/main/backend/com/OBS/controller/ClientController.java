@@ -26,17 +26,17 @@ public class ClientController {
     }
 
     @PostMapping()
-    public void addNewEmployee(@RequestBody ClientUserBody body) {
+    public void addNewClient(@RequestBody ClientUserBody body) {
         clientService.addClient(body);
     }
 
     @PutMapping()
-    public void updateEmployee(@RequestBody ClientUserBody body) {
+    public void updateClient(@RequestBody ClientUserBody body) {
         clientService.updateClient(body);
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteEmployee(@PathVariable Long id) {
+    public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }
 

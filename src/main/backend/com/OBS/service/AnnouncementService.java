@@ -5,6 +5,7 @@ import com.OBS.repository.AnnouncementRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class AnnouncementService {
         announcementRepository.save(announcement);
     }
 
+    @Transactional
     public void updateAnnouncement(Long id, Announcement announcement) {
         Announcement oldAnnouncement = announcementRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("Can't find announcement of given id")
