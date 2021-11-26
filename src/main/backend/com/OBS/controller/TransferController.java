@@ -23,7 +23,6 @@ public class TransferController {
     public void addTransfer(@RequestBody Transfer transfer){ transferService.performTransfer(transfer);}
 
     @DeleteMapping(path = "{transferId}")
-
     public void deleteTransfer(@PathVariable Long transferId){transferService.deleteTransfer(transferId);}
 
 }
