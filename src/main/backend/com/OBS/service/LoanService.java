@@ -121,7 +121,7 @@ public class LoanService {
         }
     }
 
-    //Automatic method that runs every day at midnight
+    //Automated method that runs every day at midnight
     @Transactional
     @Scheduled(cron = "0 0 0 * * * ")
     protected void updateLoans(){
@@ -157,4 +157,12 @@ public class LoanService {
         else logger.debug("Every client payed his rate in time!");
     }
 
+    public Loan calculateLoan(LoanBody body) {
+        return new Loan(
+                body.getConcludedDate(),
+                body.getInitialRatesNumber(),
+                body.getBasicLoanAmount(),
+                clientService.getClient(body.getClientId())
+        );
+    }
 }

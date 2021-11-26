@@ -11,7 +11,6 @@ import com.OBS.repository.CyclicalTransferRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +75,6 @@ public class CyclicalTransferService {
 
         // TODO check if this works and change if it's not
         cyclicalTransfer.setTransferId(transferId);
-        //
 
         cyclicalTransferRepository.save(cyclicalTransfer);
     }
@@ -87,7 +85,8 @@ public class CyclicalTransferService {
         cyclicalTransferRepository.deleteById(transferId);
     }
 
-    //Automatic method that runs every day at midnight
+    //Automated method that runs every day at midnight
+    @Transactional
     @Scheduled(cron = "0 0 0 * * * ")
     protected void realiseTransfers(){
         Logger logger = LoggerFactory.getLogger(CyclicalTransferService.class);
@@ -145,6 +144,7 @@ public class CyclicalTransferService {
                 }
                 transfer.setReTransferDate(transfer.getReTransferDate().plusMonths(1));
                 logger.debug("Transfer id:" + transfer.getTransferId() + " finalized!\n");
+                cyclicalTransferRepository.save(transfer);
             }
         }
         else logger.debug("No transfer will be realised today!\n");

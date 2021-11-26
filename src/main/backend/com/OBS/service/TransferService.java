@@ -52,7 +52,6 @@ public class TransferService {
     }
 
     @Transactional
-
     public void performTransfer(Client client, Loan clientLoan){
         if(client == null) throw new IllegalStateException("Internal Server Error, Sender not available");
         if(client.getBalance() < clientLoan.getRateAmount()){
@@ -79,7 +78,6 @@ public class TransferService {
 
 
     @Transactional
-
     public void performTransfer(Transfer transfer){
         Client sender = clientService.getClientOrNull(transfer.getClient().getClientId());
         Client receiver = clientService.getClientByAccountNumber(transfer.getToAccountNumber());
