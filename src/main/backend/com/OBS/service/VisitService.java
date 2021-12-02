@@ -45,4 +45,12 @@ public class VisitService {
             throw new IllegalStateException(doesntExist(id));
         visitRepository.deleteById(id);
     }
+
+    public List<Visit> getEmployeeVisits(Long id) {
+        return visitRepository.findAllByEmployee_EmployeeId(id);
+    }
+
+    public List<Visit> getVisitsUnassigned() {
+        return visitRepository.findAllByEmployeeNull();
+    }
 }

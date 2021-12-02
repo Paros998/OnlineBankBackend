@@ -5,11 +5,18 @@ import com.OBS.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/visits")
 @AllArgsConstructor
 public class VisitController {
     private final VisitService visitService;
+
+    @GetMapping(path = "employee/{id}")
+    public List<Visit> getEmployeeVisits(@PathVariable("id") Long id) {
+        return visitService.getEmployeeVisits(id);
+    }
 
     @GetMapping(path = "{id}")
     public Visit getVisit(@PathVariable("id") Long id) {
