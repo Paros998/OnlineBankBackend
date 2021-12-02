@@ -2,11 +2,13 @@ package com.OBS.requestBodies;
 
 import com.OBS.auth.AppUserRole;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserCredentials {
     private String username;
     private String password;

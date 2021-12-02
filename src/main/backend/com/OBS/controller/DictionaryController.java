@@ -56,6 +56,11 @@ public class DictionaryController {
         return visitService.getVisits();
     }
 
+    @GetMapping(path = "/visits/unassigned")
+    public List<Visit> getVisitsUnassigned() {
+        return visitService.getVisitsUnassigned();
+    }
+
     @GetMapping(path = "/orders")
     public List<Order> getOrders() {
         return orderService.getOrders(ADMIN.name());
