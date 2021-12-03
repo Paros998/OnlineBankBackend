@@ -66,8 +66,14 @@ public class DictionaryController {
         return orderService.getOrders(ADMIN.name());
     }
 
+    @GetMapping(path = "/orders/priority")
+    public List<Order> getPriorOrders() {return orderService.getPriorityOrders(ADMIN.name());}
+
     @GetMapping(path = "/orders/for-employees")
     public List<Order> getOrdersForEmployees(){ return orderService.getOrders(EMPLOYEE.name());}
+
+    @GetMapping(path = "/orders/for-employees/priority")
+    public List<Order> getPriorOrdersForEmployees(){ return orderService.getPriorityOrders(EMPLOYEE.name());}
 
     @GetMapping(path = "/transfers")
     public List<Transfer> getTransfers(){ return transferService.getTransfers();}

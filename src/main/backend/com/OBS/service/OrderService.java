@@ -5,6 +5,7 @@ import com.OBS.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,22 @@ public class OrderService {
         }
     }
 
+    public List<Order> getPriorityOrders(String role) {
+        LocalDate today = LocalDate.now();
+        if(Objects.equals(role, ADMIN.name())) {
+            return orderRepository.findAllPriorityOrders(today);
+        }else{
+            List<Order> orders =  orderRepository.findAllPriorityOrders(today);
+            orders.removeIf(order ->
+                    order.getOrderType().equals(changeUser.name())
+                            || order.getOrderType().equals(changeEmployee.name())
+                            || order.getOrderType().equals(createUser.name())
+            );
+            return orders;
+        }
+    }
+
+
     public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(
                 () -> new IllegalStateException(orderNotFound(orderId))
@@ -57,4 +74,6 @@ public class OrderService {
         order.setIsActive(false);
         orderRepository.save(order);
     }
+
+
 }
