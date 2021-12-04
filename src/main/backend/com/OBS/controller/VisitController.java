@@ -33,6 +33,9 @@ public class VisitController {
         visitService.setInactive(id);
     }
 
+    @PutMapping(path = "{id}")
+    public void addEmployeeToVisit(@PathVariable("id") Long id,@RequestBody Long employeeID ){visitService.setEmployee(id,employeeID);}
+
     @DeleteMapping(path = "{id}")
     public void deleteVisit(@PathVariable Long id){
         visitService.deleteVisit(id);
