@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VisitService {
     private final VisitRepository visitRepository;
+    private final EmployeeService employeeService;
 
     private String doesntExist(Long id) { return  "Visit by given id:" + id + " doesn't exists in database" ;}
 
@@ -52,5 +53,16 @@ public class VisitService {
 
     public List<Visit> getVisitsUnassigned() {
         return visitRepository.findAllByEmployeeNull();
+    }
+
+    @Transactional
+    public void setEmployee(Long id, Long employeeID) {
+        Visit visit = visitRepository.findById(id).orElseThrow(
+                () ->  new IllegalStateException(doesntExist(id))
+        );
+
+        visit.setEmployee(employeeService.getEmployee(employeeID));
+
+        visitRepository.save(visit);
     }
 }
