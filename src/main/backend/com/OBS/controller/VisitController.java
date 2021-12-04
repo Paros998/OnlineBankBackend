@@ -1,6 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Visit;
+import com.OBS.requestBodies.AssignEmployeeToVisitBody;
 import com.OBS.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,9 @@ public class VisitController {
     }
 
     @PutMapping(path = "{id}")
-    public void addEmployeeToVisit(@PathVariable("id") Long id,@RequestBody Long employeeID ){visitService.setEmployee(id,employeeID);}
+    public void addEmployeeToVisit(@PathVariable("id") Long id,@RequestBody AssignEmployeeToVisitBody body ){
+        visitService.setEmployee(id,body.getEmployeeId());
+    }
 
     @DeleteMapping(path = "{id}")
     public void deleteVisit(@PathVariable Long id){
