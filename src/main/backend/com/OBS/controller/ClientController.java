@@ -2,7 +2,7 @@ package com.OBS.controller;
 
 import com.OBS.entity.Client;
 import com.OBS.requestBodies.ClientUserBody;
-import com.OBS.requestBodies.NameAndPersonalNumBody;
+import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping(path = "/filtered")
-    public List<Client> getClientsSorted(@RequestBody NameAndPersonalNumBody body) {
+    public List<Client> getClientsSorted(@RequestBody NamePersonalNum_BirthDateBody body) {
         return clientService.getClients(body);
     }
 

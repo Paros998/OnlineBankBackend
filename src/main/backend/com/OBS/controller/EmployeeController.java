@@ -2,10 +2,9 @@ package com.OBS.controller;
 
 import com.OBS.entity.Employee;
 import com.OBS.requestBodies.EmployeeUserBody;
-import com.OBS.requestBodies.NameAndPersonalNumBody;
+import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.service.EmployeeService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/filtered")
-    public List<Employee> getEmployeesSorted(@RequestBody NameAndPersonalNumBody body ) {
+    public List<Employee> getEmployeesSorted(@RequestBody NamePersonalNum_BirthDateBody body ) {
         return employeeService.getEmployees(body);
     }
 

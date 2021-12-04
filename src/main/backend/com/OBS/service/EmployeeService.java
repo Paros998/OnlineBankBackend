@@ -3,12 +3,13 @@ package com.OBS.service;
 import com.OBS.entity.Employee;
 import com.OBS.repository.EmployeeRepository;
 import com.OBS.requestBodies.EmployeeUserBody;
-import com.OBS.requestBodies.NameAndPersonalNumBody;
+import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,12 +23,10 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<Employee> getEmployees(NameAndPersonalNumBody body) {
-        String fullName = body.getFullName();
-        String personalNumber = body.getPersonalNumber();
-        List<Employee> employeeList = employeeRepository.findAll();
-        employeeList.removeIf(employee -> !employee.getFullName().contains(fullName) && !employee.getPersonalNumber().startsWith(personalNumber));
-        return employeeList;
+    public List<Employee> getEmployees(NamePersonalNum_BirthDateBody body) {
+        String personalNumber_personName = body.getPersonalNumber_personName();
+        LocalDate birthDate = body.getBirthDate();
+        return employeeRepository.findAllByStringOrDate(personalNumber_personName,birthDate);
     }
 
     public Employee getEmployee(Long id) {

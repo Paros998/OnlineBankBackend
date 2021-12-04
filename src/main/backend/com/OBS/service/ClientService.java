@@ -3,7 +3,7 @@ package com.OBS.service;
 import com.OBS.entity.Client;
 import com.OBS.repository.ClientRepository;
 import com.OBS.requestBodies.ClientUserBody;
-import com.OBS.requestBodies.NameAndPersonalNumBody;
+import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,12 +25,10 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getClients(NameAndPersonalNumBody body) {
-        String fullName = body.getFullName();
-        String personalNumber = body.getPersonalNumber();
-        List<Client> clients = clientRepository.findAll();
-        clients.removeIf(client -> !client.getFullName().contains(fullName) && !client.getPersonalNumber().startsWith(personalNumber));
-        return clients;
+    public List<Client> getClients(NamePersonalNum_BirthDateBody body) {
+        String personalNumber_personName = body.getPersonalNumber_personName();
+        LocalDate birthDate = body.getBirthDate();
+        return clientRepository.findAllByStringOrDate(personalNumber_personName,birthDate);
     }
 
     public Client getClient(Long id) {
