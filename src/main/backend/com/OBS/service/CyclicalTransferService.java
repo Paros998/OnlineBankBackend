@@ -11,6 +11,7 @@ import com.OBS.repository.CyclicalTransferRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,12 @@ public class CyclicalTransferService {
 
     public List<CyclicalTransfer> getTransfers() {
         return cyclicalTransferRepository.findAll();
+    }
+
+    public List<CyclicalTransfer> getComingTransfers(Long clientId) {
+        return cyclicalTransferRepository.findComingByClient_clientIdOrderByReTransferDate(
+                clientId, PageRequest.of(0, 3)
+        );
     }
 
     public CyclicalTransfer getTransfer(Long transferId) {
