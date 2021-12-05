@@ -16,8 +16,8 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
-    @GetMapping(path = "/filtered?{birthDate}&{personalNumber_personName}")
-    public List<Client> getClientsSorted(@PathVariable String birthDate, @PathVariable String personalNumber_personName) {
+    @GetMapping(path = "/filtered")
+    public List<Client> getClientsSorted(@RequestParam("birthDate") String birthDate, @RequestParam("personalNumber_personName") String personalNumber_personName) {
         return clientService.getClients(personalNumber_personName,LocalDate.parse(birthDate));
     }
 
