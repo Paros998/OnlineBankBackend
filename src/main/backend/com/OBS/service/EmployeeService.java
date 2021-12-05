@@ -24,9 +24,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<Employee> getEmployees(NamePersonalNum_BirthDateBody body) {
-        String personalNumber_personName = body.getPersonalNumber_personName();
-        LocalDate birthDate = body.getBirthDate();
+    public List<Employee> getEmployees(String personalNumber_personName,LocalDate birthDate) {
         if(Objects.equals(personalNumber_personName, "") && birthDate == null)
             return employeeRepository.findAll();
         if(Objects.equals(personalNumber_personName, "") && birthDate != null)

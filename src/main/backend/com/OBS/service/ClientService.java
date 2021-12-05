@@ -26,9 +26,7 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getClients(NamePersonalNum_BirthDateBody body) {
-        String personalNumber_personName = body.getPersonalNumber_personName();
-        LocalDate birthDate = body.getBirthDate();
+    public List<Client> getClients(String personalNumber_personName,LocalDate birthDate) {
         if(Objects.equals(personalNumber_personName, "") && birthDate == null)
             return clientRepository.findAll();
         if(Objects.equals(personalNumber_personName, "") && birthDate != null)

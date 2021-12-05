@@ -7,6 +7,7 @@ import com.OBS.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,9 +16,9 @@ import java.util.List;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
-    @GetMapping("/filtered")
-    public List<Employee> getEmployeesSorted(@RequestBody NamePersonalNum_BirthDateBody body ) {
-        return employeeService.getEmployees(body);
+    @GetMapping("/filtered?{birthDate}&{personalNumber_personName}")
+    public List<Employee> getEmployeesSorted(@PathVariable LocalDate birthDate,@PathVariable String personalNumber_personName) {
+        return employeeService.getEmployees(personalNumber_personName,birthDate);
     }
 
     @GetMapping(path = "{id}")
