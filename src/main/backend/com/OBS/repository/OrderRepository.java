@@ -7,10 +7,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select o from Order o where o.isActive = true and o.createDate < :date order by o.createDate asc")
-    List<Order> findAllPriorityOrders(@Param("date")LocalDate today);
+    List<Order> findAllPriorityOrders(@Param("date") LocalDateTime today);
 }

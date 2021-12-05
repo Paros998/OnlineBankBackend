@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class OrderService {
     }
 
     public List<Order> getPriorityOrders(String role) {
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         if(Objects.equals(role, ADMIN.name())) {
             return orderRepository.findAllPriorityOrders(today);
         }else{
