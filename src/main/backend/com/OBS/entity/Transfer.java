@@ -33,7 +33,7 @@ public class Transfer {
     private String title;
     private String toAccountNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
 
     @JoinColumn(name = "client_id")
     private Client client;
