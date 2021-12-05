@@ -18,7 +18,7 @@ public class ClientController {
 
     @GetMapping(path = "/filtered")
     public List<Client> getClientsSorted(@RequestParam("birthDate") String birthDate, @RequestParam("personalNumber_personName") String personalNumber_personName) {
-        return clientService.getClients(personalNumber_personName,LocalDate.parse(birthDate));
+        return clientService.getClients(personalNumber_personName,birthDate);
     }
 
     @GetMapping(path = "{id}")
