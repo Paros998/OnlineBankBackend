@@ -18,7 +18,7 @@ public class EmployeeController {
 
     @GetMapping("/filtered")
     public List<Employee> getEmployeesSorted(@RequestParam String birthDate,@RequestParam String personalNumber_personName) {
-        return employeeService.getEmployees(personalNumber_personName,LocalDate.parse(birthDate));
+        return employeeService.getEmployees(personalNumber_personName,birthDate);
     }
 
     @GetMapping(path = "{id}")
