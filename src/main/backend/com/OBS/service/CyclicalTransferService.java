@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import static com.OBS.enums.TransferType.*;
@@ -120,7 +121,7 @@ public class CyclicalTransferService {
                 clientService.updateClientBalance(sender,transfer.getAmount(),OUTGOING.name());
                 Transfer senderTransfer = new Transfer(
                         transfer.getAmount(),
-                        LocalDate.now(),
+                        LocalDateTime.now(),
                         transfer.getCategory(),
                         OUTGOING.name(),
                         transfer.getReceiver(),
@@ -133,7 +134,7 @@ public class CyclicalTransferService {
                     clientService.updateClientBalance(receiver,transfer.getAmount(),INCOMING.name());
                     Transfer receiverTransfer = new Transfer(
                             transfer.getAmount(),
-                            LocalDate.now(),
+                            LocalDateTime.now(),
                             transfer.getCategory(),
                             INCOMING.name(),
                             sender.getFullName(),

@@ -25,7 +25,7 @@ public class LoanRate {
     private LocalDate payDate;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "loan_id", nullable = false)
     private Loan loan;
 

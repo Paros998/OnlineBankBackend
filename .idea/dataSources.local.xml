@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-212.5457.46">
-    <data-source name="bankingApp@localhost" uuid="3d20472b-b313-4e2f-a730-fdfa9ec4013c">
-      <database-info product="PostgreSQL" version="13.3" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.22" dbms="POSTGRES" exact-version="13.3" exact-driver-version="42.2">
+  <component name="dataSourceStorageLocal" created-in="IU-212.4746.92">
+    <data-source name="dctqlhh67ap2qi@ec2-34-251-245-108.eu-west-1.compute.amazonaws.com" uuid="6804d31b-9262-4ece-9337-3bd08dd6b2be">
+      <database-info product="PostgreSQL" version="13.5 (Ubuntu 13.5-2.pgdg20.04+1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.22" dbms="POSTGRES" exact-version="13.5" exact-driver-version="42.2">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>postgres</user-name>
+      <user-name>yvaphrttemptpr</user-name>
       <schema-mapping>
         <introspection-scope>
           <node kind="database" qname="@">
@@ -15,10 +15,6 @@
           </node>
         </introspection-scope>
       </schema-mapping>
-    </data-source>
-    <data-source name="d32qiiqvd12je2@ec2-63-33-239-176.eu-west-1.compute.amazonaws.com" uuid="3ea24ffe-117d-4be5-9de2-e97f62d68965">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" exact-version="0" />
-      <schema-mapping />
     </data-source>
   </component>
 </project>
