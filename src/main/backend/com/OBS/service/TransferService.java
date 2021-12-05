@@ -71,7 +71,7 @@ public class TransferService {
                 LocalDateTime.now(),
                 BILLS.name(),
                 OUTGOING.name(),
-                client.getFullName(),
+                "Future Bank Sp. z o.o.",
                 "Loan: "+ clientLoan.getLoanId() +" | Rate number:" + (clientLoan.getNumOfRates() - clientLoan.getRatesLeftToPay() + 1),
                 "Restricted Account Number"
         );
@@ -96,12 +96,16 @@ public class TransferService {
 
     private void updateBalances(Client sender,Client receiver,Transfer transfer){
         clientService.updateClientBalance(sender,transfer.getAmount(),OUTGOING.name());
+        String receiverName ;
+        if(receiver != null)
+            receiverName = receiver.getFullName();
+        else receiverName = transfer.getReceiver_sender();
         Transfer senderTransfer = new Transfer(
                 transfer.getAmount(),
                 transfer.getTransferDate(),
                 transfer.getCategory(),
                 OUTGOING.name(),
-                sender.getFullName(),
+                receiverName,
                 transfer.getTitle(),
                 transfer.getToAccountNumber()
         );
