@@ -18,6 +18,11 @@ public class CyclicalTransferController {
         return cyclicalTransferService.getTransfer(transferId);
     }
 
+    @GetMapping(path = "/coming/client/{clientId}")
+    public List<CyclicalTransfer> getComingTransfers(@PathVariable Long clientId) {
+        return cyclicalTransferService.getComingTransfers(clientId);
+    }
+
     @GetMapping(path = "/client/{clientId}")
     public List<CyclicalTransfer> getClientTransfers(@PathVariable Long clientId){
         return cyclicalTransferService.getClientTransfers(clientId);

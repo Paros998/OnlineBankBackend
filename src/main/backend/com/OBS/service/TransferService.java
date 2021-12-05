@@ -32,6 +32,10 @@ public class TransferService {
         return transferRepository.findAll();
     }
 
+    public List<Transfer> getRecentTransfers(Long client_id) {
+        return transferRepository.findRecentTransfersByClient_clientIdOrderByTransferDateDesc(client_id, PageRequest.of(0, 3));
+    }
+
     public List<Transfer> getTransfers(Long client_id, FilterTransferFromClient body) {
         List<Transfer> transfers = transferRepository.findAllByClient_clientId(client_id);
         transfers.removeIf(t ->
@@ -125,9 +129,5 @@ public class TransferService {
             receiverTransfer.setClient(receiver);
             addTransfer(receiverTransfer);
         }
-    }
-
-    public List<Transfer> getRecentTransfers(Long client_id) {
-        return transferRepository.findRecentTransfersByClient_clientIdOrderByTransferDateDesc(client_id, PageRequest.of(0, 3));
     }
 }
