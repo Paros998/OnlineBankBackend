@@ -49,7 +49,6 @@ public class TransferService {
 
 
     public void deleteTransfer(Long transferId) {
-
         if(!transferRepository.existsById(transferId))
             throw new IllegalStateException("Transfer with given id " + transferId + " doesn't exists");
         transferRepository.deleteById(transferId);
