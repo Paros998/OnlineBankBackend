@@ -21,6 +21,9 @@ public class ClientController {
         return clientService.getClients(personalNumber_personName,birthDate);
     }
 
+    @GetMapping(path = "/latest/{days}")
+    public List<Client> getLatestClients(@PathVariable("days") Integer days){return clientService.getLatestClients(days);}
+
     @GetMapping(path = "{id}")
     public Client getClient(@PathVariable Long id) {
         return clientService.getClient(id);
