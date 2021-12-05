@@ -38,7 +38,7 @@ public class Loan {
     private int ratesLeftToPay;
 
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
 
     @JoinColumn(name = "client_id")
     private Client client;
