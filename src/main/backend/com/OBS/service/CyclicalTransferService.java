@@ -96,7 +96,7 @@ public class CyclicalTransferService {
         if(!cyclicalTransfersList.isEmpty()){
             for(CyclicalTransfer transfer : cyclicalTransfersList){
 
-                if(!transfer.getReTransferDate().equals(LocalDate.now()))
+                if(!transfer.getReTransferDate().equals(LocalDateTime.now()))
                     continue;
 
                 Client sender = clientService.getClientOrNull(transfer.getClient().getClientId());

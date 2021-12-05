@@ -16,8 +16,11 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findEmployeeByPersonalNumber(String personalNumber);
 
-    @Query("select e from Employee e where e.dateOfBirth = :date or (e.fullName like '%:string%' or e.personalNumber like ':string%') ")
-    List<Employee> findAllByStringOrDate(@Param("string")String personalNumber_personName, @Param("date") LocalDate birthDate);
+    List<Employee> findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(String fullName, String personalNumber, LocalDate dateOfBirth);
+
+    List<Employee> findAllByDateOfBirth(LocalDate birthDate);
+
+    List<Employee> findAllByFullNameContainsOrPersonalNumberStartsWith(String fullName, String personalNumber);
 
     Optional<Employee> findByFullName(String fullName);
 

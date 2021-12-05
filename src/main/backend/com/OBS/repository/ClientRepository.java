@@ -25,6 +25,9 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Client getByUser(AppUser user);
 
-    @Query("select c from Client c where c.dateOfBirth = :date or (c.fullName like '%:string%' or c.personalNumber like ':string%') ")
-    List<Client> findAllByStringOrDate(@Param("string")String personalNumber_personName,@Param("date") LocalDate birthDate);
+    List<Client> findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(String fullName, String personalNumber, LocalDate dateOfBirth);
+
+    List<Client> findAllByDateOfBirth(LocalDate birthDate);
+
+    List<Client> findAllByFullNameContainsOrPersonalNumberStartsWith(String fullName, String personalNumber);
 }
