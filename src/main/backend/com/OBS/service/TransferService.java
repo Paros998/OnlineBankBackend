@@ -6,12 +6,15 @@ import com.OBS.entity.Transfer;
 import com.OBS.repository.TransferRepository;
 import com.OBS.requestBodies.FilterTransferFromClient;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.OBS.enums.TransferType.INCOMING;
@@ -23,6 +26,7 @@ import static com.OBS.enums.TransferCategory.*;
 public class TransferService {
     private final TransferRepository transferRepository;
     private final ClientService clientService;
+
 
     public List<Transfer> getTransfers() {
         return transferRepository.findAll();
@@ -64,7 +68,7 @@ public class TransferService {
         clientService.updateClientBalance(client, clientLoan.getRateAmount(), OUTGOING.name());
         Transfer clientRateTransfer = new Transfer(
                 clientLoan.getRateAmount(),
-                LocalDate.now(),
+                LocalDateTime.now(),
                 BILLS.name(),
                 OUTGOING.name(),
                 client.getFullName(),
@@ -94,7 +98,7 @@ public class TransferService {
         clientService.updateClientBalance(sender,transfer.getAmount(),OUTGOING.name());
         Transfer senderTransfer = new Transfer(
                 transfer.getAmount(),
-                LocalDate.now(),
+                transfer.getTransferDate(),
                 transfer.getCategory(),
                 OUTGOING.name(),
                 sender.getFullName(),
@@ -108,7 +112,7 @@ public class TransferService {
             clientService.updateClientBalance(receiver,transfer.getAmount(),INCOMING.name());
             Transfer receiverTransfer = new Transfer(
                     transfer.getAmount(),
-                    LocalDate.now(),
+                    transfer.getTransferDate(),
                     transfer.getCategory(),
                     INCOMING.name(),
                     sender.getFullName(),
@@ -118,5 +122,9 @@ public class TransferService {
             receiverTransfer.setClient(receiver);
             addTransfer(receiverTransfer);
         }
+    }
+
+    public List<Transfer> getRecentTransfers(Long client_id) {
+        return transferRepository.findRecentTransfersByClient_clientIdOrderByTransferDateDesc(client_id, PageRequest.of(0, 3));
     }
 }

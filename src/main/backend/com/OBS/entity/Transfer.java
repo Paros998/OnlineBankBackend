@@ -1,10 +1,14 @@
 package com.OBS.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,21 +25,21 @@ public class Transfer {
     )
     private Long transferId;
     private Float amount;
-    private LocalDate transferDate;
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime transferDate;
     private String category;
     private String type;
     private String receiver_sender;
     private String title;
     private String toAccountNumber;
 
-
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 
     @JoinColumn(name = "client_id")
     private Client client;
 
     public Transfer(Float amount,
-                    LocalDate transferDate,
+                    LocalDateTime transferDate,
                     String category,
                     String type,
                     String receiver_sender,

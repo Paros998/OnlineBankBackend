@@ -27,7 +27,7 @@ public class CyclicalTransfer {
     private String accountNumber;
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 
     @JoinColumn(name = "client_id")
     private Client client;

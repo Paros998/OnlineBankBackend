@@ -14,15 +14,19 @@ import java.util.List;
 public class TransferController {
     private final TransferService transferService;
 
+    @GetMapping(path = "recent/client/{client_Id}")
+    public List<Transfer> getRecentTransfers(@PathVariable Long client_Id) {
+        return transferService.getRecentTransfers(client_Id);
+    }
+
     @GetMapping(path = "client/{client_Id}")
-    public List<Transfer> getTransfers(@PathVariable Long client_Id, @RequestBody FilterTransferFromClient body){
+    public List<Transfer> getTransfers(@PathVariable Long client_Id, @RequestBody FilterTransferFromClient body) {
         return transferService.getTransfers(client_Id,body);
     }
 
     @PostMapping()
-    public void addTransfer(@RequestBody Transfer transfer){ transferService.performTransfer(transfer);}
+    public void addTransfer(@RequestBody Transfer transfer) { transferService.performTransfer(transfer); }
 
     @DeleteMapping(path = "{transferId}")
-    public void deleteTransfer(@PathVariable Long transferId){transferService.deleteTransfer(transferId);}
-
+    public void deleteTransfer(@PathVariable Long transferId) { transferService.deleteTransfer(transferId); }
 }

@@ -25,7 +25,7 @@ public class Visit {
     private String establishment;
     private Boolean isActive;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
