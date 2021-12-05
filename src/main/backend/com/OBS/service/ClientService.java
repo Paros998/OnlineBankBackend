@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import static com.OBS.enums.TransferType.*;
 
@@ -28,7 +29,13 @@ public class ClientService {
     public List<Client> getClients(NamePersonalNum_BirthDateBody body) {
         String personalNumber_personName = body.getPersonalNumber_personName();
         LocalDate birthDate = body.getBirthDate();
-        return clientRepository.findAllByStringOrDate(personalNumber_personName,birthDate);
+        if(Objects.equals(personalNumber_personName, "") && birthDate == null)
+            return clientRepository.findAll();
+        if(Objects.equals(personalNumber_personName, "") && birthDate != null)
+            return clientRepository.findAllByDateOfBirth(birthDate);
+        if(!Objects.equals(personalNumber_personName, "") && birthDate == null)
+            return clientRepository.findAllByFullNameContainsOrPersonalNumberStartsWith(personalNumber_personName,personalNumber_personName);
+        return clientRepository.findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(personalNumber_personName,personalNumber_personName,birthDate);
     }
 
     public Client getClient(Long id) {

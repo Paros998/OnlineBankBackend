@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +27,13 @@ public class EmployeeService {
     public List<Employee> getEmployees(NamePersonalNum_BirthDateBody body) {
         String personalNumber_personName = body.getPersonalNumber_personName();
         LocalDate birthDate = body.getBirthDate();
-        return employeeRepository.findAllByStringOrDate(personalNumber_personName,birthDate);
+        if(Objects.equals(personalNumber_personName, "") && birthDate == null)
+            return employeeRepository.findAll();
+        if(Objects.equals(personalNumber_personName, "") && birthDate != null)
+            return employeeRepository.findAllByDateOfBirth(birthDate);
+        if(!Objects.equals(personalNumber_personName, "") && birthDate == null)
+            return employeeRepository.findAllByFullNameContainsOrPersonalNumberStartsWith(personalNumber_personName,personalNumber_personName);
+        return employeeRepository.findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(personalNumber_personName,personalNumber_personName,birthDate);
     }
 
     public Employee getEmployee(Long id) {
