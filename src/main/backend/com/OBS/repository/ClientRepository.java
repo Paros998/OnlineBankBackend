@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -30,4 +31,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findAllByDateOfBirth(LocalDate birthDate);
 
     List<Client> findAllByFullNameContainsOrPersonalNumberStartsWith(String fullName, String personalNumber);
+
+    List<Client> findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(LocalDateTime dateOfCreation, LocalDateTime dateOfCreation2);
 }
