@@ -7,13 +7,12 @@ import com.OBS.repository.TransferRepository;
 import com.OBS.requestBodies.FilterTransferFromClient;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
 
-import java.awt.print.Pageable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class TransferService {
     private final TransferRepository transferRepository;
     private final ClientService clientService;
 
-
     public List<Transfer> getTransfers() {
         return transferRepository.findAll();
     }
@@ -36,21 +34,13 @@ public class TransferService {
         return transferRepository.findRecentTransfersByClient_clientIdOrderByTransferDateDesc(client_id, PageRequest.of(0, 3));
     }
 
-    public List<Transfer> getTransfers(Long client_id, FilterTransferFromClient body) {
-        List<Transfer> transfers = transferRepository.findAllByClient_clientId(client_id);
-        transfers.removeIf(t ->
-            t.getTransferDate().isBefore(body.getDateFrom())
-                    || t.getTransferDate().isAfter(body.getDateTo())
-                || !t.getType().equals(body.getTransferType())
-                || !t.getCategory().equals(body.getTransferCategory())
-        );
-        return transfers;
+    public List<Transfer> getTransfers(Specification<Transfer> filterTransferSpec) {
+        return transferRepository.findAll(filterTransferSpec);
     }
 
     public void addTransfer(Transfer transfer) {
         transferRepository.save(transfer);
     }
-
 
     public void deleteTransfer(Long transferId) {
         if(!transferRepository.existsById(transferId))
