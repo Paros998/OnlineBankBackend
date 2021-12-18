@@ -17,8 +17,11 @@ public class StaticResourcesController {
     @Value("classpath:public/OrderType.json")
     Resource OrderType;
 
-    @Value("classpath:public/TransferCategory.json")
-    Resource TransferCategory;
+    @Value("classpath:public/TransferTypes.json")
+    Resource TransferTypes;
+
+    @Value("classpath:public/TransferCategories.json")
+    Resource TransferCategories;
 
     @GetMapping(path = "/visits")
     public Resource getVisits(){
@@ -30,8 +33,13 @@ public class StaticResourcesController {
         return OrderType;
     }
 
-    @GetMapping(path = "/transfers")
-    public Resource getTransfers(){
-        return TransferCategory;
+    @GetMapping(path = "/transfers/categories")
+    public Resource getTransfersCategories() {
+        return TransferCategories;
+    }
+
+    @GetMapping(path = "/transfers/types")
+    public Resource getTransferTypes() {
+        return TransferTypes;
     }
 }
