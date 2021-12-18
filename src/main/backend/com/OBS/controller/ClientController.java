@@ -16,10 +16,13 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
-    @GetMapping(path = "/filtered?{birthDate}&{personalNumber_personName}")
-    public List<Client> getClientsSorted(@PathVariable String birthDate, @PathVariable String personalNumber_personName) {
-        return clientService.getClients(personalNumber_personName,LocalDate.parse(birthDate));
+    @GetMapping(path = "/filtered")
+    public List<Client> getClientsSorted(@RequestParam("birthDate") String birthDate, @RequestParam("personalNumber_personName") String personalNumber_personName) {
+        return clientService.getClients(personalNumber_personName,birthDate);
     }
+
+    @GetMapping(path = "/latest/{days}")
+    public List<Client> getLatestClients(@PathVariable("days") Integer days){return clientService.getLatestClients(days);}
 
     @GetMapping(path = "{id}")
     public Client getClient(@PathVariable Long id) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +27,12 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getClients(String personalNumber_personName,LocalDate birthDate) {
+    public List<Client> getClients(String personalNumber_personName,String date) {
+        LocalDate birthDate;
+        if(Objects.equals(date, ""))
+            birthDate = null;
+        else
+            birthDate = LocalDate.parse(date);
         if(Objects.equals(personalNumber_personName, "") && birthDate == null)
             return clientRepository.findAll();
         if(Objects.equals(personalNumber_personName, "") && birthDate != null)
@@ -61,6 +67,11 @@ public class ClientService {
         }else return null;
     }
 
+    public List<Client> getLatestClients(Integer days) {
+        LocalDateTime today = LocalDateTime.now();
+        return clientRepository.findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(today.minusDays(days),today);
+    }
+
 
     public void addClient(ClientUserBody body) {
         Client client = body.getClient();
@@ -84,7 +95,7 @@ public class ClientService {
             throw new IllegalStateException("This Account Number is already taken!");
         }
         client.setUser(appUserService.createAppUser(userCredentials));
-        client.setDateOfCreation(LocalDate.now());
+        client.setDateOfCreation(LocalDateTime.now());
         clientRepository.save(client);
     }
 
@@ -160,5 +171,7 @@ public class ClientService {
 
         clientRepository.save(client);
     }
+
+
 }
 

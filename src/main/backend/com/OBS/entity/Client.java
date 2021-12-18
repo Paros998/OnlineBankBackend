@@ -1,12 +1,14 @@
 package com.OBS.entity;
 
 import com.OBS.auth.entity.AppUser;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -37,7 +39,8 @@ public class Client {
     private String secCity;
     private String secPostalCode;
     private Integer numberOfCreditsCards;
-    private LocalDate dateOfCreation;
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime dateOfCreation;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
@@ -68,7 +71,7 @@ public class Client {
         this.postalCode = postalCode;
         this.numberOfCreditsCards = numberOfCreditsCards;
         this.user = user;
-        this.dateOfCreation = LocalDate.now();
+        this.dateOfCreation = LocalDateTime.now();
 
     }
     public Client(String email,
@@ -101,7 +104,7 @@ public class Client {
         this.secPostalCode = secPostalCode;
         this.numberOfCreditsCards = numberOfCreditsCards;
         this.user = user;
-        this.dateOfCreation = LocalDate.now();
+        this.dateOfCreation = LocalDateTime.now();
     }
 
     public Client() {
