@@ -6,6 +6,7 @@ import com.OBS.requestBodies.EmployeeUserBody;
 import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,19 +25,8 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<Employee> getEmployees(String personalNumber_personName,String date) {
-        LocalDate birthDate;
-        if(Objects.equals(date, ""))
-            birthDate = null;
-        else
-            birthDate = LocalDate.parse(date);
-        if(Objects.equals(personalNumber_personName, "") && birthDate == null)
-            return employeeRepository.findAll();
-        if(Objects.equals(personalNumber_personName, "") && birthDate != null)
-            return employeeRepository.findAllByDateOfBirth(birthDate);
-        if(!Objects.equals(personalNumber_personName, "") && birthDate == null)
-            return employeeRepository.findAllByFullNameContainsOrPersonalNumberStartsWith(personalNumber_personName,personalNumber_personName);
-        return employeeRepository.findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(personalNumber_personName,personalNumber_personName,birthDate);
+    public List<Employee> getEmployees(Specification<Employee> employeeSpecificationFilter) {
+        return employeeRepository.findAll(employeeSpecificationFilter);
     }
 
     public Employee getEmployee(Long id) {
