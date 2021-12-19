@@ -14,15 +14,14 @@ public class OrderController {
     @GetMapping(path = "{orderId}")
     public Order getOrder(@PathVariable Long orderId){return orderService.getOrder(orderId);}
 
-
     @PostMapping()
     public void addOrder(@RequestBody Order order){
         orderService.addOrder(order);
     }
 
     @PutMapping(path = "{orderId}")
-    public void finishOrder(@PathVariable Long orderId){
-        orderService.setInactive(orderId);
+    public void finishOrder(@PathVariable Long orderId,@RequestParam("decision") String decision){
+        orderService.setInactive(orderId,decision);
     }
 
     @DeleteMapping(path = "{orderId}")

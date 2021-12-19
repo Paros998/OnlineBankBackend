@@ -1,7 +1,10 @@
 package com.OBS.service;
 
 import com.OBS.entity.Order;
+import com.OBS.enums.OrderType;
 import com.OBS.repository.OrderRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -17,6 +20,7 @@ import static com.OBS.auth.AppUserRole.*;
 @AllArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final LoanService loanService;
 
     private String orderNotFound(Long id) { return "Order with id: " + id + " doesn't exist in database";}
 
@@ -68,11 +72,12 @@ public class OrderService {
     }
 
     @Transactional
-    public void setInactive(Long orderId) {
+    public void setInactive(Long orderId,String decision) {
         Order order = orderRepository.findById(orderId).orElseThrow(
                 () -> new IllegalStateException(orderNotFound(orderId))
         );
         order.setIsActive(false);
+        order.setDecision(decision);
         orderRepository.save(order);
     }
 
