@@ -40,7 +40,7 @@ public class Order {
     private Client client;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "ordering_employee_id")
     private Employee orderingEmployee;
 
     @ManyToOne(fetch = FetchType.EAGER)
