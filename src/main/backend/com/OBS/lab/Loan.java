@@ -4,7 +4,7 @@ import com.OBS.entity.Client;
 
 import java.time.LocalDate;
 
-public class Loan {
+public class Loan implements BankStuff{
     private Boolean isActive;
     private LocalDate concludedDate;
     private int initialRatesNumber;
@@ -116,4 +116,8 @@ public class Loan {
         return new Loan();
     }
 
+    @Override
+    public String draw() {
+        return toString();
+    }
 }
