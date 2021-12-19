@@ -1,6 +1,8 @@
 package com.OBS.lab;
 
 import com.OBS.entity.Client;
+import com.OBS.service.ClientService;
+
 import java.time.LocalDateTime;
 
 public class Transfer {
@@ -80,10 +82,10 @@ public class Transfer {
         return this;
     }
 
-    public void performTransfer(Client client, com.OBS.entity.Loan clientLoan){
+    public void performTransfer() {
         if(client == null) throw new IllegalStateException("Internal Server Error, Sender not available");
-        if(client.getBalance() < clientLoan.getRateAmount()) {
-            throw new IllegalStateException("There is insufficient account balance to perform this transaction");
+        if(client.getBalance() < this.amount) {
+            throw new IllegalStateException("Account balance is insufficient to perform this transaction");
         }
 
         System.out.println("Transfer performed successfully.");

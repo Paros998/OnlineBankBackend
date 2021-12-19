@@ -1,5 +1,6 @@
 package com.OBS.lab;
 
+import com.OBS.entity.Client;
 import com.OBS.enums.TransferCategory;
 import com.OBS.enums.TransferType;
 
