@@ -1,21 +1,30 @@
 package com.OBS;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @EnableEncryptableProperties
-public class ObsApplication {
+public class ObsApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         SpringApplication.run(ObsApplication.class, args);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new SpecificationArgumentResolver());
     }
 
     @Bean
