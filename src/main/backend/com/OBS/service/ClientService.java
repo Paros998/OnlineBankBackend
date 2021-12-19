@@ -6,6 +6,7 @@ import com.OBS.requestBodies.ClientUserBody;
 import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,19 +28,8 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Client> getClients(String personalNumber_personName,String date) {
-        LocalDate birthDate;
-        if(Objects.equals(date, ""))
-            birthDate = null;
-        else
-            birthDate = LocalDate.parse(date);
-        if(Objects.equals(personalNumber_personName, "") && birthDate == null)
-            return clientRepository.findAll();
-        if(Objects.equals(personalNumber_personName, "") && birthDate != null)
-            return clientRepository.findAllByDateOfBirth(birthDate);
-        if(!Objects.equals(personalNumber_personName, "") && birthDate == null)
-            return clientRepository.findAllByFullNameContainsOrPersonalNumberStartsWith(personalNumber_personName,personalNumber_personName);
-        return clientRepository.findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(personalNumber_personName,personalNumber_personName,birthDate);
+    public List<Client> getClients(Specification<Client> clientSpecificationFilter) {
+        return clientRepository.findAll(clientSpecificationFilter);
     }
 
     public Client getClient(Long id) {

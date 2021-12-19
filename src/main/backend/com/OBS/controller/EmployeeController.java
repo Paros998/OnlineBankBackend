@@ -1,10 +1,15 @@
 package com.OBS.controller;
 
+import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
 import com.OBS.requestBodies.EmployeeUserBody;
 import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.service.EmployeeService;
 import lombok.AllArgsConstructor;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,8 +22,13 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/filtered")
-    public List<Employee> getEmployeesSorted(@RequestParam String birthDate,@RequestParam String personalNumber_personName) {
-        return employeeService.getEmployees(personalNumber_personName,birthDate);
+    public List<Employee> getEmployeesSorted(
+            @And({
+                    @Spec(path = "dateOfBirth", params = "birthDate", spec = Equal.class),
+                    @Spec(path = "fullName", params = "personalNumber_personName", spec = Equal.class),
+                    @Spec(path = "personalNumber", params = "personalNumber_personName", spec = Equal.class),
+            }) Specification<Employee> filterEmployeeSpec) {
+        return employeeService.getEmployees(filterEmployeeSpec);
     }
 
     @GetMapping(path = "{id}")

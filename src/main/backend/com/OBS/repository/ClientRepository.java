@@ -2,7 +2,9 @@ package com.OBS.repository;
 
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
+import com.OBS.entity.Transfer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
+public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecificationExecutor<Client> {
 
     boolean existsByPersonalNumber(String personalNumber);
 
@@ -25,12 +27,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Client findByAccountNumber(String accountNumber);
 
     Client getByUser(AppUser user);
-
-    List<Client> findAllByFullNameContainsOrPersonalNumberStartsWithOrDateOfBirth(String fullName, String personalNumber, LocalDate dateOfBirth);
-
-    List<Client> findAllByDateOfBirth(LocalDate birthDate);
-
-    List<Client> findAllByFullNameContainsOrPersonalNumberStartsWith(String fullName, String personalNumber);
 
     List<Client> findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(LocalDateTime dateOfCreation, LocalDateTime dateOfCreation2);
 }
