@@ -2,6 +2,7 @@ package com.OBS.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -26,16 +27,21 @@ public class Order {
     private Long order_Id;
 
     private String orderType;
+    private String decision;
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime createDate;
     private Boolean isActive;
 
-    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonBinaryType")
-    private JsonBinaryType requestBody;
+    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonStringType")
+    private JsonStringType requestBody;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employee_id")
+    private Employee orderingEmployee;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
