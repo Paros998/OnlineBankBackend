@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +37,7 @@ public class CyclicalTransferService {
     }
 
     public List<CyclicalTransfer> getComingTransfers(Long clientId) {
-        return cyclicalTransferRepository.findComingByClient_clientIdOrderByReTransferDate(
+        return cyclicalTransferRepository.findComingByClient_clientIdOrderByReTransferDateDesc(
                 clientId, PageRequest.of(0, 3)
         );
     }
