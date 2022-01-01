@@ -1,5 +1,6 @@
 package com.OBS.service;
 
+import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
 import com.OBS.repository.ClientRepository;
 import com.OBS.requestBodies.ClientUserBody;
@@ -62,32 +63,32 @@ public class ClientService {
         return clientRepository.findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(today.minusDays(days),today);
     }
 
+    public void assignUserToClient(Client client,AppUser user){
+        clientEmployeeService.assignUser(client,user);
+    }
 
     public void addClient(ClientUserBody body) {
         Client client = body.getClient();
         UserCredentials userCredentials = body.getUserCredentials();
 
-        if (clientEmployeeService.existsByPersonalNumber(client.getPersonalNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
+        clientEmployeeService.checkForWithPN_IN(client);
 
-        if (clientEmployeeService.existsByIdentificationNumber(client.getIdentificationNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
+        clientEmployeeService.checkForClientErrors(client);
 
-        if (clientRepository.existsByPersonalNumber(client.getPersonalNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
-        if (clientRepository.existsByIdentificationNumber(client.getIdentificationNumber())) {
-            throw new IllegalStateException("This Identification Number is already taken!");
-        }
-        if (clientRepository.existsByAccountNumber(client.getAccountNumber())) {
-            throw new IllegalStateException("This Account Number is already taken!");
-        }
         client.setUser(appUserService.createAppUser(userCredentials));
         client.setDateOfCreation(LocalDateTime.now());
         clientRepository.save(client);
     }
+
+    public void addClient(Client client){
+        clientEmployeeService.checkForWithPN_IN(client);
+        clientEmployeeService.checkForClientErrors(client);
+
+        client.setDateOfCreation(LocalDateTime.now());
+        clientRepository.save(client);
+    }
+
+
 
     @Transactional
     public void updateClient(ClientUserBody body) {
@@ -98,28 +99,9 @@ public class ClientService {
         }
         Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());
 
-        if (clientEmployeeService.existsByPersonalNumber(newClientRecord.getPersonalNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
+        clientEmployeeService.checkForWithPN_IN(newClientRecord);
 
-        if (clientEmployeeService.existsByIdentificationNumber(newClientRecord.getIdentificationNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
-
-        if (!currentClientRecord.getPersonalNumber().equals(newClientRecord.getPersonalNumber())) {
-            if (clientRepository.existsByPersonalNumber(newClientRecord.getPersonalNumber()))
-                throw new IllegalStateException("This Personal Number is already taken!");
-        }
-
-        if (!currentClientRecord.getIdentificationNumber().equals(newClientRecord.getIdentificationNumber())) {
-            if (clientRepository.existsByIdentificationNumber(newClientRecord.getIdentificationNumber()))
-                throw new IllegalStateException("This Identification Number is already taken!");
-        }
-
-        if (!currentClientRecord.getAccountNumber().equals(newClientRecord.getAccountNumber())) {
-            if (clientRepository.existsByAccountNumber(newClientRecord.getAccountNumber()))
-                throw new IllegalStateException("This Account Number is already taken!");
-        }
+        clientEmployeeService.checkForErrorsBetweenOldEntities(currentClientRecord,newClientRecord);
 
         appUserService.updateAppUser(currentClientRecord.getUser().getUserId(), newUserCredentials);
 
@@ -127,6 +109,30 @@ public class ClientService {
             newClientRecord.setEmail(newUserCredentials.getEmail());
 
         newClientRecord.setUser(currentClientRecord.getUser());
+
+        clientRepository.save(newClientRecord);
+    }
+
+    @Transactional
+    public void updateClient(Client newClientRecord){
+        if (clientRepository.existsById(newClientRecord.getClientId())) {
+            throw new IllegalStateException("Client with given id:" + newClientRecord.getClientId() + " doesn't exists in database");
+        }
+        Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());
+
+        clientEmployeeService.checkForWithPN_IN(newClientRecord);
+
+        clientEmployeeService.checkForErrorsBetweenOldEntities(currentClientRecord,newClientRecord);
+
+        AppUser clientUser = currentClientRecord.getUser();
+
+        if(!Objects.equals(clientUser.getEmail(), newClientRecord.getEmail())){
+            clientUser.setEmail(newClientRecord.getEmail());
+        }
+
+        appUserService.updateAppUser(clientUser);
+
+        newClientRecord.setUser(clientUser);
 
         clientRepository.save(newClientRecord);
     }

@@ -15,13 +15,13 @@ public class OrderController {
     public Order getOrder(@PathVariable Long orderId){return orderService.getOrder(orderId);}
 
     @PostMapping()
-    public void addOrder(@RequestBody Order order){
-        orderService.addOrder(order);
+    public void addOrder(@RequestBody Order order,@RequestParam("requestBody") String requestBody){
+        orderService.addOrder(order,requestBody);
     }
 
     @PutMapping(path = "{orderId}")
     public void finishOrder(@PathVariable Long orderId,@RequestParam("decision") String decision){
-        orderService.setInactive(orderId,decision);
+        orderService.finishOrder(orderId,decision);
     }
 
     @DeleteMapping(path = "{orderId}")

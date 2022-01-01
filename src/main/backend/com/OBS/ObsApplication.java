@@ -11,6 +11,10 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +29,11 @@ public class ObsApplication implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new SpecificationArgumentResolver());
+    }
+
+    @Bean
+    public Jsonb jsonb(){
+        return JsonbBuilder.create(new JsonbConfig());
     }
 
     @Bean

@@ -2,19 +2,19 @@ package com.OBS.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
 @Getter
 @Setter
+@TypeDef(name = "jsonb",typeClass = JsonBinaryType.class)
 public class Order {
     @Id
     @GeneratedValue(
@@ -32,8 +32,9 @@ public class Order {
     private LocalDateTime createDate;
     private Boolean isActive;
 
-    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonStringType")
-    private JsonStringType requestBody;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private String requestBody;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
