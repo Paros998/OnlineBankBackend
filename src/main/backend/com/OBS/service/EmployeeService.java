@@ -1,5 +1,7 @@
 package com.OBS.service;
 
+import com.OBS.auth.entity.AppUser;
+import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
 import com.OBS.repository.EmployeeRepository;
 import com.OBS.requestBodies.EmployeeUserBody;
@@ -35,24 +37,17 @@ public class EmployeeService {
         );
     }
 
+    public void assignUserToEmployee(Employee employee, AppUser user){
+        clientEmployeeService.assignUser(employee,user);
+    }
+
     public void addEmployee(EmployeeUserBody body) {
         Employee employee = body.getEmployee();
         UserCredentials userCredentials = body.getUserCredentials();
 
-        if (clientEmployeeService.existsByPersonalNumber(employee.getPersonalNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
+        clientEmployeeService.checkForWithPN_IN(employee);
 
-        if (clientEmployeeService.existsByIdentificationNumber(employee.getIdentificationNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
-
-        if (employeeRepository.existsByPersonalNumber(employee.getPersonalNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
-        if (employeeRepository.existsByIdentificationNumber(employee.getIdentificationNumber())) {
-            throw new IllegalStateException("This Identification Number is already taken!");
-        }
+        clientEmployeeService.checkForEmployeeErrors(employee);
         employee.setUser(appUserService.createAppUser(userCredentials));
         employeeRepository.save(employee);
 
@@ -67,22 +62,9 @@ public class EmployeeService {
         }
         Employee currentEmployeeRecord = employeeRepository.getById(newEmployeeRecord.getEmployeeId());
 
-        if (clientEmployeeService.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
+        clientEmployeeService.checkForWithPN_IN(newEmployeeRecord);
 
-        if (clientEmployeeService.existsByIdentificationNumber(newEmployeeRecord.getIdentificationNumber())) {
-            throw new IllegalStateException("This Personal Number is already taken!");
-        }
-
-        if (!currentEmployeeRecord.getPersonalNumber().equals(newEmployeeRecord.getPersonalNumber()))
-            if (employeeRepository.existsByPersonalNumber(newEmployeeRecord.getPersonalNumber())) {
-                throw new IllegalStateException("This Personal Number is already taken!");
-            }
-        if (!currentEmployeeRecord.getIdentificationNumber().equals(newEmployeeRecord.getIdentificationNumber()))
-            if (employeeRepository.existsByIdentificationNumber(newEmployeeRecord.getIdentificationNumber())) {
-                throw new IllegalStateException("This Identification Number is already taken!");
-            }
+        clientEmployeeService.checkForErrorsBetweenOldEntities(currentEmployeeRecord,newEmployeeRecord);
 
         appUserService.updateAppUser(currentEmployeeRecord.getUser().getUserId(), newUserCredentials);
 
@@ -90,6 +72,28 @@ public class EmployeeService {
             newEmployeeRecord.setEmail(newUserCredentials.getEmail());
 
         newEmployeeRecord.setUser(currentEmployeeRecord.getUser());
+
+        employeeRepository.save(newEmployeeRecord);
+    }
+
+    @Transactional
+    public void updateEmployee(Employee newEmployeeRecord){
+        if (!employeeRepository.existsById(newEmployeeRecord.getEmployeeId())) {
+            throw new IllegalStateException("Employee with given id:" + newEmployeeRecord.getEmployeeId() + " doesnt exist in database!");
+        }
+
+        Employee currentEmployeeRecord = employeeRepository.getById(newEmployeeRecord.getEmployeeId());
+
+        clientEmployeeService.checkForWithPN_IN(newEmployeeRecord);
+
+        clientEmployeeService.checkForErrorsBetweenOldEntities(currentEmployeeRecord,newEmployeeRecord);
+
+        newEmployeeRecord.setUser(currentEmployeeRecord.getUser());
+
+        if(!Objects.equals(newEmployeeRecord.getEmail(),currentEmployeeRecord.getEmail())){
+            newEmployeeRecord.getUser().setEmail(newEmployeeRecord.getEmail());
+            appUserService.updateAppUser(newEmployeeRecord.getUser());
+        }
 
         employeeRepository.save(newEmployeeRecord);
     }

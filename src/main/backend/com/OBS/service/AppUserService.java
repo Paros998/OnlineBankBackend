@@ -3,6 +3,7 @@ package com.OBS.service;
 import com.OBS.email.EmailService;
 import com.OBS.auth.entity.AppUser;
 import com.OBS.email.EmailTemplates;
+import com.OBS.entity.Client;
 import com.OBS.repository.AppUserRepository;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
@@ -94,6 +95,11 @@ public class AppUserService implements UserDetailsService {
         } else
             throw new IllegalStateException("User with given email doesn't exist!");
 
+    }
+
+    @Transactional
+    public void updateAppUser(AppUser user){
+        appUserRepository.save(user);
     }
 
     @Transactional

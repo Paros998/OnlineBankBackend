@@ -36,15 +36,8 @@ public class LoanService {
         return loan;
     }
 
-    public void addLoan(LoanBody body) {
-        Loan newLoan = new Loan(
-                body.getConcludedDate(),
-                body.getInitialRatesNumber(),
-                body.getBasicLoanAmount(),
-                clientService.getClient(body.getClientId())
-        );
-
-        List<Loan> clientLoans = loanRepository.findAllByClient_clientId(body.getClientId());
+    public void addLoan(Loan newLoan) {
+        List<Loan> clientLoans = loanRepository.findAllByClient_clientId(newLoan.getClient().getClientId());
         for(Loan loan: clientLoans){
             if(loan.getIsActive())
                 throw new IllegalStateException("New loan couldn't be created because there is already an active loan registered on this client");

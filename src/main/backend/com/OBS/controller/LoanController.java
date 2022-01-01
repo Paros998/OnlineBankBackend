@@ -19,7 +19,7 @@ public class LoanController {
     public Loan getLoan(@PathVariable Long loanId){return loanService.getLoan(loanId);}
 
     @PostMapping()
-    public void addLoan(@RequestBody LoanBody body){loanService.addLoan(body);}
+    public void addLoan(@RequestBody Loan body){loanService.addLoan(body);}
 
     @PatchMapping(path = "/{loanId}")
     public void setInactive(@PathVariable Long loanId){loanService.setInactive(loanId);}
@@ -29,7 +29,5 @@ public class LoanController {
 
     @PatchMapping(path = "/pay-rate/{clientId}")
     public void payLoanRate(@PathVariable Long clientId){loanService.realizePayment(clientId);}
-
-    //TODO add endpoint for client to get future loan calculated
 
 }
