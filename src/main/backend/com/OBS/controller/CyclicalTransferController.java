@@ -3,6 +3,11 @@ package com.OBS.controller;
 import com.OBS.entity.CyclicalTransfer;
 import com.OBS.service.CyclicalTransferService;
 import lombok.AllArgsConstructor;
+import net.kaczmarzyk.spring.data.jpa.domain.Between;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +28,15 @@ public class CyclicalTransferController {
         return cyclicalTransferService.getComingTransfers(clientId);
     }
 
-    @GetMapping(path = "/client/{clientId}")
-    public List<CyclicalTransfer> getClientTransfers(@PathVariable Long clientId){
-        return cyclicalTransferService.getClientTransfers(clientId);
+    @RequestMapping(path = "/client/{clientId}")
+    public List<CyclicalTransfer> getClientTransfers(
+            @And({
+                    @Spec(path = "client.clientId", pathVars = "clientId", spec = Equal.class),
+                    @Spec(path = "category", params = "transferCategory", spec = Equal.class),
+                    @Spec(path = "reTransferDate", params = {"dateFrom", "dateTo"}, config = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", spec = Between.class)
+            }) Specification<CyclicalTransfer> filterCyclicalTransferSpec
+    ) {
+        return cyclicalTransferService.getClientTransfers(filterCyclicalTransferSpec);
     }
 
     @PostMapping()

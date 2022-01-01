@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,10 @@ public class CyclicalTransferService {
         return cyclicalTransferRepository.findById(transferId).orElseThrow(
                 () -> new IllegalStateException(TransferNotExists(transferId))
         );
+    }
+
+    public List<CyclicalTransfer> getClientTransfers(Specification<CyclicalTransfer> filterCyclicalTransferSpec) {
+        return cyclicalTransferRepository.findAll(filterCyclicalTransferSpec);
     }
 
     public List<CyclicalTransfer> getClientTransfers(Long clientId) {
