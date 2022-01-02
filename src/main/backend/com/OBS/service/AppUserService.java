@@ -1,9 +1,8 @@
 package com.OBS.service;
 
-import com.OBS.email.EmailService;
 import com.OBS.auth.entity.AppUser;
+import com.OBS.email.EmailService;
 import com.OBS.email.EmailTemplates;
-import com.OBS.entity.Client;
 import com.OBS.repository.AppUserRepository;
 import com.OBS.requestBodies.UserCredentials;
 import lombok.AllArgsConstructor;
@@ -63,17 +62,15 @@ public class AppUserService implements UserDetailsService {
     }
 
     public void remindLoginToEmail(String email) {
-        if (appUserRepository.existsByEmail(email)) {
-            AppUser appUser = appUserRepository.getByEmail(email);
+        AppUser appUser = appUserRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalStateException("User with given email doesn't exist! " + email));
 
-            emailService.send(
-                    appUser.getEmail(),
-                    emailTemplates.emailTemplateForLoginReminder(appUser.getUsername()),
-                    "Remember your login credentials"
-            );
+        emailService.send(
+                appUser.getEmail(),
+                emailTemplates.emailTemplateForLoginReminder(appUser.getUsername()),
+                "Remember your login credentials"
+        );
 
-        } else
-            throw new IllegalStateException("User with given email doesn't exist!");
     }
 
     @Transactional
@@ -98,7 +95,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public void updateAppUser(AppUser user){
+    public void updateAppUser(AppUser user) {
         appUserRepository.save(user);
     }
 

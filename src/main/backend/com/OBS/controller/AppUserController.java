@@ -26,7 +26,7 @@ public class AppUserController {
     public AppUser getEmployeeUser(@PathVariable Long employeeId){return appUserService.getEmployeeUser(employeeId);}
 
     @PatchMapping(path = "{type}")
-    public void forgotCredentials(@RequestBody String email, @PathVariable("type") String type) {
+    public void forgotCredentials( @PathVariable("type") String type,@RequestParam String email) {
         if (Objects.equals(type, "login"))
             appUserService.remindLoginToEmail(email);
         else if (Objects.equals(type, "password"))
