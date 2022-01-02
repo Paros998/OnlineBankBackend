@@ -39,9 +39,11 @@ public class AppUser implements UserDetails {
     private Boolean locked;
     private Boolean enabled;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private Employee employee;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private Client client;
 

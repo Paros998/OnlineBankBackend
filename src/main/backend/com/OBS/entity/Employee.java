@@ -31,7 +31,7 @@ public class Employee {
     private String homeAddress;
     private String city;
     private String postalCode;
-
+    
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
