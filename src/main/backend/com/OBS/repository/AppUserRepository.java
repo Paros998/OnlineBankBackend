@@ -21,4 +21,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     AppUser getByEmail(String email);
 
     AppUser getByUsername(String username);
+
+    AppUser findByClient_clientId(Long clientId);
 }

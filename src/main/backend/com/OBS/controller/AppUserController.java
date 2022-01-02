@@ -19,6 +19,9 @@ public class AppUserController {
         return appUserService.getUser(id);
     }
 
+    @GetMapping(path = "/client/{clientId}")
+    public AppUser getClientUser(@PathVariable Long clientId){return appUserService.getClientUser(clientId);}
+
     @PatchMapping(path = "{type}")
     public void forgotCredentials(@RequestBody String email, @PathVariable("type") String type) {
         if (Objects.equals(type, "login"))

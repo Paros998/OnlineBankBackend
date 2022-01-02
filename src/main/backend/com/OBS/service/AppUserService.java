@@ -134,4 +134,7 @@ public class AppUserService implements UserDetailsService {
         appUserRepository.deleteById(id);
     }
 
+    public AppUser getClientUser(Long clientId) {
+        return appUserRepository.findByClient_clientId(clientId);
+    }
 }
