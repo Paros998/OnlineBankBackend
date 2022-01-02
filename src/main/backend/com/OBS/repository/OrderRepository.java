@@ -14,4 +14,6 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select o from Order o where o.isActive = true and o.createDate < :date order by o.createDate asc")
     List<Order> findAllPriorityOrders(@Param("date") LocalDateTime today);
+
+    List<Order> findAllByClient_clientId(Long clientId);
 }
