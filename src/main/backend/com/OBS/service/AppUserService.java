@@ -141,4 +141,5 @@ public class AppUserService implements UserDetailsService {
     public AppUser getEmployeeUser(Long employeeId) {
         return appUserRepository.findByEmployee_employeeId(employeeId);
     }
+
 }

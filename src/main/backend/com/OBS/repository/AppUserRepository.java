@@ -25,4 +25,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     AppUser findByClient_clientId(Long clientId);
 
     AppUser findByEmployee_employeeId(Long employeeId);
+
 }
