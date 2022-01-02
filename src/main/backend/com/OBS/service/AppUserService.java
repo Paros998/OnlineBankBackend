@@ -137,4 +137,8 @@ public class AppUserService implements UserDetailsService {
     public AppUser getClientUser(Long clientId) {
         return appUserRepository.findByClient_clientId(clientId);
     }
+
+    public AppUser getEmployeeUser(Long employeeId) {
+        return appUserRepository.findByEmployee_employeeId(employeeId);
+    }
 }

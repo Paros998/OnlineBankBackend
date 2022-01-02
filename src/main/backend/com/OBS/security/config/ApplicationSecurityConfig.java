@@ -70,6 +70,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/visits/**").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
 
                 .antMatchers(HttpMethod.PATCH, "/users/**").anonymous()
+                .antMatchers(HttpMethod.GET,"/users/client/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
+                .antMatchers(HttpMethod.GET,"/users/employee/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/users/**").hasRole(ADMIN.name())
 
                 .antMatchers(HttpMethod.GET, "/employees/{id}").hasAnyRole(ADMIN.name(),EMPLOYEE.name())
