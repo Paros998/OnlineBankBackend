@@ -54,16 +54,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/index", "/css/*", "/js/*", "/swagger-ui.html").permitAll()
 
+                .antMatchers(HttpMethod.GET,"/dictionary/orders/for-employees/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET,
-                        "/dictionary/clients/",
-                        "/dictionary/credit-cards",
-                        "/dictionary/orders/employees",
-                        "/dictionary/visits",
-                        "/dictionary/announcements",
-                        "/dictionary/transfers",
-                        "/dictionary/cyclical-transfers",
-                        "/dictionary/loans",
-                        "/dictionary/loans-rates").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                        "/dictionary/clients/**",
+                        "/dictionary/credit-cards/**",
+                        "/dictionary/orders/employees/**",
+                        "/dictionary/visits/**",
+                        "/dictionary/announcements/**",
+                        "/dictionary/transfers/**",
+                        "/dictionary/cyclical-transfers/**",
+                        "/dictionary/loans/**",
+                        "/dictionary/loans-rates/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET, "/dictionary/**").hasRole(ADMIN.name())
 
                 .antMatchers(HttpMethod.POST, "/visits/**").anonymous()
