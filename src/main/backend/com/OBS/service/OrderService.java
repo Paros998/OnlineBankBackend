@@ -145,4 +145,7 @@ public class OrderService {
     }
 
 
+    public List<Order> getClientOrders(Long clientId) {
+        return orderRepository.findAllByClient_clientId(clientId);
+    }
 }
