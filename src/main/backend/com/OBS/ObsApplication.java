@@ -26,6 +26,7 @@ public class ObsApplication implements WebMvcConfigurer {
         SpringApplication.run(ObsApplication.class, args);
     }
 
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new SpecificationArgumentResolver());
@@ -33,7 +34,9 @@ public class ObsApplication implements WebMvcConfigurer {
 
     @Bean
     public Jsonb jsonb(){
-        return JsonbBuilder.create(new JsonbConfig());
+        return JsonbBuilder.create(
+                new JsonbConfig().withNullValues(true)
+        );
     }
 
     @Bean

@@ -19,6 +19,12 @@ public class OrderController {
     @GetMapping(path = "client/{clientId}")
     public List<Order> getClientOrders(@PathVariable Long clientId){return orderService.getClientOrders(clientId);}
 
+    @GetMapping(path = "employee/{employeeId}/active")
+    public List<Order> getEmployeeActiveOrders(@PathVariable Long employeeId){return orderService.getEmployeeOrders(employeeId,true);}
+
+    @GetMapping(path = "employee/{employeeId}/inactive")
+    public List<Order> getEmployeeInactiveOrders(@PathVariable Long employeeId){return orderService.getEmployeeOrders(employeeId,false);}
+
     @PostMapping()
     public void addOrder(@RequestBody Order order,@RequestParam("requestBody") String requestBody){
         orderService.addOrder(order,requestBody);
@@ -27,6 +33,11 @@ public class OrderController {
     @PutMapping(path = "{orderId}")
     public void finishOrder(@PathVariable Long orderId,@RequestParam("decision") String decision){
         orderService.finishOrder(orderId,decision);
+    }
+
+    @PutMapping(path = "{orderId}/assign-employee/{employeeId}")
+    public void assignEmployee(@PathVariable("orderId") Long orderId,@PathVariable("employeeId") Long employeeId){
+        orderService.assignEmployee(orderId,employeeId);
     }
 
     @DeleteMapping(path = "{orderId}")

@@ -1,5 +1,6 @@
 package com.OBS.service;
 
+import com.OBS.auth.AppUserRole;
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
 import com.OBS.entity.CreditCard;
@@ -20,7 +21,19 @@ public class SystemService {
     private final LoanService loanService;
 
     public void createNewUser(UserCredentials userCredentials){
-        appUserService.createAppUser(userCredentials);
+        AppUser user = appUserService.createAppUser(userCredentials);
+        if(userCredentials.getAppUserRole() == AppUserRole.CLIENT){
+            Client oldClient = clientService.getClientByEmail(userCredentials.getEmail());
+            oldClient.setUser(user);
+            clientService.updateClient(oldClient);
+            user.setClient(oldClient);
+        }else {
+            Employee oldEmployee = employeeService.getEmployeeByEmail(userCredentials.getEmail());
+            oldEmployee.setUser(user);
+            employeeService.updateEmployee(oldEmployee);
+            user.setEmployee(oldEmployee);
+        }
+        appUserService.updateAppUser(user);
     }
 
     public void updateAppUser(AppUser appUser){

@@ -80,7 +80,7 @@ public class ClientService {
         clientRepository.save(client);
     }
 
-    public void addClient(Client client){
+    public void addOnlyClient(Client client){
         clientEmployeeService.checkForWithPN_IN(client);
         clientEmployeeService.checkForClientErrors(client);
 
@@ -169,5 +169,8 @@ public class ClientService {
     }
 
 
+    public Client getClientByEmail(String email) {
+        return clientRepository.getByEmail(email);
+    }
 }
 
