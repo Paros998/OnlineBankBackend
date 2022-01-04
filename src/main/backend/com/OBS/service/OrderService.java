@@ -2,17 +2,19 @@ package com.OBS.service;
 
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.*;
+import com.OBS.enums.SearchOperation;
 import com.OBS.repository.OrderRepository;
-import com.OBS.requestBodies.LoanBody;
 import com.OBS.requestBodies.UserCredentials;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
+import org.mockito.internal.matchers.Null;
 import org.springframework.stereotype.Service;
-
 import javax.json.bind.Jsonb;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static com.OBS.auth.AppUserRole.ADMIN;
 import static com.OBS.enums.OrderType.*;
@@ -22,6 +24,7 @@ import static com.OBS.enums.OrderType.*;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final SystemService systemService;
+    private final EmployeeService employeeService;
     private final Jsonb jsonb;
 
     private String orderNotFound(Long id) {
@@ -29,32 +32,41 @@ public class OrderService {
     }
 
     public List<Order> getOrders(String role) {
-        if (Objects.equals(role, ADMIN.name())) {
-            return orderRepository.findAll();
-        } else {
-            List<Order> orders = orderRepository.findAll();
-            orders.removeIf(order ->
-                    order.getOrderType().equals(changeUser.name())
-                            || order.getOrderType().equals(changeEmployee.name())
-                            || order.getOrderType().equals(createUser.name())
-            );
-            return orders;
+        Specifications<Order> priorityOrdersSpecifications = new Specifications<Order>()
+                .add(new SearchCriteria("employee", null, SearchOperation.EQUAL_NULL));
+        if (!Objects.equals(role, ADMIN.name())) {
+            priorityOrdersSpecifications = priorityOrdersSpecifications
+                    .add(new SearchCriteria("orderType", changeEmployee.toString(), SearchOperation.NOT_EQUAL))
+                    .add(new SearchCriteria("orderType", changeUser.toString(), SearchOperation.NOT_EQUAL))
+                    .add(new SearchCriteria("orderType", createUser.toString(), SearchOperation.NOT_EQUAL));
         }
+        return orderRepository.findAll(priorityOrdersSpecifications);
     }
 
+    //TODO fix LocalDateTime
     public List<Order> getPriorityOrders(String role) {
-        LocalDateTime today = LocalDateTime.now();
-        if (Objects.equals(role, ADMIN.name())) {
-            return orderRepository.findAllPriorityOrders(today);
-        } else {
-            List<Order> orders = orderRepository.findAllPriorityOrders(today);
-            orders.removeIf(order ->
-                    order.getOrderType().equals(changeUser.name())
-                            || order.getOrderType().equals(changeEmployee.name())
-                            || order.getOrderType().equals(createUser.name())
-            );
-            return orders;
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        Specifications<Order> priorityOrdersSpecifications = new Specifications<Order>()
+                .add(new SearchCriteria(
+                        "createDate",
+                        yesterday.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")),
+                        SearchOperation.LESS_THAN))
+                .add(new SearchCriteria("employee",null, SearchOperation.EQUAL_NULL))
+                ;
+        if (!Objects.equals(role, ADMIN.name())) {
+            priorityOrdersSpecifications = priorityOrdersSpecifications
+                    .add(new SearchCriteria("orderType", changeEmployee.toString(), SearchOperation.NOT_EQUAL))
+                    .add(new SearchCriteria("orderType", changeUser.toString(), SearchOperation.NOT_EQUAL))
+                    .add(new SearchCriteria("orderType", createUser.toString(), SearchOperation.NOT_EQUAL));
         }
+        return orderRepository.findAll(priorityOrdersSpecifications);
+    }
+
+    public List<Order> getEmployeeOrders(Long employeeId,boolean isActive) {
+        Specifications<Order> employeeOrdersSpecifications = new Specifications<Order>()
+                .add(new SearchCriteria("employee",employeeService.getEmployee(employeeId),SearchOperation.EQUAL))
+                .add(new SearchCriteria("isActive", isActive,SearchOperation.EQUAL));
+        return orderRepository.findAll(employeeOrdersSpecifications);
     }
 
 
@@ -148,4 +160,16 @@ public class OrderService {
     public List<Order> getClientOrders(Long clientId) {
         return orderRepository.findAllByClient_clientId(clientId);
     }
+
+    @Transactional
+    public void assignEmployee(Long orderId, Long employeeId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                ()-> new IllegalStateException(orderNotFound(orderId))
+        );
+        Employee employee = employeeService.getEmployee(employeeId);
+        order.setEmployee(employee);
+        orderRepository.save(order);
+    }
+
+
 }

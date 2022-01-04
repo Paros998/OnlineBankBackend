@@ -35,6 +35,8 @@ public class TransferController {
         return transferService.getTransfers(filterTransferSpec);
     }
 
+    //TODO add endpoint for 30days history of payments within categories
+
     @PostMapping()
     public void addTransfer(@RequestBody Transfer transfer) { transferService.performTransfer(transfer); }
 

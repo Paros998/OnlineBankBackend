@@ -1,18 +1,18 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Client;
-import com.OBS.entity.Transfer;
 import com.OBS.requestBodies.ClientUserBody;
-import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
 import com.OBS.service.ClientService;
 import lombok.AllArgsConstructor;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.StartingWith;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Conjunction;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,13 +21,15 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
+    //TODO fix filtering
     @GetMapping(path = "/filtered")
     public List<Client> getClientsSorted(
-            @And({
-                    @Spec(path = "dateOfBirth", params = "birthDate", spec = Equal.class),
-                    @Spec(path = "fullName", params = "personalNumber_personName", spec = Equal.class),
-                    @Spec(path = "personalNumber", params = "personalNumber_personName", spec = Equal.class),
-            }) Specification<Client>filterClientSpec) {
+            @Conjunction(value = {
+                    @Or({
+                            @Spec(path = "fullName", params = "personalNumber_personName", spec = StartingWith.class),
+                            @Spec(path = "personalNumber", params = "personalNumber_personName", spec = StartingWith.class)
+                    }),
+            }, and = @Spec(path = "dateOfBirth", params = "birthDate", spec = Equal.class)) Specification<Client>filterClientSpec) {
         return clientService.getClients(filterClientSpec);
     }
 
@@ -40,9 +42,12 @@ public class ClientController {
     }
 
     @PostMapping()
-    public void addNewClient(@RequestBody ClientUserBody body) {
+    public void addClient(@RequestBody ClientUserBody body) {
         clientService.addClient(body);
     }
+
+    @PostMapping(path = "/only-client")
+    public void addOnlyClient(@RequestBody Client body){clientService.addOnlyClient(body);}
 
     @PutMapping()
     public void updateClient(@RequestBody ClientUserBody body) {

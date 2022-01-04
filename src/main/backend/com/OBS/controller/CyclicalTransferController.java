@@ -39,6 +39,8 @@ public class CyclicalTransferController {
         return cyclicalTransferService.getClientTransfers(filterCyclicalTransferSpec);
     }
 
+    //TODO add endpoint for 30days estimation of payments within categories
+
     @PostMapping()
     public void addTransfer(@RequestBody CyclicalTransfer cyclicalTransfer){
         cyclicalTransferService.addTransfer(cyclicalTransfer);

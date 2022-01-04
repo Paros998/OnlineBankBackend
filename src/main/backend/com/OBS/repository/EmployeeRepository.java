@@ -21,4 +21,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
     boolean existsByIdentificationNumber(String identificationNumber);
 
     Employee getByUser(AppUser user);
+
+    Employee getByEmail(String email);
 }

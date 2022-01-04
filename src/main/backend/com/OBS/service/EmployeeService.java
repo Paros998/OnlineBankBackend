@@ -110,4 +110,8 @@ public class EmployeeService {
             return null;
         else return employee.getEmployeeId();
     }
+
+    public Employee getEmployeeByEmail(String email) {
+        return employeeRepository.getByEmail(email);
+    }
 }

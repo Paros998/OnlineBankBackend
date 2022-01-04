@@ -29,4 +29,6 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
     Client getByUser(AppUser user);
 
     List<Client> findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(LocalDateTime dateOfCreation, LocalDateTime dateOfCreation2);
+
+    Client getByEmail(String email);
 }
