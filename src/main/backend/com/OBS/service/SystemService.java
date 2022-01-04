@@ -36,8 +36,9 @@ public class SystemService {
         appUserService.updateAppUser(user);
     }
 
-    public void updateAppUser(AppUser appUser){
-        appUserService.updateAppUser(appUser);
+    public void updateAppUser(UserCredentials userCredentials){
+        AppUser appUser = appUserService.getUserByEmail(userCredentials.getEmail());
+        appUserService.updateAppUser(appUser.getUserId(),userCredentials);
     }
 
     public void updateClient(Client client){

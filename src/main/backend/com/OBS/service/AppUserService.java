@@ -125,7 +125,7 @@ public class AppUserService implements UserDetailsService {
 
 
     public void deleteUserById(Long id) {
-        AppUser appUser = appUserRepository.findById(id).orElseThrow(
+         appUserRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("User with given id " + id + " doesn't exist in database!")
         );
         appUserRepository.deleteById(id);
@@ -137,5 +137,11 @@ public class AppUserService implements UserDetailsService {
 
     public AppUser getEmployeeUser(Long employeeId) {
         return appUserRepository.findByEmployee_employeeId(employeeId);
+    }
+
+    public AppUser getUserByEmail(String email) {
+        return appUserRepository.findByEmail(email).orElseThrow(
+                ()->new IllegalStateException("User with given email " + email + " doesn't exist in database!")
+        );
     }
 }
