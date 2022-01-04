@@ -1,6 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Order;
+import com.OBS.requestBodies.OrderJsonBody;
 import com.OBS.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,8 @@ public class OrderController {
     public List<Order> getEmployeeInactiveOrders(@PathVariable Long employeeId){return orderService.getEmployeeOrders(employeeId,false);}
 
     @PostMapping()
-    public void addOrder(@RequestBody Order order,@RequestParam("requestBody") String requestBody){
-        orderService.addOrder(order,requestBody);
+    public void addOrder(@RequestBody OrderJsonBody body){
+        orderService.addOrder(body.getOrder(), body.getRequestBody());
     }
 
     @PutMapping(path = "{orderId}")
