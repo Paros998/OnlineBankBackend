@@ -79,14 +79,12 @@ public class OrderService {
     public void addOrder(Order order, String requestBody) {
         String newRequestBody = "";
         switch (order.getOrderType()) {
+            case "Modyfikacja użytkownika":
             case "Utworzenie użytkownika":
                 newRequestBody = jsonb.toJson(requestBody, UserCredentials.class);
                 break;
             case "Edycja danych klienta":
                 newRequestBody = jsonb.toJson(requestBody, Client.class);
-                break;
-            case "Modyfikacja użytkownika":
-                newRequestBody = jsonb.toJson(requestBody, AppUser.class);
                 break;
             case "Modyfikacja danych pracownika":
                 newRequestBody = jsonb.toJson(requestBody, Employee.class);
@@ -100,6 +98,8 @@ public class OrderService {
             case "Podanie o kredyt":
                 newRequestBody = jsonb.toJson(requestBody, Loan.class);
                 break;
+            default:
+                throw new IllegalStateException("Nieznany Typ Zlecenia");
         }
 
         order.setRequestBody(newRequestBody);
@@ -128,7 +128,7 @@ public class OrderService {
                     systemService.updateClient(jsonb.fromJson(order.getRequestBody(),Client.class));
                     break;
                 case "Modyfikacja użytkownika":
-                    systemService.updateAppUser(jsonb.fromJson(order.getRequestBody(),AppUser.class));
+                    systemService.updateAppUser(jsonb.fromJson(order.getRequestBody(),UserCredentials.class));
                     break;
                 case "Modyfikacja danych pracownika":
                     systemService.updateEmployee(jsonb.fromJson(order.getRequestBody(),Employee.class));;
