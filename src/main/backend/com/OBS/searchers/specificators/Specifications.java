@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Specifications<T> implements Specification<T>, Cloneable {
 
     private final List<SearchCriteria> searchCriteriaList;
