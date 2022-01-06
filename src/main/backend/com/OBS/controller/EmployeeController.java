@@ -1,9 +1,7 @@
 package com.OBS.controller;
 
-import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
-import com.OBS.requestBodies.EmployeeUserBody;
-import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
+import com.OBS.alternativeBodies.EmployeeUserBody;
 import com.OBS.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
@@ -12,7 +10,6 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor

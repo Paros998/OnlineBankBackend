@@ -1,7 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Order;
-import com.OBS.requestBodies.OrderJsonBody;
+import com.OBS.alternativeBodies.OrderJsonBody;
 import com.OBS.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

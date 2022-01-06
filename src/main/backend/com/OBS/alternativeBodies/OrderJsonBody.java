@@ -1,4 +1,4 @@
-package com.OBS.requestBodies;
+package com.OBS.alternativeBodies;
 
 import com.OBS.entity.Order;
 import lombok.AllArgsConstructor;

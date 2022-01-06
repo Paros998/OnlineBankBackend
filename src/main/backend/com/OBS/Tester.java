@@ -1,11 +1,24 @@
 package com.OBS;
 
-import com.OBS.entity.Order;
+import com.OBS.entity.Transfer;
+import com.OBS.enums.SearchOperation;
+import com.OBS.searchers.SearchCriteria;
+
+import java.time.LocalDateTime;
 
 public class Tester {
     public static void main(String[] args) {
-        Order order = new Order();
-        System.out.println(order.getEmployee());
-        System.out.println(order.getEmployee() == null);
+        Transfer transfer = new Transfer();
+        transfer.setTransferDate(LocalDateTime.now());
+
+
+        SearchCriteria sc = new SearchCriteria(
+                "transferDate",
+                LocalDateTime.now().minusMonths(1),
+                SearchOperation.GREATER_THAN);
+
+        System.out.println(sc.getValue());
+        System.out.println(sc.getValue().toString());
+        System.out.println(sc.getValue().equals(sc.getValue().toString()));
     }
 }

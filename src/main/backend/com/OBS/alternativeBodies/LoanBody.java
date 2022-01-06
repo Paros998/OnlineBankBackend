@@ -1,4 +1,4 @@
-package com.OBS.requestBodies;
+package com.OBS.alternativeBodies;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,10 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NamePersonalNum_BirthDateBody {
-    String personalNumber_personName;
-    LocalDate birthDate;
+public class LoanBody {
+    LocalDate concludedDate;
+    int initialRatesNumber;
+    Float basicLoanAmount;
+    Long clientId;
+
 }

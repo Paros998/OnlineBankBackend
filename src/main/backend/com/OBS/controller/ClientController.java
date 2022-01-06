@@ -1,12 +1,11 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Client;
-import com.OBS.requestBodies.ClientUserBody;
+import com.OBS.alternativeBodies.ClientUserBody;
 import com.OBS.service.ClientService;
 import lombok.AllArgsConstructor;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.StartingWith;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Conjunction;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -21,7 +20,6 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
-    //TODO fix filtering
     @GetMapping(path = "/filtered")
     public List<Client> getClientsSorted(
             @Conjunction(value = {

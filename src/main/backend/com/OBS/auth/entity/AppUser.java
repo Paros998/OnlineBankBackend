@@ -3,7 +3,7 @@ package com.OBS.auth.entity;
 import com.OBS.auth.AppUserRole;
 import com.OBS.entity.Client;
 import com.OBS.entity.Employee;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.UserCredentials;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
