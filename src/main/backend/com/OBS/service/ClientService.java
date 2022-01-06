@@ -113,7 +113,7 @@ public class ClientService {
 
     @Transactional
     public void updateClient(Client newClientRecord){
-        if (clientRepository.existsById(newClientRecord.getClientId())) {
+        if (!clientRepository.existsById(newClientRecord.getClientId())) {
             throw new IllegalStateException("Client with given id:" + newClientRecord.getClientId() + " doesn't exists in database");
         }
         Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());

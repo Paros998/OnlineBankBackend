@@ -1,5 +1,6 @@
 package com.OBS.service;
 
+import com.OBS.alternativeBodies.CreateCreditCardModel;
 import com.OBS.entity.*;
 import com.OBS.enums.SearchOperation;
 import com.OBS.repository.OrderRepository;
@@ -70,32 +71,7 @@ public class OrderService {
     }
 
     public void addOrder(Order order, String requestBody) {
-        String newRequestBody ;
-        switch (order.getOrderType()) {
-            case "Modyfikacja użytkownika":
-            case "Utworzenie użytkownika":
-                newRequestBody = jsonb.toJson(requestBody, UserCredentials.class);
-                break;
-            case "Edycja danych klienta":
-                newRequestBody = jsonb.toJson(requestBody, Client.class);
-                break;
-            case "Modyfikacja danych pracownika":
-                newRequestBody = jsonb.toJson(requestBody, Employee.class);
-                break;
-            case "Zablokowanie karty kredytowej":
-            case "Wycofanie karty kredytowej":
-            case "Wyrób nowej karty kredytowej":
-            case "Odblokowanie karty kredytowej":
-                newRequestBody = jsonb.toJson(requestBody, CreditCard.class);
-                break;
-            case "Podanie o kredyt":
-                newRequestBody = jsonb.toJson(requestBody, Loan.class);
-                break;
-            default:
-                throw new IllegalStateException("Nieznany Typ Zlecenia");
-        }
-
-        order.setRequestBody(newRequestBody);
+        order.setRequestBody(requestBody);
         order.setIsActive(true);
         orderRepository.save(order);
     }
@@ -133,7 +109,7 @@ public class OrderService {
                     systemService.discardCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
                     break;
                 case "Wyrób nowej karty kredytowej":
-                    systemService.createCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
+                    systemService.createCreditCard(jsonb.fromJson(order.getRequestBody(), CreateCreditCardModel.class));
                     break;
                 case "Odblokowanie karty kredytowej":
                     systemService.unblockCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
