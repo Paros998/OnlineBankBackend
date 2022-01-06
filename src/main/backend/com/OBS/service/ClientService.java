@@ -2,9 +2,12 @@ package com.OBS.service;
 
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
+import com.OBS.enums.SearchOperation;
 import com.OBS.repository.ClientRepository;
 import com.OBS.alternativeBodies.ClientUserBody;
 import com.OBS.alternativeBodies.UserCredentials;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -58,7 +61,9 @@ public class ClientService {
 
     public List<Client> getLatestClients(Integer days) {
         LocalDateTime today = LocalDateTime.now();
-        return clientRepository.findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(today.minusDays(days),today);
+        Specifications<Client> findAllByCreationDateBefore = new Specifications<Client>()
+                .add(new SearchCriteria("dateOfCreation",today.minusDays(days), SearchOperation.GREATER_THAN_EQUAL_DATE));
+        return clientRepository.findAll(findAllByCreationDateBefore);
     }
 
     public void assignUserToClient(Client client,AppUser user){

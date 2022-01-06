@@ -1,8 +1,6 @@
 package com.OBS.service;
 
-
 import com.OBS.alternativeBodies.CreateCreditCardModel;
-
 import com.OBS.entity.*;
 import com.OBS.enums.SearchOperation;
 import com.OBS.repository.OrderRepository;
@@ -10,7 +8,6 @@ import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
-import org.mockito.internal.matchers.Null;
 import org.springframework.stereotype.Service;
 import javax.json.bind.Jsonb;
 import javax.transaction.Transactional;
@@ -46,7 +43,6 @@ public class OrderService {
         return orderRepository.findAll(normalOrdersSpecifications);
     }
 
-    //TODO fix LocalDateTime
     public List<Order> getPriorityOrders(String role) {
         Specifications<Order> priorityOrdersSpecifications = new Specifications<Order>()
                 .add(new SearchCriteria("createDate", LocalDateTime.now().minusDays(1), SearchOperation.LESS_THAN_EQUAL_DATE))
@@ -75,7 +71,6 @@ public class OrderService {
     }
 
     public void addOrder(Order order, String requestBody) {
-
         order.setRequestBody(requestBody);
         order.setIsActive(true);
         orderRepository.save(order);
