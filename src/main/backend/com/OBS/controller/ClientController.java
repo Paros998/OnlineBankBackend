@@ -20,6 +20,7 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
+    //TODO fix filtering
     @GetMapping(path = "/filtered")
     public List<Client> getClientsSorted(
             @Conjunction(value = {

@@ -20,5 +20,4 @@ public enum SearchOperation {
     LESS_THAN_DATE,
     EQUAL_DATE,
     NOT_EQUAL_DATE,
-
 }
