@@ -1,5 +1,7 @@
 package com.OBS.controller;
 
+import com.OBS.alternativeBodies.KeyValueObject;
+import com.OBS.alternativeBodies.ValueAndPercent;
 import com.OBS.entity.CyclicalTransfer;
 import com.OBS.service.CyclicalTransferService;
 import lombok.AllArgsConstructor;
@@ -28,7 +30,7 @@ public class CyclicalTransferController {
         return cyclicalTransferService.getComingTransfers(clientId);
     }
 
-    @RequestMapping(path = "/client/{clientId}")
+    @GetMapping(path = "/client/{clientId}")
     public List<CyclicalTransfer> getClientTransfers(
             @And({
                     @Spec(path = "client.clientId", pathVars = "clientId", spec = Equal.class),
@@ -39,7 +41,10 @@ public class CyclicalTransferController {
         return cyclicalTransferService.getClientTransfers(filterCyclicalTransferSpec);
     }
 
-    //TODO add endpoint for 30days estimation of payments within categories
+    @GetMapping(path = "/client/{client_Id}/estimate")
+    public List<KeyValueObject<String, ValueAndPercent>> getClientEstimated(@PathVariable Long client_Id){
+        return cyclicalTransferService.getClientEstimated(client_Id);
+    }
 
     @PostMapping()
     public void addTransfer(@RequestBody CyclicalTransfer cyclicalTransfer){

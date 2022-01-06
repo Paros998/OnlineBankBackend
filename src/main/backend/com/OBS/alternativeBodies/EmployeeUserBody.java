@@ -1,6 +1,6 @@
-package com.OBS.requestBodies;
+package com.OBS.alternativeBodies;
 
-import com.OBS.entity.Client;
+import com.OBS.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientUserBody {
-    Client client;
+public class EmployeeUserBody {
+    Employee employee;
     UserCredentials userCredentials;
+
 }

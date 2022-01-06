@@ -3,7 +3,7 @@ package com.OBS.service;
 import com.OBS.entity.Client;
 import com.OBS.entity.Loan;
 import com.OBS.repository.LoanRepository;
-import com.OBS.requestBodies.LoanBody;
+import com.OBS.alternativeBodies.LoanBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import lombok.AllArgsConstructor;

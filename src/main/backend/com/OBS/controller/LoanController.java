@@ -1,7 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Loan;
-import com.OBS.requestBodies.LoanBody;
+import com.OBS.alternativeBodies.LoanBody;
 import com.OBS.service.LoanService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

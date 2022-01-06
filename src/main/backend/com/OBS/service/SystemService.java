@@ -6,10 +6,12 @@ import com.OBS.entity.Client;
 import com.OBS.entity.CreditCard;
 import com.OBS.entity.Employee;
 import com.OBS.entity.Loan;
-import com.OBS.requestBodies.LoanBody;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -58,6 +60,23 @@ public class SystemService {
     }
 
     public void createCreditCard(CreditCard creditCard) {
+        Random random = new Random();
+        creditCard.setIsActive(true);
+        creditCard.setExpireDate(LocalDate.now().plusYears(3));
+        creditCard.setCvvNumber((random.nextInt(99999) + 9869 ) % 1000);
+        
+        String cardNumber = "1099 20";
+        do {
+            for (int i = 0; i < 11; i++) {
+                if(i == (2 | 7))
+                    cardNumber += " ";
+                else cardNumber += random.nextInt(10);
+            }
+            cardNumber += '8';
+        } while(creditCardService.existsByCardNumber(cardNumber));
+                
+        creditCard.setCardNumber(cardNumber);
+        
         creditCardService.addCreditCard(creditCard.getClient().getClientId(),creditCard);
     }
 

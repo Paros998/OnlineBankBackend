@@ -3,15 +3,13 @@ package com.OBS.service;
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
 import com.OBS.repository.ClientRepository;
-import com.OBS.requestBodies.ClientUserBody;
-import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.ClientUserBody;
+import com.OBS.alternativeBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;

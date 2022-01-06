@@ -26,8 +26,8 @@ public class CreditCard {
     private String cardNumber;
     private LocalDate expireDate;
     private int cvvNumber;
-    private int pinNumber;
-    //TODO change to actual image someday
+    private String pinNumber;
+
     private String cardImage;
 
     @JsonIgnore

@@ -4,7 +4,7 @@ import com.OBS.auth.entity.AppUser;
 import com.OBS.email.EmailService;
 import com.OBS.email.EmailTemplates;
 import com.OBS.repository.AppUserRepository;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.UserCredentials;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

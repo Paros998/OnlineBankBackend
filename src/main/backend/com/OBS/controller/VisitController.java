@@ -1,7 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.entity.Visit;
-import com.OBS.requestBodies.AssignEmployeeToVisitBody;
+import com.OBS.alternativeBodies.AssignEmployeeToVisitBody;
 import com.OBS.service.VisitService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

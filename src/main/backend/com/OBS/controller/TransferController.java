@@ -1,5 +1,7 @@
 package com.OBS.controller;
 
+import com.OBS.alternativeBodies.KeyValueObject;
+import com.OBS.alternativeBodies.ValueAndPercent;
 import com.OBS.entity.Transfer;
 import com.OBS.service.TransferService;
 import lombok.AllArgsConstructor;
@@ -23,7 +25,7 @@ public class TransferController {
         return transferService.getRecentTransfers(client_Id);
     }
 
-    @RequestMapping(path = "/client/{client_Id}")
+    @GetMapping(path = "/client/{client_Id}")
     public List<Transfer> getTransfers(
             @And({
                     @Spec(path = "client.clientId", pathVars = "client_Id", spec = Equal.class),
@@ -35,7 +37,10 @@ public class TransferController {
         return transferService.getTransfers(filterTransferSpec);
     }
 
-    //TODO add endpoint for 30days history of payments within categories
+    @GetMapping(path = "/client/{client_Id}/1-month-history")
+    public List<KeyValueObject<String, ValueAndPercent>> getClientHistoryOf1Month(@PathVariable Long client_Id){
+        return transferService.getClientHistory(client_Id);
+    }
 
     @PostMapping()
     public void addTransfer(@RequestBody Transfer transfer) { transferService.performTransfer(transfer); }
