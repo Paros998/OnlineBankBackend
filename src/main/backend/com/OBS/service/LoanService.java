@@ -1,9 +1,12 @@
 package com.OBS.service;
 
+import com.OBS.alternativeBodies.LoanBody;
 import com.OBS.entity.Client;
 import com.OBS.entity.Loan;
+import com.OBS.enums.SearchOperation;
 import com.OBS.repository.LoanRepository;
-import com.OBS.alternativeBodies.LoanBody;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import lombok.AllArgsConstructor;
@@ -156,6 +159,15 @@ public class LoanService {
                 body.getInitialRatesNumber(),
                 body.getBasicLoanAmount(),
                 clientService.getClient(body.getClientId())
+        );
+    }
+
+    public Loan getClientLoan(Long clientId) {
+        Specifications<Loan> findByClient = new Specifications<Loan>()
+                .add(new SearchCriteria("client", clientService.getClient(clientId), SearchOperation.EQUAL))
+                .add(new SearchCriteria("isActive", true, SearchOperation.EQUAL));
+        return loanRepository.findOne(findByClient).orElseThrow(
+                () -> new IllegalStateException("This client hasn't got any active loan")
         );
     }
 }
