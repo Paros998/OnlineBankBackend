@@ -86,13 +86,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/credit-cards/client/{clientId}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
                 .antMatchers("/credit-cards/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
 
-                .antMatchers(HttpMethod.GET,"/transfers/client/{clientId}").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.GET,"/transfers/client/{clientId}/**").hasAnyRole(CLIENT.name(), ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET,"/transfers/recent/**").hasRole(CLIENT.name())
                 .antMatchers(HttpMethod.POST,"/transfers/**").hasRole(CLIENT.name())
                 .antMatchers("/transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
 
                 .antMatchers(HttpMethod.DELETE,"/cyclical-transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
-                .antMatchers("/cyclical-transfers/**").hasRole(CLIENT.name())
+                .antMatchers("/cyclical-transfers/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
 
                 .antMatchers(HttpMethod.PATCH,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.DELETE,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())

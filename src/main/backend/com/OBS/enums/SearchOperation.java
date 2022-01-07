@@ -13,5 +13,12 @@ public enum SearchOperation {
     IN,
     NOT_IN,
     EQUAL_NULL,
-    NOT_EQUAL_NULL
+    NOT_EQUAL_NULL,
+    GREATER_THAN_EQUAL_DATE,
+    GREATER_THAN_DATE,
+    LESS_THAN_EQUAL_DATE,
+    LESS_THAN_DATE,
+    EQUAL_DATE,
+    NOT_EQUAL_DATE,
+
 }

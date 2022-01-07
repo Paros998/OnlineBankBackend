@@ -1,13 +1,19 @@
 package com.OBS.service;
 
+import com.OBS.alternativeBodies.KeyValueObject;
+import com.OBS.alternativeBodies.ValueAndPercent;
 import com.OBS.email.EmailService;
 import com.OBS.email.EmailTemplates;
 import com.OBS.entity.Client;
 import com.OBS.entity.CyclicalTransfer;
 import com.OBS.entity.Transfer;
+import com.OBS.enums.SearchOperation;
+import com.OBS.enums.TransferCategory;
 import com.OBS.repository.CyclicalTransferRepository;
 
 
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import static com.OBS.enums.TransferType.*;
@@ -163,4 +170,40 @@ public class CyclicalTransferService {
     }
 
 
+    public List<KeyValueObject<String, ValueAndPercent>> getClientEstimated(Long client_id) {
+        ArrayList<KeyValueObject<String, ValueAndPercent>> clientEstimation= new ArrayList<>();
+
+        Specifications<CyclicalTransfer> findAllByClientAndForNextMonth = new Specifications<CyclicalTransfer>()
+                .add(new SearchCriteria("client",clientService.getClient(client_id), SearchOperation.EQUAL))
+                .add(new SearchCriteria("reTransferDate", LocalDateTime.now().plusMonths(1), SearchOperation.LESS_THAN_EQUAL_DATE));
+
+        float sumOfOutgoing = getTotalAmount(cyclicalTransferRepository.findAll(findAllByClientAndForNextMonth));
+
+        clientEstimation.add(new KeyValueObject<>("Suma Wydatków",new ValueAndPercent(sumOfOutgoing,100f)));
+
+        for (TransferCategory category : TransferCategory.values()) {
+            Specifications<CyclicalTransfer> findAllByCategory = findAllByClientAndForNextMonth.clone()
+                    .add(new SearchCriteria("category", category.getCategory(), SearchOperation.EQUAL));
+
+            float sumFromCategory = getTotalAmount(cyclicalTransferRepository.findAll(findAllByCategory));
+
+            clientEstimation.add(new KeyValueObject<>(
+                    category.getCategory(),
+                    new ValueAndPercent(
+                            sumFromCategory,
+                            sumFromCategory / sumOfOutgoing * 100
+                    ))
+            );
+        }
+
+        return clientEstimation;
+    }
+
+    private float getTotalAmount(List<CyclicalTransfer> transfers){
+        float sum = 0f;
+        for(CyclicalTransfer transfer : transfers)
+            sum += transfer.getAmount();
+
+        return sum;
+    }
 }

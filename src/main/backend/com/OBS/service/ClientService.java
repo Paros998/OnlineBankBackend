@@ -2,16 +2,17 @@ package com.OBS.service;
 
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
+import com.OBS.enums.SearchOperation;
 import com.OBS.repository.ClientRepository;
-import com.OBS.requestBodies.ClientUserBody;
-import com.OBS.requestBodies.NamePersonalNum_BirthDateBody;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.ClientUserBody;
+import com.OBS.alternativeBodies.UserCredentials;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -60,7 +61,9 @@ public class ClientService {
 
     public List<Client> getLatestClients(Integer days) {
         LocalDateTime today = LocalDateTime.now();
-        return clientRepository.findAllByDateOfCreationBetweenOrderByDateOfCreationDesc(today.minusDays(days),today);
+        Specifications<Client> findAllByCreationDateBefore = new Specifications<Client>()
+                .add(new SearchCriteria("dateOfCreation",today.minusDays(days), SearchOperation.GREATER_THAN_EQUAL_DATE));
+        return clientRepository.findAll(findAllByCreationDateBefore);
     }
 
     public void assignUserToClient(Client client,AppUser user){
@@ -115,7 +118,7 @@ public class ClientService {
 
     @Transactional
     public void updateClient(Client newClientRecord){
-        if (clientRepository.existsById(newClientRecord.getClientId())) {
+        if (!clientRepository.existsById(newClientRecord.getClientId())) {
             throw new IllegalStateException("Client with given id:" + newClientRecord.getClientId() + " doesn't exists in database");
         }
         Client currentClientRecord = clientRepository.getById(newClientRecord.getClientId());

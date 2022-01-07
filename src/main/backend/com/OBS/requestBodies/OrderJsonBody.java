@@ -1,15 +1,14 @@
 package com.OBS.requestBodies;
 
-import com.OBS.entity.Employee;
+import com.OBS.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeUserBody {
-    Employee employee;
-    UserCredentials userCredentials;
-
+@Getter
+public class OrderJsonBody {
+    private Order order;
+    private String requestBody;
 }

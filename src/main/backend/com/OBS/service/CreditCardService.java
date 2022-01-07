@@ -64,4 +64,8 @@ public class CreditCardService {
 
         creditCardRepository.deleteById(cardId);
     }
+
+    public boolean existsByCardNumber(String cardNumber) {
+        return creditCardRepository.existsByCardNumber(cardNumber);
+    }
 }

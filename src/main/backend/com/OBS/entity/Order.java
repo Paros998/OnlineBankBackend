@@ -8,13 +8,14 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
 @Getter
 @Setter
-@TypeDef(name = "jsonb",typeClass = JsonBinaryType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Order {
     @Id
     @GeneratedValue(
@@ -28,9 +29,12 @@ public class Order {
 
     private String orderType;
     private String decision;
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime createDate;
     private Boolean isActive;
+
+    @Transient
+    private String waitingTime;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -51,4 +55,18 @@ public class Order {
     public Order() {
 
     }
+
+    public String getWaitingTime() {
+        LocalDateTime now = LocalDateTime.now();
+
+        Duration duration = Duration.between( this.createDate,now);
+
+        return String.format("%dD.%dH.%dM.%dS",
+                (int) duration.toDays() % 31,
+                (int) duration.toHours() % 24,
+                ((int) duration.toMinutes() % 24) % 60,
+                (((int) duration.getSeconds()  % 24) % 60) % 60
+        );
+    }
+
 }

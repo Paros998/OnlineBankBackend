@@ -1,7 +1,7 @@
 package com.OBS.controller;
 
 import com.OBS.auth.entity.AppUser;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.OBS.requestBodies;
+package com.OBS.alternativeBodies;
 
 import com.OBS.auth.AppUserRole;
 import lombok.AllArgsConstructor;

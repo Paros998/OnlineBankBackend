@@ -1,14 +1,13 @@
 package com.OBS.service;
 
-import com.OBS.auth.entity.AppUser;
+import com.OBS.alternativeBodies.CreateCreditCardModel;
 import com.OBS.entity.*;
 import com.OBS.enums.SearchOperation;
 import com.OBS.repository.OrderRepository;
-import com.OBS.requestBodies.UserCredentials;
+import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
-import org.mockito.internal.matchers.Null;
 import org.springframework.stereotype.Service;
 import javax.json.bind.Jsonb;
 import javax.transaction.Transactional;
@@ -32,27 +31,22 @@ public class OrderService {
     }
 
     public List<Order> getOrders(String role) {
-        Specifications<Order> priorityOrdersSpecifications = new Specifications<Order>()
+        Specifications<Order> normalOrdersSpecifications = new Specifications<Order>()
+                .add(new SearchCriteria("createDate", LocalDateTime.now().minusDays(1), SearchOperation.GREATER_THAN_DATE))
                 .add(new SearchCriteria("employee", null, SearchOperation.EQUAL_NULL));
         if (!Objects.equals(role, ADMIN.name())) {
-            priorityOrdersSpecifications = priorityOrdersSpecifications
+            normalOrdersSpecifications = normalOrdersSpecifications
                     .add(new SearchCriteria("orderType", changeEmployee.toString(), SearchOperation.NOT_EQUAL))
                     .add(new SearchCriteria("orderType", changeUser.toString(), SearchOperation.NOT_EQUAL))
                     .add(new SearchCriteria("orderType", createUser.toString(), SearchOperation.NOT_EQUAL));
         }
-        return orderRepository.findAll(priorityOrdersSpecifications);
+        return orderRepository.findAll(normalOrdersSpecifications);
     }
 
-    //TODO fix LocalDateTime
     public List<Order> getPriorityOrders(String role) {
-        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
         Specifications<Order> priorityOrdersSpecifications = new Specifications<Order>()
-                .add(new SearchCriteria(
-                        "createDate",
-                        yesterday.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")),
-                        SearchOperation.LESS_THAN))
-                .add(new SearchCriteria("employee",null, SearchOperation.EQUAL_NULL))
-                ;
+                .add(new SearchCriteria("createDate", LocalDateTime.now().minusDays(1), SearchOperation.LESS_THAN_EQUAL_DATE))
+                .add(new SearchCriteria("employee",null, SearchOperation.EQUAL_NULL));
         if (!Objects.equals(role, ADMIN.name())) {
             priorityOrdersSpecifications = priorityOrdersSpecifications
                     .add(new SearchCriteria("orderType", changeEmployee.toString(), SearchOperation.NOT_EQUAL))
@@ -77,32 +71,7 @@ public class OrderService {
     }
 
     public void addOrder(Order order, String requestBody) {
-        String newRequestBody = "";
-        switch (order.getOrderType()) {
-            case "Utworzenie użytkownika":
-                newRequestBody = jsonb.toJson(requestBody, UserCredentials.class);
-                break;
-            case "Edycja danych klienta":
-                newRequestBody = jsonb.toJson(requestBody, Client.class);
-                break;
-            case "Modyfikacja użytkownika":
-                newRequestBody = jsonb.toJson(requestBody, AppUser.class);
-                break;
-            case "Modyfikacja danych pracownika":
-                newRequestBody = jsonb.toJson(requestBody, Employee.class);
-                break;
-            case "Zablokowanie karty kredytowej":
-            case "Wycofanie karty kredytowej":
-            case "Wyrób nowej karty kredytowej":
-            case "Odblokowanie karty kredytowej":
-                newRequestBody = jsonb.toJson(requestBody, CreditCard.class);
-                break;
-            case "Podanie o kredyt":
-                newRequestBody = jsonb.toJson(requestBody, Loan.class);
-                break;
-        }
-
-        order.setRequestBody(newRequestBody);
+        order.setRequestBody(requestBody);
         order.setIsActive(true);
         orderRepository.save(order);
     }
@@ -128,10 +97,10 @@ public class OrderService {
                     systemService.updateClient(jsonb.fromJson(order.getRequestBody(),Client.class));
                     break;
                 case "Modyfikacja użytkownika":
-                    systemService.updateAppUser(jsonb.fromJson(order.getRequestBody(),AppUser.class));
+                    systemService.updateAppUser(jsonb.fromJson(order.getRequestBody(),UserCredentials.class));
                     break;
                 case "Modyfikacja danych pracownika":
-                    systemService.updateEmployee(jsonb.fromJson(order.getRequestBody(),Employee.class));;
+                    systemService.updateEmployee(jsonb.fromJson(order.getRequestBody(),Employee.class));
                     break;
                 case "Zablokowanie karty kredytowej":
                     systemService.blockCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
@@ -140,7 +109,7 @@ public class OrderService {
                     systemService.discardCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
                     break;
                 case "Wyrób nowej karty kredytowej":
-                    systemService.createCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
+                    systemService.createCreditCard(jsonb.fromJson(order.getRequestBody(), CreateCreditCardModel.class));
                     break;
                 case "Odblokowanie karty kredytowej":
                     systemService.unblockCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
