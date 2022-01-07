@@ -1,10 +1,10 @@
 package com.OBS.service;
 
+import com.OBS.alternativeBodies.LoanBody;
 import com.OBS.entity.Client;
 import com.OBS.entity.Loan;
 import com.OBS.enums.SearchOperation;
 import com.OBS.repository.LoanRepository;
-import com.OBS.requestBodies.LoanBody;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
 import org.slf4j.Logger;
