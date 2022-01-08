@@ -96,7 +96,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.PATCH,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
                 .antMatchers(HttpMethod.DELETE,"/loans/{loanId}").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .antMatchers(HttpMethod.POST,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .antMatchers(HttpMethod.POST,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
                 .antMatchers(HttpMethod.PATCH,"/loans/pay-rate/{clientId}").hasRole(CLIENT.name())
                 .antMatchers(HttpMethod.GET,"/loans/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name(), CLIENT.name())
 

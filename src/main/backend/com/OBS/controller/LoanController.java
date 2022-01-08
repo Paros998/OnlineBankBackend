@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.*;
 public class LoanController {
     private final LoanService loanService;
 
-    @GetMapping(path = "/calculate")
+    @PostMapping(path = "/calculate")
     public Loan getFutureLoan(@RequestBody LoanBody body){return loanService.calculateLoan(body);}
 
     @GetMapping(path = "/{loanId}")
     public Loan getLoan(@PathVariable Long loanId){return loanService.getLoan(loanId);}
+
+    @GetMapping(path = "/client/{clientId}")
+    public Loan getClientLoan(@PathVariable Long clientId) {
+        return loanService.getClientLoan(clientId);
+    }
 
     @PostMapping()
     public void addLoan(@RequestBody Loan body){loanService.addLoan(body);}
