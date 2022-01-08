@@ -2,6 +2,7 @@ package com.OBS.service;
 
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
+import com.OBS.entity.Employee;
 import com.OBS.enums.SearchOperation;
 import com.OBS.repository.ClientRepository;
 import com.OBS.alternativeBodies.ClientUserBody;
@@ -144,7 +145,9 @@ public class ClientService {
         if (!clientRepository.existsById(id)) {
             throw new IllegalStateException("Can't find client of given id");
         }
+        Client client = clientRepository.getById(id);
         clientRepository.deleteById(id);
+        appUserService.deleteUserById(client.getUser().getUserId());
     }
 
     @Transactional
@@ -174,6 +177,14 @@ public class ClientService {
 
     public Client getClientByEmail(String email) {
         return clientRepository.getByEmail(email);
+    }
+
+    public void changeStateOfUser(Long id) {
+        if (clientRepository.existsById(id)){
+            Client client = clientRepository.getById(id);
+            appUserService.changeStateOfUser(client.getUser().getUserId());
+        }
+        else throw new IllegalStateException("Employee with given id:" + id + " doesn't exist in database!");
     }
 }
 

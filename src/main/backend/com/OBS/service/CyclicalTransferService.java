@@ -23,7 +23,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -109,13 +111,14 @@ public class CyclicalTransferService {
     @Scheduled(cron = "0 0 0 * * * ")
     protected void realiseTransfers(){
         Logger logger = LoggerFactory.getLogger(CyclicalTransferService.class);
-        List<CyclicalTransfer> cyclicalTransfersList = getTransfers();
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0,0));
+        Specifications<CyclicalTransfer> findAllByReTransferDateToday = new Specifications<CyclicalTransfer>()
+                .add(new SearchCriteria("reTransferDate", today, SearchOperation.GREATER_THAN_EQUAL_DATE));
+
+        List<CyclicalTransfer> cyclicalTransfersList = cyclicalTransferRepository.findAll(findAllByReTransferDateToday);
 
         if(!cyclicalTransfersList.isEmpty()){
             for(CyclicalTransfer transfer : cyclicalTransfersList){
-
-                if(!transfer.getReTransferDate().equals(LocalDateTime.now()))
-                    continue;
 
                 Client sender = clientService.getClientOrNull(transfer.getClient().getClientId());
                 Client receiver = clientService.getClientByAccountNumber(transfer.getAccountNumber());

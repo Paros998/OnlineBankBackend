@@ -1,5 +1,6 @@
 package com.OBS.service;
 
+import com.OBS.alternativeBodies.ClientCreditWorthiness;
 import com.OBS.alternativeBodies.KeyValueObject;
 import com.OBS.alternativeBodies.ValueAndPercent;
 import com.OBS.entity.Client;
@@ -125,20 +126,46 @@ public class TransferService {
         }
     }
 
-    public List<KeyValueObject<String, ValueAndPercent>> getClientHistory(Long clientId) {
-        ArrayList<KeyValueObject<String, ValueAndPercent>> clientHistory = new ArrayList<>();
+    public ClientCreditWorthiness getClientWorthiness(Long clientId,int months){
+        ClientCreditWorthiness clientCreditWorthiness = new ClientCreditWorthiness();
 
-        Specifications<Transfer> findAllByClientAndWithin1Month = new Specifications<Transfer>()
+        Specifications<Transfer> findAllByClientAndWithinMonths = new Specifications<Transfer>()
                 .add(new SearchCriteria("client", clientService.getClient(clientId), SearchOperation.EQUAL))
                 .add(new SearchCriteria(
                         "transferDate",
-                        LocalDateTime.now().minusMonths(1),
+                        LocalDateTime.now().minusMonths(months),
                         SearchOperation.GREATER_THAN_DATE));
 
-        Specifications<Transfer> findAllByOutgoing = findAllByClientAndWithin1Month.clone()
+        Specifications<Transfer> findAllByOutgoing = findAllByClientAndWithinMonths.clone()
                 .add(new SearchCriteria("type", OUTGOING.toString(), SearchOperation.EQUAL));
 
-        Specifications<Transfer> findAllByIncoming = findAllByClientAndWithin1Month.clone()
+        Specifications<Transfer> findAllByIncoming = findAllByClientAndWithinMonths.clone()
+                .add(new SearchCriteria("type", INCOMING.toString(), SearchOperation.EQUAL));
+
+        clientCreditWorthiness.setSumOfOutgoing(getTotalAmount(transferRepository.findAll(findAllByOutgoing)));
+        clientCreditWorthiness.setSumOfIncoming(getTotalAmount(transferRepository.findAll(findAllByIncoming)));
+
+        clientCreditWorthiness.setSumOfBalance(clientCreditWorthiness.getSumOfIncoming() - clientCreditWorthiness.getSumOfOutgoing());
+
+        clientCreditWorthiness.setMonthlyBalance(clientCreditWorthiness.getSumOfBalance() / months);
+
+        return clientCreditWorthiness;
+    }
+
+    public List<KeyValueObject<String, ValueAndPercent>> getClientHistory(Long clientId,int months) {
+        ArrayList<KeyValueObject<String, ValueAndPercent>> clientHistory = new ArrayList<>();
+
+        Specifications<Transfer> findAllByClientAndWithinMonths = new Specifications<Transfer>()
+                .add(new SearchCriteria("client", clientService.getClient(clientId), SearchOperation.EQUAL))
+                .add(new SearchCriteria(
+                        "transferDate",
+                        LocalDateTime.now().minusMonths(months),
+                        SearchOperation.GREATER_THAN_DATE));
+
+        Specifications<Transfer> findAllByOutgoing = findAllByClientAndWithinMonths.clone()
+                .add(new SearchCriteria("type", OUTGOING.toString(), SearchOperation.EQUAL));
+
+        Specifications<Transfer> findAllByIncoming = findAllByClientAndWithinMonths.clone()
                 .add(new SearchCriteria("type", INCOMING.toString(), SearchOperation.EQUAL));
 
         float sumOfOutgoing = getTotalAmount(transferRepository.findAll(findAllByOutgoing));
@@ -148,7 +175,7 @@ public class TransferService {
         clientHistory.add(new KeyValueObject<>("Suma Przychodów", new ValueAndPercent(sumOfIncoming,sumOfIncoming / (sumOfIncoming + sumOfOutgoing) * 100)));
 
         for (TransferCategory category : TransferCategory.values()) {
-            Specifications<Transfer> findAllByCategory = findAllByClientAndWithin1Month.clone()
+            Specifications<Transfer> findAllByCategory = findAllByClientAndWithinMonths.clone()
                     .add(new SearchCriteria("category", category.getCategory(), SearchOperation.EQUAL));
 
             float sumFromCategory = getTotalAmount(transferRepository.findAll(findAllByCategory));

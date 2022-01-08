@@ -1,5 +1,6 @@
 package com.OBS.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +22,12 @@ public class Loan {
     )
     private Long loanId;
     private Boolean isActive;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate concludedDate;
     private int initialRatesNumber;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate estimatedEndDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate nextRatePayDay;
     private int numOfRates;
     private Float yearlyInterestPercent;
