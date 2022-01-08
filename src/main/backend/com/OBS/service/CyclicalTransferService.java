@@ -47,7 +47,7 @@ public class CyclicalTransferService {
     }
 
     public List<CyclicalTransfer> getComingTransfers(Long clientId) {
-        return cyclicalTransferRepository.findComingByClient_clientIdOrderByReTransferDateDesc(
+        return cyclicalTransferRepository.findComingByClient_clientIdOrderByReTransferDateAsc(
                 clientId, PageRequest.of(0, 3)
         );
     }
