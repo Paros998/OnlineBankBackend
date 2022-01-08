@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "client")
@@ -31,6 +30,7 @@ public class Client {
     private Float balance;
     private String personalNumber;
     private String identificationNumber;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private String homeAddress;
     private String city;

@@ -22,7 +22,6 @@ public class CyclicalTransfer {
     )
     private Long transferId;
     private Float amount;
-     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime reTransferDate;
     private String category;
     private String receiver;

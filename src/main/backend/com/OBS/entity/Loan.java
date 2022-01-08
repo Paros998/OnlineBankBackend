@@ -70,10 +70,17 @@ public class Loan {
         this.ratesLeftToPay = initialRatesNumber;
         this.toRepaidOff = basicLoanAmount;
 
+        if(initialRatesNumber > 12)
+            for(int i = 0; i < initialRatesNumber / 12 ; i++){
+                toRepaidOff += toRepaidOff * yearlyRRSO;
+            }
+
+        float monthlyPercent = yearlyRRSO / 12;
+
         for(int i = 0; i < initialRatesNumber % 12 ; i++){
-            toRepaidOff += toRepaidOff * yearlyRRSO;
+            toRepaidOff += toRepaidOff * monthlyPercent;
         }
-        toRepaidOff += (initialRatesNumber - (12 * (initialRatesNumber%12))) * (yearlyRRSO / 12) * toRepaidOff;
+
         toRepaidOff += commission;
 
         interestAmount = toRepaidOff - basicLoanAmount;
