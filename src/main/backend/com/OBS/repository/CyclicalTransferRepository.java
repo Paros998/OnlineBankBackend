@@ -13,5 +13,5 @@ import java.util.List;
 public interface CyclicalTransferRepository extends JpaRepository<CyclicalTransfer,Long>, JpaSpecificationExecutor<CyclicalTransfer> {
     List<CyclicalTransfer> findAllByClient_clientId(Long clientId);
 
-    List<CyclicalTransfer> findComingByClient_clientIdOrderByReTransferDateDesc(Long clientId, Pageable pageable);
+    List<CyclicalTransfer> findComingByClient_clientIdOrderByReTransferDateAsc(Long clientId, Pageable pageable);
 }
