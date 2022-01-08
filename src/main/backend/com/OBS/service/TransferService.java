@@ -92,6 +92,28 @@ public class TransferService {
         updateBalances(sender, receiver, transfer);
     }
 
+    @Transactional
+    public void performLoanTransfer(Transfer transfer) {
+        updateBalances(transfer.getClient(), transfer);
+    }
+
+    private void updateBalances(Client receiver, Transfer transfer) {
+        if (!(receiver == null)) {
+            clientService.updateClientBalance(receiver, transfer.getAmount(), INCOMING.name());
+            Transfer receiverTransfer = new Transfer(
+                    transfer.getAmount(),
+                    transfer.getTransferDate(),
+                    transfer.getCategory(),
+                    INCOMING.name(),
+                    "Future Bank Sp. z o.o.",
+                    transfer.getTitle(),
+                    receiver.getAccountNumber()
+            );
+            receiverTransfer.setClient(receiver);
+            addTransfer(receiverTransfer);
+        }
+    }
+
     private void updateBalances(Client sender, Client receiver, Transfer transfer) {
         clientService.updateClientBalance(sender, transfer.getAmount(), OUTGOING.name());
         String receiverName;

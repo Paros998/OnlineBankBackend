@@ -11,7 +11,6 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
@@ -35,7 +34,8 @@ public class ObsApplication implements WebMvcConfigurer {
     @Bean
     public Jsonb jsonb(){
         return JsonbBuilder.create(
-                new JsonbConfig().withNullValues(true)
+                new JsonbConfig()
+                        .withNullValues(true)
         );
     }
 

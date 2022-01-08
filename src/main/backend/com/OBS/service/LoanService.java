@@ -3,7 +3,9 @@ package com.OBS.service;
 import com.OBS.alternativeBodies.LoanBody;
 import com.OBS.entity.Client;
 import com.OBS.entity.Loan;
+import com.OBS.entity.Transfer;
 import com.OBS.enums.SearchOperation;
+import com.OBS.enums.TransferType;
 import com.OBS.repository.LoanRepository;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -45,6 +48,20 @@ public class LoanService {
             if(loan.getIsActive())
                 throw new IllegalStateException("New loan couldn't be created because there is already an active loan registered on this client");
         }
+
+        newLoan.setNextRatePayDay(LocalDate.now().plusMonths(1));
+
+        Transfer transfer = new Transfer();
+        transfer.setClient(newLoan.getClient());
+        transfer.setTransferDate(LocalDateTime.now());
+        transfer.setAmount(newLoan.getBasicLoanAmount());
+        transfer.setCategory("Pożyczka");
+        transfer.setToAccountNumber(newLoan.getClient().getAccountNumber());
+        transfer.setType(TransferType.OUTGOING.name());
+        transfer.setTitle("Udzielenie pożyczki klientowi");
+
+        transferService.performLoanTransfer(transfer);
+
         loanRepository.save(newLoan);
     }
 
