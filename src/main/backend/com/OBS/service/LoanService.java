@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -162,12 +163,11 @@ public class LoanService {
         );
     }
 
-    public Loan getClientLoan(Long clientId) {
+    public Optional<Loan> getClientLoan(Long clientId) {
         Specifications<Loan> findByClient = new Specifications<Loan>()
                 .add(new SearchCriteria("client", clientService.getClient(clientId), SearchOperation.EQUAL))
                 .add(new SearchCriteria("isActive", true, SearchOperation.EQUAL));
-        return loanRepository.findOne(findByClient).orElseThrow(
-                () -> new IllegalStateException("This client hasn't got any active loan")
-        );
+
+        return loanRepository.findOne(findByClient);
     }
 }
