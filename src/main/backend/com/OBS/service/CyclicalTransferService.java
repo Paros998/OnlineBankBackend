@@ -78,6 +78,7 @@ public class CyclicalTransferService {
         for(CyclicalTransfer transfer : clientsTransfers){
             if(
                     Objects.equals(transfer.getAmount(), cyclicalTransfer.getAmount())
+                    && Objects.equals(transfer.getReceiver(), cyclicalTransfer.getReceiver())
                     && Objects.equals(transfer.getReTransferDate(), cyclicalTransfer.getReTransferDate())
                     && Objects.equals(transfer.getCategory(), cyclicalTransfer.getCategory())
                     && Objects.equals(transfer.getAccountNumber(), cyclicalTransfer.getAccountNumber())

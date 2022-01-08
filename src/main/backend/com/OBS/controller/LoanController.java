@@ -6,6 +6,8 @@ import com.OBS.service.LoanService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "/loans")
@@ -19,7 +21,7 @@ public class LoanController {
     public Loan getLoan(@PathVariable Long loanId){return loanService.getLoan(loanId);}
 
     @GetMapping(path = "/client/{clientId}")
-    public Loan getClientLoan(@PathVariable Long clientId) {
+    public Optional<Loan> getClientLoan(@PathVariable Long clientId) {
         return loanService.getClientLoan(clientId);
     }
 
