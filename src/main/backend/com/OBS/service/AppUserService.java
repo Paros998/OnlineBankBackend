@@ -144,4 +144,13 @@ public class AppUserService implements UserDetailsService {
                 ()->new IllegalStateException("User with given email " + email + " doesn't exist in database!")
         );
     }
+
+    public void changeStateOfUser(Long userId) {
+        AppUser user = appUserRepository.findById(userId).orElseThrow(
+                ()-> new IllegalStateException("User with given id " + userId + " doesn't exist in database!")
+        );
+        user.setLocked(true);
+        user.setEnabled(false);
+        appUserRepository.save(user);
+    }
 }

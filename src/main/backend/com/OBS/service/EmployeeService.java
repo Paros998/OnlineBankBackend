@@ -39,7 +39,7 @@ public class EmployeeService {
     }
 
     public void addEmployee(EmployeeUserBody body) {
-        Employee employee = body.getEmployee();
+         Employee employee = body.getEmployee();
         UserCredentials userCredentials = body.getUserCredentials();
 
         clientEmployeeService.checkForWithPN_IN(employee);
@@ -96,9 +96,12 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(Long id) {
-        if (employeeRepository.existsById(id))
+        if (employeeRepository.existsById(id)){
+            Employee employee = employeeRepository.getById(id);
             employeeRepository.deleteById(id);
-        else throw new IllegalStateException("Employee with given id:" + id + " doesnt exist in database!");
+            appUserService.deleteUserById(employee.getUser().getUserId());
+        }
+        else throw new IllegalStateException("Employee with given id:" + id + " doesn't exist in database!");
     }
 
     public Long getEmployeeByUserId(Long appUserId) {
@@ -110,5 +113,13 @@ public class EmployeeService {
 
     public Employee getEmployeeByEmail(String email) {
         return employeeRepository.getByEmail(email);
+    }
+
+    public void changeStateOfUser(Long id) {
+        if (employeeRepository.existsById(id)){
+            Employee employee = employeeRepository.getById(id);
+            appUserService.changeStateOfUser(employee.getUser().getUserId());
+        }
+        else throw new IllegalStateException("Employee with given id:" + id + " doesn't exist in database!");
     }
 }

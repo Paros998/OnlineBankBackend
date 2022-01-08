@@ -1,5 +1,6 @@
 package com.OBS.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class CreditCard {
 
     private Boolean isActive;
     private String cardNumber;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate expireDate;
     private int cvvNumber;
     private String pinNumber;

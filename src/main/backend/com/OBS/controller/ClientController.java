@@ -1,8 +1,10 @@
 package com.OBS.controller;
 
+import com.OBS.alternativeBodies.ClientCreditWorthiness;
 import com.OBS.entity.Client;
 import com.OBS.alternativeBodies.ClientUserBody;
 import com.OBS.service.ClientService;
+import com.OBS.service.ClientTransferService;
 import lombok.AllArgsConstructor;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.StartingWith;
@@ -10,6 +12,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Conjunction;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +22,8 @@ import java.util.List;
 @RequestMapping(path = "/clients")
 public class ClientController {
     private final ClientService clientService;
+    private final ClientTransferService clientTransferService;
 
-    //TODO fix filtering
     @GetMapping(path = "/filtered")
     public List<Client> getClientsSorted(
             @Conjunction(value = {
@@ -30,6 +33,11 @@ public class ClientController {
                     }),
             }, and = @Spec(path = "dateOfBirth", params = "birthDate", spec = Equal.class)) Specification<Client>filterClientSpec) {
         return clientService.getClients(filterClientSpec);
+    }
+
+    @GetMapping(path = "/{clientId}/credit-worthiness/{months}")
+    public ClientCreditWorthiness getClientCreditWorthiness(@PathVariable("clientId") Long clientId, @PathVariable("months") int numOfMonths){
+        return clientTransferService.getClientWorthiness(clientId,numOfMonths);
     }
 
     @GetMapping(path = "/latest/{days}")
@@ -52,6 +60,9 @@ public class ClientController {
     public void updateClient(@RequestBody ClientUserBody body) {
         clientService.updateClient(body);
     }
+
+    @PutMapping(path = "{id}")
+    public void changeStateOfUser(@PathVariable Long id){clientService.changeStateOfUser(id);}
 
     @DeleteMapping(path = "{id}")
     public void deleteClient(@PathVariable Long id) {

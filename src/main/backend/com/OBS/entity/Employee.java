@@ -1,6 +1,7 @@
 package com.OBS.entity;
 
 import com.OBS.auth.entity.AppUser;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class Employee {
     private String fullName;
     private String personalNumber;
     private String identificationNumber;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private String homeAddress;
     private String city;

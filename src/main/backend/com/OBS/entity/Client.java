@@ -39,7 +39,7 @@ public class Client {
     private String secCity;
     private String secPostalCode;
     private Integer numberOfCreditsCards;
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime dateOfCreation;
 
 

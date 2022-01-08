@@ -24,6 +24,7 @@ public class LoanRate {
     )
     private Long rateId;
     private Float amount;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate payDate;
 
     @JsonIgnore
