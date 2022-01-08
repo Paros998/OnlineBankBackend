@@ -12,4 +12,5 @@ import java.util.List;
 public interface TransferRepository extends JpaRepository<Transfer,Long>, JpaSpecificationExecutor<Transfer> {
     List<Transfer> findRecentTransfersByClient_clientIdOrderByTransferDateDesc(Long client_id, Pageable pageable);
     List<Transfer> findAllByClient_clientId(Long client_id);
+
 }

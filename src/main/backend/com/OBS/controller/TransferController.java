@@ -39,7 +39,7 @@ public class TransferController {
 
     @GetMapping(path = "/client/{client_Id}/1-month-history")
     public List<KeyValueObject<String, ValueAndPercent>> getClientHistoryOf1Month(@PathVariable Long client_Id){
-        return transferService.getClientHistory(client_Id);
+        return transferService.getClientHistory(client_Id,1);
     }
 
 
