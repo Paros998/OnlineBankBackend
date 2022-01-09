@@ -2,7 +2,10 @@ package com.OBS.service;
 
 import com.OBS.entity.Loan;
 import com.OBS.entity.LoanRate;
+import com.OBS.enums.SearchOperation;
 import com.OBS.repository.LoanRateRepository;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -6,6 +6,7 @@ import com.OBS.repository.EmployeeRepository;
 import com.OBS.alternativeBodies.EmployeeUserBody;
 import com.OBS.alternativeBodies.UserCredentials;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployees(Specification<Employee> employeeSpecificationFilter) {
-        return employeeRepository.findAll(employeeSpecificationFilter);
+        return employeeRepository.findAll(employeeSpecificationFilter, Sort.by(Sort.Direction.DESC,"dateOfBirth"));
     }
 
     public Employee getEmployee(Long id) {

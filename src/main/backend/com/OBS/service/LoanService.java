@@ -9,9 +9,9 @@ import com.OBS.enums.TransferType;
 import com.OBS.repository.LoanRepository;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,9 @@ public class LoanService {
     private final TransferService transferService;
     private final LoanRateService loanRateService;
 
-    private String LoanNotFound(Long loanId){return "Loan with id:" + loanId + " doesn't exists in database";}
+    private String LoanNotFound(Long loanId) {
+        return "Loan with id:" + loanId + " doesn't exists in database";
+    }
 
     public List<Loan> getLoans() {
         return loanRepository.findAll();
@@ -45,8 +47,8 @@ public class LoanService {
 
     public void addLoan(Loan newLoan) {
         List<Loan> clientLoans = loanRepository.findAllByClient_clientId(newLoan.getClient().getClientId());
-        for(Loan loan: clientLoans){
-            if(loan.getIsActive())
+        for (Loan loan : clientLoans) {
+            if (loan.getIsActive())
                 throw new IllegalStateException("New loan couldn't be created because there is already an active loan registered on this client");
         }
 
@@ -76,7 +78,7 @@ public class LoanService {
         loanRepository.save(oldLoan);
     }
 
-    public void deleteLoan(Long loanId){
+    public void deleteLoan(Long loanId) {
         loanRepository.findById(loanId).orElseThrow(
                 () -> new IllegalStateException(LoanNotFound(loanId))
         );
@@ -85,23 +87,24 @@ public class LoanService {
 
     @Transactional
     public void realizePayment(Long clientId) {
-        Loan loan = loanRepository.findByClient_clientIdAndIsActive(clientId,true).orElseThrow(
-                ()-> new IllegalStateException("There is no active loan for this client with id:" + clientId)
+        Loan loan = loanRepository.findByClient_clientIdAndIsActive(clientId, true).orElseThrow(
+                () -> new IllegalStateException("There is no active loan for this client with id:" + clientId)
         );
         Client client = clientService.getClientOrNull(clientId);
 
-        transferService.performTransfer(client,loan);
+        transferService.performTransfer(client, loan);
 
         loanRateService.addRate(loan);
         //TODO check logic if works
 
+        loan.setNextRatePayDay(loan.getNextRatePayDay().plusMonths(1));
         loan.setRatesLeftToPay(loan.getRatesLeftToPay() - 1);
         loan.setToRepaidOff(loan.getToRepaidOff() - loan.getRateAmount());
         loan.setTotalPaidOff(loan.getTotalPaidOff() + loan.getRateAmount());
 
         updateRatesInfo(loan);
 
-        if(loan.getRatesLeftToPay() == 0
+        if (loan.getRatesLeftToPay() == 0
                 || loan.getToRepaidOff() == 0
                 || loan.getNumOfRates() == loanRateService.getNumOfRatesPayed(loan.getLoanId())
         )
@@ -112,61 +115,66 @@ public class LoanService {
 
     private void updateRatesInfo(Loan loan) {
 
-        if(loan.getRatesLeftToPay() == 1 && loan.getToRepaidOff() > loan.getRateAmount()){
-            if(loan.getToRepaidOff() < loan.getBasicRateAmount())
+        if (loan.getRatesLeftToPay() == 1 && loan.getToRepaidOff() > loan.getRateAmount()) {
+            if (loan.getToRepaidOff() < loan.getBasicRateAmount())
                 loan.setRateAmount(loan.getToRepaidOff());
-            else{
+            else {
                 loan.setRateAmount(loan.getBasicRateAmount());
             }
         }
 
-        if( loan.getRatesLeftToPay() == 1 && loan.getToRepaidOff() < loan.getRateAmount() )
+        if (loan.getRatesLeftToPay() == 1 && loan.getToRepaidOff() < loan.getRateAmount())
             loan.setRateAmount(loan.getToRepaidOff());
 
-        if(loan.getToRepaidOff() > (loan.getRateAmount()) * loan.getRatesLeftToPay()){
-               float difference = loan.getToRepaidOff() - (loan.getRateAmount() * loan.getRatesLeftToPay());
-               int additionalRates = (int) (difference % loan.getRateAmount());
-               if(difference - (additionalRates * loan.getRateAmount()) > 0)
-                   additionalRates += 1;
+        if (loan.getToRepaidOff() > (loan.getRateAmount()) * loan.getRatesLeftToPay()) {
+            float difference = loan.getToRepaidOff() - (loan.getRateAmount() * loan.getRatesLeftToPay());
+            int additionalRates = (int) (difference % loan.getRateAmount());
+            if (difference - (additionalRates * loan.getRateAmount()) > 0)
+                additionalRates += 1;
 
-               loan.setEstimatedEndDate(loan.getEstimatedEndDate().plusMonths(additionalRates));
-               loan.setRatesLeftToPay(loan.getRatesLeftToPay() + additionalRates);
-               loan.setNumOfRates(loan.getNumOfRates() + additionalRates);
+            loan.setEstimatedEndDate(loan.getEstimatedEndDate().plusMonths(additionalRates));
+            loan.setRatesLeftToPay(loan.getRatesLeftToPay() + additionalRates);
+            loan.setNumOfRates(loan.getNumOfRates() + additionalRates);
         }
     }
 
     //Automated method that runs every day at midnight
     @Transactional
     @Scheduled(cron = "0 0 0 * * * ")
-    protected void updateLoans(){
+    protected void updateLoans() {
         Logger logger = LoggerFactory.getLogger(CyclicalTransferService.class);
-        List<Loan> loans = loanRepository.findAll();
+        Specifications<Loan> findAllByReTransferDate = new Specifications<Loan>()
+                .add(new SearchCriteria("nextRatePayDay", LocalDate.now(), SearchOperation.LESS_THAN_EQUAL_DATE));
+
+        List<Loan> loans = loanRepository.findAll(findAllByReTransferDate);
 
         //TODO do checking logic if client hasn't payed in time
-        if(!loans.isEmpty())
-            for(Loan loan : loans){
-               if(loanRateService.checkIfPayed(loan.getNextRatePayDay())){
-                   loan.setNextRatePayDay(loan.getNextRatePayDay().plusMonths(1));
-               }else{
-                   LocalDate today = LocalDate.now();
-                   int penaltyMonths = 0;
-                   while(!today.isBefore( loan.getNextRatePayDay() )) penaltyMonths++;
+        if (!loans.isEmpty())
+            for (Loan loan : loans) {
+                if (!loanRateService.checkIfPayed(loan.getNextRatePayDay())) {
+                    LocalDate today = LocalDate.now();
+                    int penaltyMonths = 0;
 
-                   float newPenaltyAmount = penaltyMonths * loan.getRateAmount();
+                    while (!today.isBefore(loan.getNextRatePayDay())){
+                        penaltyMonths++;
+                        today = today.plusMonths(1);
+                    }
 
-                   loan.setPenaltyAmount( loan.getPenaltyAmount() + newPenaltyAmount);
+                    float newPenaltyAmount = penaltyMonths * loan.getRateAmount();
 
-                   float newInterestAmount = (penaltyMonths * (Loan.yearlyRRSO / 12) ) * (
-                           loan.getInterestAmount() + loan.getBasicLoanAmount() + loan.getPenaltyAmount()
-                   );
+                    loan.setPenaltyAmount(loan.getPenaltyAmount() + newPenaltyAmount);
 
-                   loan.setInterestAmount(loan.getInterestAmount() + newInterestAmount);
+                    float newInterestAmount = (penaltyMonths * (Loan.yearlyRRSO / 12)) * (
+                            loan.getInterestAmount() + loan.getBasicLoanAmount() + loan.getPenaltyAmount()
+                    );
 
-                   loan.setToRepaidOff(loan.getToRepaidOff() + newPenaltyAmount + newInterestAmount );
+                    loan.setInterestAmount(loan.getInterestAmount() + newInterestAmount);
 
-                   updateRatesInfo(loan);
-               }
-                loanRepository.save(loan);
+                    loan.setToRepaidOff(loan.getToRepaidOff() + newPenaltyAmount + newInterestAmount);
+
+                    updateRatesInfo(loan);
+                    loanRepository.save(loan);
+                }
             }
         else logger.debug("Every client payed his rate in time!");
     }
