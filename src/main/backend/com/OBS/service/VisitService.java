@@ -1,8 +1,13 @@
 package com.OBS.service;
 
+import com.OBS.entity.Employee;
 import com.OBS.entity.Visit;
+import com.OBS.enums.SearchOperation;
 import com.OBS.repository.VisitRepository;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -48,11 +53,16 @@ public class VisitService {
     }
 
     public List<Visit> getEmployeeVisits(Long id) {
-        return visitRepository.findAllByEmployee_EmployeeId(id);
+        Employee employee = employeeService.getEmployee(id);
+        Specifications<Visit> findAllByEmployee = new Specifications<Visit>()
+                .add(new SearchCriteria("employee",employee, SearchOperation.EQUAL));
+        return visitRepository.findAll(findAllByEmployee,Sort.by(Sort.Direction.DESC,"visitDate"));
     }
 
     public List<Visit> getVisitsUnassigned() {
-        return visitRepository.findAllByEmployeeNull();
+        Specifications<Visit> findAllByEmployeeNull = new Specifications<Visit>()
+                .add(new SearchCriteria("employee",null, SearchOperation.EQUAL_NULL));
+        return visitRepository.findAll(findAllByEmployeeNull,Sort.by(Sort.Direction.DESC,"visitDate"));
     }
 
     @Transactional

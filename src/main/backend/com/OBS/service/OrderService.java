@@ -8,6 +8,7 @@ import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import javax.json.bind.Jsonb;
 import javax.transaction.Transactional;
@@ -24,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final SystemService systemService;
     private final EmployeeService employeeService;
+    private final ClientService clientService;
     private final Jsonb jsonb;
 
     private String orderNotFound(Long id) {
@@ -40,7 +42,7 @@ public class OrderService {
                     .add(new SearchCriteria("orderType", changeUser.toString(), SearchOperation.NOT_EQUAL))
                     .add(new SearchCriteria("orderType", createUser.toString(), SearchOperation.NOT_EQUAL));
         }
-        return orderRepository.findAll(normalOrdersSpecifications);
+        return orderRepository.findAll(normalOrdersSpecifications, Sort.by(Sort.Direction.ASC,"createDate"));
     }
 
     public List<Order> getPriorityOrders(String role) {
@@ -53,14 +55,14 @@ public class OrderService {
                     .add(new SearchCriteria("orderType", changeUser.toString(), SearchOperation.NOT_EQUAL))
                     .add(new SearchCriteria("orderType", createUser.toString(), SearchOperation.NOT_EQUAL));
         }
-        return orderRepository.findAll(priorityOrdersSpecifications);
+        return orderRepository.findAll(priorityOrdersSpecifications, Sort.by(Sort.Direction.ASC,"createDate"));
     }
 
     public List<Order> getEmployeeOrders(Long employeeId,boolean isActive) {
         Specifications<Order> employeeOrdersSpecifications = new Specifications<Order>()
                 .add(new SearchCriteria("employee",employeeService.getEmployee(employeeId),SearchOperation.EQUAL))
                 .add(new SearchCriteria("isActive", isActive,SearchOperation.EQUAL));
-        return orderRepository.findAll(employeeOrdersSpecifications);
+        return orderRepository.findAll(employeeOrdersSpecifications, Sort.by(Sort.Direction.ASC,"createDate"));
     }
 
 
@@ -127,7 +129,10 @@ public class OrderService {
 
 
     public List<Order> getClientOrders(Long clientId) {
-        return orderRepository.findAllByClient_clientId(clientId);
+        Client client = clientService.getClient(clientId);
+        Specifications<Order> findAllByClient = new Specifications<Order>()
+                .add(new SearchCriteria("client",client,SearchOperation.EQUAL));
+        return orderRepository.findAll(findAllByClient, Sort.by(Sort.Direction.ASC,"createDate"));
     }
 
     @Transactional

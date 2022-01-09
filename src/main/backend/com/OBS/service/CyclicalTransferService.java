@@ -112,9 +112,9 @@ public class CyclicalTransferService {
     @Scheduled(cron = "0 0 0 * * * ")
     protected void realiseTransfers(){
         Logger logger = LoggerFactory.getLogger(CyclicalTransferService.class);
-        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0,0));
+        LocalDateTime today = LocalDateTime.now().plusDays(1);
         Specifications<CyclicalTransfer> findAllByReTransferDateToday = new Specifications<CyclicalTransfer>()
-                .add(new SearchCriteria("reTransferDate", today, SearchOperation.GREATER_THAN_EQUAL_DATE));
+                .add(new SearchCriteria("reTransferDate", today, SearchOperation.LESS_THAN_EQUAL_DATE));
 
         List<CyclicalTransfer> cyclicalTransfersList = cyclicalTransferRepository.findAll(findAllByReTransferDateToday);
 

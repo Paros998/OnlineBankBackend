@@ -7,6 +7,8 @@ import com.OBS.service.CyclicalTransferService;
 import lombok.AllArgsConstructor;
 import net.kaczmarzyk.spring.data.jpa.domain.Between;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.GreaterThanOrEqual;
+import net.kaczmarzyk.spring.data.jpa.domain.LessThanOrEqual;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,7 +37,8 @@ public class CyclicalTransferController {
             @And({
                     @Spec(path = "client.clientId", pathVars = "clientId", spec = Equal.class),
                     @Spec(path = "category", params = "transferCategory", spec = Equal.class),
-                    @Spec(path = "reTransferDate", params = {"dateFrom", "dateTo"}, config = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", spec = Between.class)
+                    @Spec(path = "reTransferDate", params = "dateFrom", config = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", spec = GreaterThanOrEqual.class),
+                    @Spec(path = "reTransferDate", params = "dateTo", config = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", spec = LessThanOrEqual.class),
             }) Specification<CyclicalTransfer> filterCyclicalTransferSpec
     ) {
         return cyclicalTransferService.getClientTransfers(filterCyclicalTransferSpec);

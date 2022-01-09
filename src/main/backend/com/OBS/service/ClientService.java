@@ -10,6 +10,7 @@ import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class ClientService {
     }
 
     public List<Client> getClients(Specification<Client> clientSpecificationFilter) {
-        return clientRepository.findAll(clientSpecificationFilter);
+        return clientRepository.findAll(clientSpecificationFilter,Sort.by(Sort.Direction.DESC,"dateOfBirth"));
     }
 
     public Client getClient(Long id) {
@@ -64,7 +65,7 @@ public class ClientService {
         LocalDateTime today = LocalDateTime.now();
         Specifications<Client> findAllByCreationDateBefore = new Specifications<Client>()
                 .add(new SearchCriteria("dateOfCreation",today.minusDays(days), SearchOperation.GREATER_THAN_EQUAL_DATE));
-        return clientRepository.findAll(findAllByCreationDateBefore);
+        return clientRepository.findAll(findAllByCreationDateBefore,Sort.by(Sort.Direction.DESC, "dateOfCreation"));
     }
 
     public void assignUserToClient(Client client,AppUser user){

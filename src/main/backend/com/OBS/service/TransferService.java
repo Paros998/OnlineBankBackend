@@ -13,6 +13,7 @@ import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class TransferService {
     }
 
     public List<Transfer> getTransfers(Specification<Transfer> filterTransferSpec) {
-        return transferRepository.findAll(filterTransferSpec);
+        return transferRepository.findAll(filterTransferSpec,Sort.by(Sort.Direction.DESC,"transferDate"));
     }
 
     public void addTransfer(Transfer transfer) {
@@ -67,7 +68,7 @@ public class TransferService {
         Transfer clientRateTransfer = new Transfer(
                 clientLoan.getRateAmount(),
                 LocalDateTime.now(),
-                BILLS.name(),
+                BILLS.getCategory(),
                 OUTGOING.name(),
                 "Future Bank Sp. z o.o.",
                 "Loan: " + clientLoan.getLoanId() + " | Rate number:" + (clientLoan.getNumOfRates() - clientLoan.getRatesLeftToPay() + 1),
@@ -197,7 +198,7 @@ public class TransferService {
         clientHistory.add(new KeyValueObject<>("Suma Przychodów", new ValueAndPercent(sumOfIncoming,sumOfIncoming / (sumOfIncoming + sumOfOutgoing) * 100)));
 
         for (TransferCategory category : TransferCategory.values()) {
-            Specifications<Transfer> findAllByCategory = findAllByClientAndWithinMonths.clone()
+            Specifications<Transfer> findAllByCategory = findAllByOutgoing.clone()
                     .add(new SearchCriteria("category", category.getCategory(), SearchOperation.EQUAL));
 
             float sumFromCategory = getTotalAmount(transferRepository.findAll(findAllByCategory));
