@@ -25,7 +25,6 @@ public class Transfer {
     )
     private Long transferId;
     private Float amount;
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime transferDate;
     private String category;
     private String type;
