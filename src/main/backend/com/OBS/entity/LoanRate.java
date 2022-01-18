@@ -35,7 +35,7 @@ public class LoanRate {
     public LoanRate( Loan loan) {
         this.amount = loan.getRateAmount();
         this.loan = loan;
-        this.payDate = loan.getNextRatePayDay();
+        this.payDate = LocalDate.now();
     }
 
     public LoanRate(){}

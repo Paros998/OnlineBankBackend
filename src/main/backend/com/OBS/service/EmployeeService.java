@@ -22,7 +22,7 @@ public class EmployeeService {
     private final ClientEmployeeService clientEmployeeService;
 
     public List<Employee> getEmployees() {
-        return employeeRepository.findAll();
+        return employeeRepository.findAll(Sort.by(Sort.Direction.DESC,"dateOfBirth"));
     }
 
     public List<Employee> getEmployees(Specification<Employee> employeeSpecificationFilter) {

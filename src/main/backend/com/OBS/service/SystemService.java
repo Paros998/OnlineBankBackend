@@ -8,6 +8,7 @@ import com.OBS.entity.CreditCard;
 import com.OBS.entity.Employee;
 import com.OBS.entity.Loan;
 import com.OBS.alternativeBodies.UserCredentials;
+import com.OBS.service.interfaces.SystemFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
-public class SystemService {
+public class SystemService implements SystemFacade {
     private final AppUserService appUserService;
     private final ClientService clientService;
     private final EmployeeService employeeService;
@@ -87,7 +88,8 @@ public class SystemService {
         creditCardService.switchActiveStateOfCreditCard(creditCard.getCardId());
     }
 
-    public void createLoan(Loan loan) {
+    public void createLoan(Loan loan, Client client) {
+        loan.setClient(client);
         loanService.addLoan(loan);
     }
 }
