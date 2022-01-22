@@ -75,4 +75,8 @@ public class VisitService {
 
         visitRepository.save(visit);
     }
+
+    public List<Visit> getVisitBySpecification(Specifications<Visit> visitSpecifications){
+        return visitRepository.findAll(visitSpecifications);
+    }
 }

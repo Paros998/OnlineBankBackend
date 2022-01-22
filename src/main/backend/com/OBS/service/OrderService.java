@@ -1,52 +1,63 @@
 package com.OBS.service;
 
-import com.OBS.alternativeBodies.CreateCreditCardModel;
-import com.OBS.entity.*;
+import com.OBS.entity.Client;
+import com.OBS.entity.Employee;
+import com.OBS.entity.Order;
+import com.OBS.enums.OrderType;
 import com.OBS.enums.SearchOperation;
+import com.OBS.lab.BuilderSpecification;
+import com.OBS.lab.ImplementedSpecification;
 import com.OBS.repository.OrderRepository;
-import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.searchers.SearchCriteria;
-import com.OBS.searchers.specificators.Specifications;
-import lombok.AllArgsConstructor;
+import com.OBS.service.interfaces.SystemFacade;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import javax.json.bind.Jsonb;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 import static com.OBS.auth.AppUserRole.ADMIN;
 import static com.OBS.enums.OrderType.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final SystemService systemService;
+    private final SystemFacade systemService;
     private final EmployeeService employeeService;
     private final ClientService clientService;
     private final Jsonb jsonb;
+    private ImplementedSpecification<Order> specification;
+
+    public ImplementedSpecification<Order> getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(ImplementedSpecification<Order> specification) {
+        this.specification = specification;
+    }
 
     private String orderNotFound(Long id) {
         return "Order with id: " + id + " doesn't exist in database";
     }
 
     public List<Order> getOrders(String role) {
-        Specifications<Order> normalOrdersSpecifications = new Specifications<Order>()
+         specification = new BuilderSpecification<Order>()
                 .add(new SearchCriteria("createDate", LocalDateTime.now().minusDays(1), SearchOperation.GREATER_THAN_DATE))
                 .add(new SearchCriteria("employee", null, SearchOperation.EQUAL_NULL));
         if (!Objects.equals(role, ADMIN.name())) {
-            normalOrdersSpecifications = normalOrdersSpecifications
-                    .add(new SearchCriteria("orderType", changeEmployee.toString(), SearchOperation.NOT_EQUAL))
+            ((BuilderSpecification<Order>) specification).add(new SearchCriteria("orderType", changeEmployee.toString(), SearchOperation.NOT_EQUAL))
                     .add(new SearchCriteria("orderType", changeUser.toString(), SearchOperation.NOT_EQUAL))
                     .add(new SearchCriteria("orderType", createUser.toString(), SearchOperation.NOT_EQUAL));
         }
-        return orderRepository.findAll(normalOrdersSpecifications, Sort.by(Sort.Direction.ASC,"createDate"));
+        return orderRepository.findAll(specification, Sort.by(Sort.Direction.ASC,"createDate"));
     }
 
     public List<Order> getPriorityOrders(String role) {
-        Specifications<Order> priorityOrdersSpecifications = new Specifications<Order>()
+        BuilderSpecification<Order> priorityOrdersSpecifications = new BuilderSpecification<Order>()
                 .add(new SearchCriteria("createDate", LocalDateTime.now().minusDays(1), SearchOperation.LESS_THAN_EQUAL_DATE))
                 .add(new SearchCriteria("employee",null, SearchOperation.EQUAL_NULL));
         if (!Objects.equals(role, ADMIN.name())) {
@@ -59,7 +70,7 @@ public class OrderService {
     }
 
     public List<Order> getEmployeeOrders(Long employeeId,boolean isActive) {
-        Specifications<Order> employeeOrdersSpecifications = new Specifications<Order>()
+        BuilderSpecification<Order> employeeOrdersSpecifications = new BuilderSpecification<Order>()
                 .add(new SearchCriteria("employee",employeeService.getEmployee(employeeId),SearchOperation.EQUAL))
                 .add(new SearchCriteria("isActive", isActive,SearchOperation.EQUAL));
         return orderRepository.findAll(employeeOrdersSpecifications, Sort.by(Sort.Direction.ASC,"createDate"));
@@ -91,35 +102,10 @@ public class OrderService {
         );
 
         if(Objects.equals(decision,"accepted")){
-            switch (order.getOrderType()) {
-                case "Utworzenie użytkownika":
-                    systemService.createNewUser(jsonb.fromJson(order.getRequestBody(),UserCredentials.class));
-                    break;
-                case "Edycja danych klienta":
-                    systemService.updateClient(jsonb.fromJson(order.getRequestBody(),Client.class));
-                    break;
-                case "Modyfikacja użytkownika":
-                    systemService.updateAppUser(jsonb.fromJson(order.getRequestBody(),UserCredentials.class));
-                    break;
-                case "Modyfikacja danych pracownika":
-                    systemService.updateEmployee(jsonb.fromJson(order.getRequestBody(),Employee.class));
-                    break;
-                case "Zablokowanie karty kredytowej":
-                    systemService.blockCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
-                    break;
-                case "Wycofanie karty kredytowej":
-                    systemService.discardCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
-                    break;
-                case "Wyrób nowej karty kredytowej":
-                    systemService.createCreditCard(jsonb.fromJson(order.getRequestBody(), CreateCreditCardModel.class));
-                    break;
-                case "Odblokowanie karty kredytowej":
-                    systemService.unblockCreditCard(jsonb.fromJson(order.getRequestBody(),CreditCard.class));
-                    break;
-                case "Podanie o kredyt":
-                    systemService.createLoan(jsonb.fromJson(order.getRequestBody(), Loan.class));
-                    break;
-            }
+           String type = order.getOrderType();
+           for(OrderType orderType: OrderType.values())
+               if(Objects.equals(type, orderType.getType()))
+                   orderType.finishOrder(systemService,jsonb,order);
         }
 
         order.setIsActive(false);
@@ -130,7 +116,7 @@ public class OrderService {
 
     public List<Order> getClientOrders(Long clientId) {
         Client client = clientService.getClient(clientId);
-        Specifications<Order> findAllByClient = new Specifications<Order>()
+        BuilderSpecification<Order> findAllByClient = new BuilderSpecification<Order>()
                 .add(new SearchCriteria("client",client,SearchOperation.EQUAL));
         return orderRepository.findAll(findAllByClient, Sort.by(Sort.Direction.ASC,"createDate"));
     }

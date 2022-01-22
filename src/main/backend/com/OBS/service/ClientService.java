@@ -29,7 +29,7 @@ public class ClientService {
     private final ClientEmployeeService clientEmployeeService;
 
     public List<Client> getClients() {
-        return clientRepository.findAll();
+        return clientRepository.findAll(Sort.by(Sort.Direction.DESC,"dateOfBirth"));
     }
 
     public List<Client> getClients(Specification<Client> clientSpecificationFilter) {
@@ -148,7 +148,8 @@ public class ClientService {
         }
         Client client = clientRepository.getById(id);
         clientRepository.deleteById(id);
-        appUserService.deleteUserById(client.getUser().getUserId());
+        if(client.getUser() != null)
+            appUserService.deleteUserById(client.getUser().getUserId());
     }
 
     @Transactional
@@ -185,7 +186,7 @@ public class ClientService {
             Client client = clientRepository.getById(id);
             appUserService.changeStateOfUser(client.getUser().getUserId());
         }
-        else throw new IllegalStateException("Employee with given id:" + id + " doesn't exist in database!");
+        else throw new IllegalStateException("Client with given id:" + id + " doesn't exist in database!");
     }
 }
 

@@ -30,4 +30,9 @@ public class AnnouncementController {
     public void deleteAnnouncement(@PathVariable("id") Long id) {
         announcementService.deleteAnnouncement(id);
     }
+
+    @DeleteMapping(path = "")
+    public void deleteAnnouncement() {
+        announcementService.deleteAll();
+    }
 }

@@ -1,0 +1,16 @@
+client_id,account_number,balance,city,date_of_birth,email,full_name,home_address,identification_number,number_of_credits_cards,personal_number,postal_code,sec_city,sec_home_address,sec_postal_code,user_id,date_of_creation
+1,,,Krakow,2000-01-01,domino49@onet.pl,dominik grudzien Client,1152,7912971,,5678,39-909,,,,4,
+3,7132982,,Kielce,2000-01-01,mail9920@wp.pl,user z akrta Client,1152,791297112222,,567811211,39-909,,,,6,
+2,713298,,Kielce,2000-01-01,mail990@wp.pl,patryk grzywacz Client,1152,7912971222,1,5678111,39-909,,,,5,
+4,3456346346,15000,string,2001-12-02,tenztym@op.pl,Janusz Kowalski,string,2352352525,0,124124151341,string,string,string,string,9,2021-12-02 00:00:00.000000
+7,12 0600 1209 1231233123233321,17500.63,Kielce,1998-05-25,cos@email.com,Krzysztof Wrona,Warszawska 8/11,FAS512352,0,12312312323,Kielce 25-001,"","","",12,2021-12-08 20:30:54.341000
+8,12060012098282458923466724,6000,Kielce,1998-05-25,hello@there.com,Jan Zbyszko,Warszawska 8/11,KLS561212,0,99943457332,Kielce 25-001,"","","",13,2022-01-03 14:53:25.604000
+9,12060012091256246363453543,0,Lipnik,1960-04-12,grunwald@exe.pl,Jan Matejko,Sadzy 6,KWE131412,0,15626132152,Lipnik 13-523,"","","",,2022-01-03 16:54:28.111784
+10,12060012091231412313132323,0,Kielce,1998-04-07,sfsdg@cos.pl,Hakuna Matata,"Sienkiewicza 6,24",CES115634,0,12315267233,Kielce 25-001,"","","",14,2022-01-04 21:29:18.488000
+11,12060012091231451231231123,0,Kiecle,2003-08-11,sasdf!@op.pl,AShdiaouhfa   AsdASF,ASdsd ,SDA123151,0,13145145111,Kielce 25-001,"","","",,2022-01-04 21:31:22.637000
+12,12060012091525636352243234,0,Gdańsk,1970-07-12,ktostam@email.com,Patrt ASsdadf,"Czterech Pancernych i Psa ,18",SGE123141,0,12145151123,Gdansk 19-024,"","","",,2022-01-04 22:56:56.979455
+13,12060012091241525234234234,0,Wrzawy,2000-01-01,bogdan19-68@wp.pl,Izabela Grzywacz,Asdfa,FGS114123,0,12314156246,Wrzawy 39-432,"","","",,2022-01-04 22:17:46.532000
+5,66666666666666666666666666,6738.23,Kielce,2000-12-01,dominik.grudzien00@gmail.com,Dominik Grudzień,ul. Malinowa,328721378,0,82749202471,21-292,Warszawa,ul. Miodowa,78-090,10,2021-12-05 00:00:00.000000
+14,12060012092674784635353535,0,Gorzyce,2003-02-06,cos@hello.com,Patryk Grzywacz,asdafa ,SEF123141,0,11657896588,Gorzyce 39-732,"","","",15,2022-01-06 22:43:38.671770
+6,66666666666666666666666667,36859.543,Małogoszcz,2000-12-02,dominik.grudzien00+1@gmail.com,Michał Tester,ul. Czarnowska 6,328721379,1,82749202472,21-292,Częstochowa,ul. Ulowa,78-092,11,2021-12-05 00:00:00.000000
+15,12060012091415125125235235,0,Gorzyce,1999-03-03,halo@op.pl,Patryk Grzywacz,Gsf sa,SDS152536,0,15374734634,Gorzyce 39-732,"","","",22,2022-01-06 22:46:14.365194

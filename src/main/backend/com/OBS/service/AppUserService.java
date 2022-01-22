@@ -6,6 +6,7 @@ import com.OBS.email.EmailTemplates;
 import com.OBS.repository.AppUserRepository;
 import com.OBS.alternativeBodies.UserCredentials;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -132,6 +133,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     public AppUser getClientUser(Long clientId) {
+
         return appUserRepository.findByClient_clientId(clientId);
     }
 
@@ -149,8 +151,8 @@ public class AppUserService implements UserDetailsService {
         AppUser user = appUserRepository.findById(userId).orElseThrow(
                 ()-> new IllegalStateException("User with given id " + userId + " doesn't exist in database!")
         );
-        user.setLocked(true);
-        user.setEnabled(false);
+        user.setLocked(!user.getLocked());
+        user.setEnabled(!user.getEnabled());
         appUserRepository.save(user);
     }
 }

@@ -22,7 +22,7 @@ public class EmployeeService {
     private final ClientEmployeeService clientEmployeeService;
 
     public List<Employee> getEmployees() {
-        return employeeRepository.findAll();
+        return employeeRepository.findAll(Sort.by(Sort.Direction.DESC,"dateOfBirth"));
     }
 
     public List<Employee> getEmployees(Specification<Employee> employeeSpecificationFilter) {
@@ -100,7 +100,8 @@ public class EmployeeService {
         if (employeeRepository.existsById(id)){
             Employee employee = employeeRepository.getById(id);
             employeeRepository.deleteById(id);
-            appUserService.deleteUserById(employee.getUser().getUserId());
+            if(employee.getUser() != null)
+                appUserService.deleteUserById(employee.getUser().getUserId());
         }
         else throw new IllegalStateException("Employee with given id:" + id + " doesn't exist in database!");
     }

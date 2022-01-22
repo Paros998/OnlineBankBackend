@@ -1,0 +1,6 @@
+employee_id,city,date_of_birth,email,full_name,home_address,identification_number,personal_number,postal_code,user_id
+1,Warsaw,2021-10-30,patrykg198@gmail.com,patryk grzywacz,115,0213241252,23525232352,39-432,1
+2,Kielce,2021-10-30,stark002@op.pl,patryk grzywacz,115,2342353733,2352352352,39-432,2
+3,Krakow,2000-01-01,choinkaDD1@wp.pl,dominik grudzien,1152,7912971,56786536,39-909,3
+4,Krakow,2000-01-01,mikolaj2.widanka@gmail.com,Mikołaj Widanka,1152,7911352452971,1312413241,39-909,8
+5,Gorzyce,1999-12-31,cos2@email.com,Patryk Grzywacz,G,ASD123112,16364374785,G 39-732,23

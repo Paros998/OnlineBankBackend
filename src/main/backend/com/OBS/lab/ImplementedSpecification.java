@@ -1,4 +1,5 @@
-package com.OBS.searchers.specificators;
+package com.OBS.lab;
+
 
 import com.OBS.searchers.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,40 +10,31 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Specifications<T> implements Specification<T>, Cloneable {
-    private final List<SearchCriteria> searchCriteriaList;
+public abstract class ImplementedSpecification<T> implements Specification<T> {
+    protected List<SearchCriteria> searchCriteriaList;
 
-    public Specifications() {
-        this.searchCriteriaList = new ArrayList<>();
+    protected List<SearchCriteria> getSearchCriteriaList(){
+        return searchCriteriaList;
     }
 
-    public Specifications(ArrayList<SearchCriteria> list) {
+    protected ImplementedSpecification() {
+        this.searchCriteriaList = new ArrayList<>();
+    }
+    protected ImplementedSpecification(ArrayList<SearchCriteria> list) {
         this.searchCriteriaList = new ArrayList<>(list);
     }
 
-    public void onlyAdd(SearchCriteria searchCriteria) {
-        this.searchCriteriaList.add(searchCriteria);
-    }
-
-    public Specifications<T> add(SearchCriteria searchCriteria) {
-        searchCriteriaList.add(searchCriteria);
-        return this;
+    protected void onlyAdd(SearchCriteria criteria){
+        this.searchCriteriaList.add(criteria);
     }
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-
         List<Predicate> predicates = new ArrayList<>();
 
         for (SearchCriteria criteria : searchCriteriaList)
            predicates.add(criteria.getOperation().getPredicate(root,criteria,builder));
 
         return builder.and(predicates.toArray(new Predicate[0]));
-    }
-
-    @Override
-    public Specifications<T> clone() {
-        return new Specifications<>(new ArrayList<>(searchCriteriaList));
-
     }
 }
