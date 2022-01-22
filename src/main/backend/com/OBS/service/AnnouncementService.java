@@ -42,4 +42,8 @@ public class AnnouncementService {
         }
         announcementRepository.deleteById(id);
     }
+
+    public void deleteAll(){
+        announcementRepository.deleteAll();
+    }
 }

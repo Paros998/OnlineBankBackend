@@ -148,7 +148,8 @@ public class ClientService {
         }
         Client client = clientRepository.getById(id);
         clientRepository.deleteById(id);
-        appUserService.deleteUserById(client.getUser().getUserId());
+        if(client.getUser() != null)
+            appUserService.deleteUserById(client.getUser().getUserId());
     }
 
     @Transactional

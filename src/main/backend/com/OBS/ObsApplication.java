@@ -35,7 +35,6 @@ public class ObsApplication implements WebMvcConfigurer {
     public Jsonb jsonb(){
         return JsonbBuilder.create(
                 new JsonbConfig()
-                        .withNullValues(true)
         );
     }
 

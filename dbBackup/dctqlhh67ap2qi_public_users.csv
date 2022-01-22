@@ -1,0 +1,17 @@
+user_id,app_user_role,email,enabled,locked,password,username
+1,ADMIN,patrykg198@gmail.com,true,false,$2a$04$hbVT7LyK.UyQ2JKJLC.q3u2phr431BqK9wVDBWhep7j4tb/Vx4UWa,paros321
+3,ADMIN,choinkaDD1@wp.pl,true,false,$2a$10$mnkF08XjKOkNQ48XdmbhqONmrMZzeaRxf4r9c4Q2uDBm.0GS4gSpS,shanodis
+5,CLIENT,mail990@wp.pl,true,false,$2a$10$24PKaWHxMVHwaDUb9l7Nt.wFEiA5O.e.hmP0AbQmDhoQS6fIEtmwG,patrykClient
+6,CLIENT,mail9920@wp.pl,true,false,$2a$10$VNyG4dLJuQrJWJ2lrSuWd.PLqFO0iBfp6HT8R0ggPjtN/b1jI4zVu,user z akrtaClient
+8,ADMIN,mikolaj2.widanka@gmail.com,true,false,$2a$10$XaLuYwqdUBDkvXhAaI8yA.E/th5U0ns9JIB/zr636.wwtlC7XuF7C,klocuch
+4,CLIENT,domino49@onet.pl,true,false,$2a$10$0rWpV2gFy90LzK9yO8yQAOYrXXPUnsYIqegWrMmNnWQoYff5F02Gi,shanodisClient
+9,CLIENT,tenztym@op.pl,true,false,$2a$10$tTTclTvWfBoA8q5dBe9ji.CBWM0ttoybCk829JlkLg2qMvHrhSdZq,janMAtejko
+10,CLIENT,dominik.grudzien00@gmail.com,true,false,$2a$10$nHeoXIrodQ3540pyWQGfd.w1F1IEY5XOzCvwjfMwduNWvGyteFOTy,shanodis00
+11,CLIENT,dominik.grudzien00+1@gmail.com,true,false,$2a$10$PdcYigKRGg.jeuIrm5YfpeR.b/AqUJb6fDkFJA4U9KpbeGrN6lL66,shanodis01
+12,CLIENT,cos@email.com,true,false,$2a$10$wDtYUL0eRV6QPJXEKmbKv.97.e0nTCEFVaHOEYtltcXZfjm7bWZju,Wron432
+2,EMPLOYEE,part4@op.pl,true,false,$2a$10$sUxHjRBwhFY4I5zbyweabuXf.zB0I9F93pv8OR2QUxtpDsGm3G8ye,pg12#
+14,CLIENT,sfsdg@cos.pl,true,false,$2a$10$g8qBUU3UzH9DZFZCCzIF6eS0gKR1D/.1TJr/N8ssM5ErXjYjwVz/u,Rysiek620
+15,CLIENT,cos@hello.com,true,false,$2a$10$JLvDSMJtuTuuoIa15pxjr.D4JgO7FaiE1jOPaSDbhywRBW2UGaYQ2,AR A121
+22,CLIENT,halo@op.pl,true,false,$2a$10$GEdRRUC1wPwf0O4Usgkpq.DrFzhudzrZ5C9gArslF0v6h43LvwL3C,12414bdfgfgd
+23,EMPLOYEE,cos2@email.com,true,false,$2a$10$lg2tzLD3cplzZZSfbczSsOCLr9R.7sF4cIarItWnCQd5pdVZ4KZR6,pg10
+13,CLIENT,hello@there.com,false,true,$2a$10$cr2smybOEycABkOC.djPvelch5oQXCBB05qbhrgsk69hXFCWAFnle,jozek

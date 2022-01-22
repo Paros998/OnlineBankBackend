@@ -3,6 +3,9 @@ package com.OBS.controller;
 import com.OBS.alternativeBodies.ClientCreditWorthiness;
 import com.OBS.entity.Client;
 import com.OBS.alternativeBodies.ClientUserBody;
+import com.OBS.enums.SearchOperation;
+import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import com.OBS.service.ClientService;
 import com.OBS.service.ClientTransferService;
 import lombok.AllArgsConstructor;
@@ -39,6 +42,20 @@ public class ClientController {
     @GetMapping(path = "/{clientId}/credit-worthiness/{months}")
     public ClientCreditWorthiness getClientCreditWorthiness(@PathVariable("clientId") Long clientId, @PathVariable("months") int numOfMonths){
         return clientTransferService.getClientWorthiness(clientId,numOfMonths);
+    }
+
+    @GetMapping(path = "/active")
+    public List<Client> getActiveClients(){
+        Specifications<Client> findActiveClients = new Specifications<Client>()
+                .add(new SearchCriteria("enabled",true, SearchOperation.EQUAL_JOIN_USER));
+        return clientService.getClients(findActiveClients);
+    }
+
+    @GetMapping(path = "/inactive")
+    public List<Client> getInactiveClients(){
+        Specifications<Client> findInactiveClients = new Specifications<Client>()
+                .add(new SearchCriteria("enabled",false, SearchOperation.EQUAL_JOIN_USER));
+        return clientService.getClients(findInactiveClients);
     }
 
     @GetMapping(path = "/latest/{days}")

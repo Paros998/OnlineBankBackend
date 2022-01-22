@@ -100,7 +100,8 @@ public class EmployeeService {
         if (employeeRepository.existsById(id)){
             Employee employee = employeeRepository.getById(id);
             employeeRepository.deleteById(id);
-            appUserService.deleteUserById(employee.getUser().getUserId());
+            if(employee.getUser() != null)
+                appUserService.deleteUserById(employee.getUser().getUserId());
         }
         else throw new IllegalStateException("Employee with given id:" + id + " doesn't exist in database!");
     }

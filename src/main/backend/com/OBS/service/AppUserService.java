@@ -133,6 +133,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     public AppUser getClientUser(Long clientId) {
+
         return appUserRepository.findByClient_clientId(clientId);
     }
 
@@ -150,8 +151,8 @@ public class AppUserService implements UserDetailsService {
         AppUser user = appUserRepository.findById(userId).orElseThrow(
                 ()-> new IllegalStateException("User with given id " + userId + " doesn't exist in database!")
         );
-        user.setLocked(true);
-        user.setEnabled(false);
+        user.setLocked(!user.getLocked());
+        user.setEnabled(!user.getEnabled());
         appUserRepository.save(user);
     }
 }

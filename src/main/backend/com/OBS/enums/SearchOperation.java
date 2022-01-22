@@ -1,8 +1,10 @@
 package com.OBS.enums;
 
+import com.OBS.auth.entity.AppUser;
 import com.OBS.searchers.SearchCriteria;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
@@ -63,6 +65,19 @@ public enum SearchOperation {
         public <T> Predicate getPredicate(Root<T> root, SearchCriteria criteria, CriteriaBuilder builder) {
             return builder.equal(root.get(
                     criteria.getKey()), criteria.getValue()
+            );
+        }
+    },
+
+    EQUAL_JOIN_USER {
+        @Override
+        public <T> Predicate getPredicate(Root<T> root, SearchCriteria criteria, CriteriaBuilder builder) {
+            Join<T, AppUser> userJoin = root.join("user");
+            return builder.equal(
+                    userJoin.get(
+                            criteria.getKey()
+                    ),
+                    criteria.getValue()
             );
         }
     },

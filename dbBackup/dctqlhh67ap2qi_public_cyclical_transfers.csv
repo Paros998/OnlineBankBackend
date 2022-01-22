@@ -1,0 +1,9 @@
+transfer_id,account_number,amount,category,re_transfer_date,receiver,title,client_id
+23,66666666666666666666666666,22,Rachunki,2022-01-20 23:00:00.000000,Dominik Grudzień,Przlew,6
+19,222213213123123123123123123,37,Rozrywka,2022-02-04 23:00:00.000000,YouTube,Rozrywka,6
+11,666666666666666666666666667,25.28,Rozrywka,2022-01-19 23:00:00.000000,"Lew, Czarownika",Księgozbiór Harrego Potter,5
+24,10002312359999837829989900,60,Rozrywka,2022-01-10 23:00:00.000000,Netflix Sp. z o.o.,Abonament ,6
+15,666666666666666666666666666,53,Wydatki Bieżące,2022-01-10 20:57:18.000000,Dominik Grudzień,Podręczniki,6
+25,66666666666666666666666666,10,Rozrywka,2022-01-09 00:00:00.000000,Dominik Grudzien,Cyliczny telefonowy,6
+26,66666666666666666666666666,12,Rachunki,2022-01-18 00:00:00.000000,Policja,Mandat za przekroczenie predkosci,6
+28,66666666666666666666666666,56,Zdrowie,2022-01-07 23:00:00.000000,Dominik Grudzień,Tytul,6
