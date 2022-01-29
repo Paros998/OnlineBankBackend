@@ -10,6 +10,7 @@ import com.OBS.enums.SearchOperation;
 import com.OBS.repository.ClientRepository;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
+import com.OBS.service.AppUserService;
 import com.OBS.service.ClientService;
 import com.OBS.service.LoanService;
 import com.OBS.service.OrderService;
@@ -37,6 +38,8 @@ public class LoanServiceTest {
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
+    private AppUserService appUserService;
+    @Autowired
     private Jsonb jsonb;
 
     @Test
@@ -59,7 +62,7 @@ public class LoanServiceTest {
         Loan newLoan = loanService.calculateLoan(body);
         newLoan.setLoanId(7L);
 
-        dbClient.setUser(null);
+        dbClient.setUser(appUserService.getClientUser(dbClient.getClientId()));
 
         Order newOrder = new Order();
         newOrder.setIsActive(true);

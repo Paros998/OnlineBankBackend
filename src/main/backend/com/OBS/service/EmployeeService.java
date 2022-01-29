@@ -5,6 +5,7 @@ import com.OBS.entity.Employee;
 import com.OBS.repository.EmployeeRepository;
 import com.OBS.alternativeBodies.EmployeeUserBody;
 import com.OBS.alternativeBodies.UserCredentials;
+import com.OBS.service.interfaces.systemFacade.EmployeeServiceFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 @Service
 @AllArgsConstructor
-public class EmployeeService {
+public class EmployeeService implements EmployeeServiceFacade {
     private final EmployeeRepository employeeRepository;
     private final AppUserService appUserService;
     private final ClientEmployeeService clientEmployeeService;

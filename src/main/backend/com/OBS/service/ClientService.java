@@ -2,13 +2,13 @@ package com.OBS.service;
 
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
-import com.OBS.entity.Employee;
 import com.OBS.enums.SearchOperation;
 import com.OBS.repository.ClientRepository;
 import com.OBS.alternativeBodies.ClientUserBody;
 import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
+import com.OBS.service.interfaces.systemFacade.ClientServiceFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,7 +23,7 @@ import static com.OBS.enums.TransferType.*;
 
 @Service
 @AllArgsConstructor
-public class ClientService {
+public class ClientService implements ClientServiceFacade {
     private final ClientRepository clientRepository;
     private final AppUserService appUserService;
     private final ClientEmployeeService clientEmployeeService;
