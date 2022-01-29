@@ -24,13 +24,13 @@ import static com.OBS.enums.OrderType.*;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
-    private final OrderRepository orderRepository;
-    private final SystemFacade systemService;
-    private final EmployeeService employeeService;
-    private final ClientService clientService;
-    private final Jsonb jsonb;
-    private ImplementedSpecification<Order> specification;
+public abstract class OrderService {
+    protected final OrderRepository orderRepository;
+    protected final SystemFacade systemService;
+    protected final EmployeeService employeeService;
+    protected final ClientService clientService;
+    protected final Jsonb jsonb;
+    protected ImplementedSpecification<Order> specification;
 
     public ImplementedSpecification<Order> getSpecification() {
         return specification;
@@ -40,7 +40,7 @@ public class OrderService {
         this.specification = specification;
     }
 
-    private String orderNotFound(Long id) {
+    protected String orderNotFound(Long id) {
         return "Order with id: " + id + " doesn't exist in database";
     }
 
@@ -101,6 +101,8 @@ public class OrderService {
                 () -> new IllegalStateException(orderNotFound(orderId))
         );
 
+        order.setDecision(decision);
+
         if(Objects.equals(decision,"accepted")){
            String type = order.getOrderType();
            for(OrderType orderType: OrderType.values())
@@ -109,7 +111,7 @@ public class OrderService {
         }
 
         order.setIsActive(false);
-        order.setDecision(decision);
+
         orderRepository.save(order);
     }
 

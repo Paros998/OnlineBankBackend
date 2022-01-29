@@ -1,5 +1,8 @@
 package com.OBS;
 
+import com.OBS.repository.OrderRepository;
+import com.OBS.service.OrderService;
+import com.OBS.service.ordersServiceExtended.StateOrdersService;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 import org.springframework.boot.SpringApplication;
@@ -24,7 +27,6 @@ public class ObsApplication implements WebMvcConfigurer {
     public static void main(String[] args) {
         SpringApplication.run(ObsApplication.class, args);
     }
-
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
