@@ -1,14 +1,15 @@
 package com.OBS.service;
 
 import com.OBS.alternativeBodies.CreateCreditCardModel;
+import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.auth.AppUserRole;
 import com.OBS.auth.entity.AppUser;
 import com.OBS.entity.Client;
 import com.OBS.entity.CreditCard;
 import com.OBS.entity.Employee;
 import com.OBS.entity.Loan;
-import com.OBS.alternativeBodies.UserCredentials;
 import com.OBS.service.interfaces.SystemFacade;
+import com.OBS.service.interfaces.systemFacade.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,11 @@ import java.util.Random;
 @Service
 @AllArgsConstructor
 public class SystemService implements SystemFacade {
-    private final AppUserService appUserService;
-    private final ClientService clientService;
-    private final EmployeeService employeeService;
-    private final CreditCardService creditCardService;
-    private final LoanService loanService;
+    private final AppUserServiceFacade appUserService;
+    private final ClientServiceFacade clientService;
+    private final EmployeeServiceFacade employeeService;
+    private final CreditCardServiceFacade creditCardService;
+    private final LoanServiceFacade loanService;
 
     public void createNewUser(UserCredentials userCredentials){
         AppUser user = appUserService.createAppUser(userCredentials);

@@ -4,6 +4,7 @@ import com.OBS.entity.Client;
 import com.OBS.entity.CreditCard;
 import com.OBS.repository.ClientRepository;
 import com.OBS.repository.CreditCardRepository;
+import com.OBS.service.interfaces.systemFacade.CreditCardServiceFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
 
 @Service
 @AllArgsConstructor
-public class CreditCardService {
+public class CreditCardService implements CreditCardServiceFacade {
     private final CreditCardRepository creditCardRepository;
     private final ClientService clientService;
 

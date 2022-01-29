@@ -5,6 +5,7 @@ import com.OBS.email.EmailService;
 import com.OBS.email.EmailTemplates;
 import com.OBS.repository.AppUserRepository;
 import com.OBS.alternativeBodies.UserCredentials;
+import com.OBS.service.interfaces.systemFacade.AppUserServiceFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,7 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
-public class AppUserService implements UserDetailsService {
+public class AppUserService implements UserDetailsService, AppUserServiceFacade {
     private final static String USER_NOT_FOUND = "User with username %s not found";
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;

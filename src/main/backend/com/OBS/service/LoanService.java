@@ -9,6 +9,7 @@ import com.OBS.enums.TransferType;
 import com.OBS.repository.LoanRepository;
 import com.OBS.searchers.SearchCriteria;
 import com.OBS.searchers.specificators.Specifications;
+import com.OBS.service.interfaces.systemFacade.LoanServiceFacade;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class LoanService {
+public class LoanService implements LoanServiceFacade {
     private final LoanRepository loanRepository;
     private final ClientService clientService;
     private final TransferService transferService;
