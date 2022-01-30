@@ -210,4 +210,8 @@ public class CyclicalTransferService {
 
         return sum;
     }
+
+    public List<CyclicalTransfer> getTransfersBySpecification(Specifications<CyclicalTransfer> transferSpecifications) {
+        return cyclicalTransferRepository.findAll(transferSpecifications);
+    }
 }

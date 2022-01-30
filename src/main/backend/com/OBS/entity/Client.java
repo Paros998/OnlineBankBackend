@@ -24,28 +24,30 @@ public class Client {
             updatable = false
     )
     private Long clientId;
-    private String email;
-    private String fullName;
     private String accountNumber;
     private Float balance;
-    private String personalNumber;
-    private String identificationNumber;
+    private String city;
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateOfBirth;
+    private String email;
+    private String fullName;
     private String homeAddress;
-    private String city;
-    private String postalCode;
-    private String secHomeAddress;
-    private String secCity;
-    private String secPostalCode;
+    private String identificationNumber;
     private Integer numberOfCreditsCards;
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
-    private LocalDateTime dateOfCreation;
+    private String personalNumber;
+    private String postalCode;
+    private String secCity;
+    private String secHomeAddress;
+    private String secPostalCode;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private AppUser user;
+
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private LocalDateTime dateOfCreation;
+
 
     public Client(String email,
                   String fullName,

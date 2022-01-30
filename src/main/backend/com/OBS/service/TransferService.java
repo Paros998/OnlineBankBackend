@@ -6,6 +6,7 @@ import com.OBS.alternativeBodies.ValueAndPercent;
 import com.OBS.entity.Client;
 import com.OBS.entity.Loan;
 import com.OBS.entity.Transfer;
+import com.OBS.entity.Visit;
 import com.OBS.enums.SearchOperation;
 import com.OBS.enums.TransferCategory;
 import com.OBS.repository.TransferRepository;
@@ -222,4 +223,7 @@ public class TransferService {
         return sum;
     }
 
+    public List<Transfer> getTransfersBySpecification(Specifications<Transfer> visitSpecifications) {
+        return transferRepository.findAll(visitSpecifications);
+    }
 }
