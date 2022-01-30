@@ -1,10 +1,8 @@
 package com.OBS;
 
-import com.OBS.repository.OrderRepository;
-import com.OBS.service.OrderService;
-import com.OBS.service.ordersServiceExtended.StateOrdersService;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

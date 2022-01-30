@@ -1,4 +1,4 @@
-package OBS.test.controller;
+package test.controller;
 
 import com.OBS.ObsApplication;
 import com.OBS.controller.CreditCardController;

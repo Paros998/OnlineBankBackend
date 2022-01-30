@@ -39,4 +39,6 @@ public class LoanRateService {
         return loanRateRepository.existsByPayDateBetween(nextRatePayDay.minusMonths(1),nextRatePayDay);
     }
 
+    public void deleteRate(Long loanRateId){loanRateRepository.deleteById(loanRateId);}
+
 }
