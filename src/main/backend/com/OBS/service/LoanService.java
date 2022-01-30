@@ -196,4 +196,8 @@ public class LoanService implements LoanServiceFacade {
 
         return loanRepository.findOne(findByClient);
     }
+
+    public void updateLoan(Loan newLoan){
+        loanRepository.save(newLoan);
+    }
 }
