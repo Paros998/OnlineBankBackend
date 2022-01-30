@@ -24,7 +24,7 @@ import static com.OBS.enums.OrderType.*;
 
 @Service
 @RequiredArgsConstructor
-public abstract class OrderService {
+public class OrderService {
     protected final OrderRepository orderRepository;
     protected final SystemFacade systemService;
     protected final EmployeeService employeeService;
@@ -106,8 +106,10 @@ public abstract class OrderService {
         if(Objects.equals(decision,"accepted")){
            String type = order.getOrderType();
            for(OrderType orderType: OrderType.values())
-               if(Objects.equals(type, orderType.getType()))
+               if(Objects.equals(type, orderType.getType())){
                    orderType.finishOrder(systemService,jsonb,order);
+                   break;
+               }
         }
 
         order.setIsActive(false);

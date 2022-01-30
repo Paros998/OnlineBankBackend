@@ -89,7 +89,9 @@ public enum OrderType {
     createCreditCard("Wyrób nowej karty kredytowej"){
         @Override
         public void finishOrder(SystemFacade systemService, Jsonb jsonb, Order order) {
-            systemService.createCreditCard(jsonb.fromJson(order.getRequestBody(), CreateCreditCardModel.class));
+            CreateCreditCardModel creditCardModel = jsonb.fromJson(order.getRequestBody(), CreateCreditCardModel.class);
+            creditCardModel.setClient(order.getClient());
+            systemService.createCreditCard(creditCardModel);
         }
 
         @Override
