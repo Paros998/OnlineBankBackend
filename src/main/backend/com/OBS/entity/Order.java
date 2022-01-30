@@ -1,23 +1,15 @@
 package com.OBS.entity;
 
-import com.OBS.lab.AcceptedFinishedOrder;
-import com.OBS.lab.FinishedOrder;
-import com.OBS.lab.InProgressOrder;
-import com.OBS.lab.OrderState;
-import com.OBS.service.interfaces.SystemFacade;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.json.bind.Jsonb;
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
@@ -44,15 +36,6 @@ public class Order {
     @Transient
     private String waitingTime;
 
-    @Transient
-    public SystemFacade systemService;
-
-    @Transient
-    private OrderState state;
-
-    @Transient
-    public Jsonb jsonb;
-
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private String requestBody;
@@ -69,6 +52,10 @@ public class Order {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    public Order() {
+
+    }
+
     public String getWaitingTime() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -81,4 +68,5 @@ public class Order {
                 (((int) duration.getSeconds()  % 24) % 60) % 60
         );
     }
+
 }
