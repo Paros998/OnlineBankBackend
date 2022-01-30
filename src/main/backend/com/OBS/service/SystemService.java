@@ -68,7 +68,11 @@ public class SystemService implements SystemFacade {
         creditCard.setPinNumber(creditCardModel.getPinNumber());
         creditCard.setIsActive(true);
         creditCard.setExpireDate(LocalDate.now().plusYears(3));
-        creditCard.setCvvNumber((random.nextInt(99999) + 9869 ) % 1000);
+        StringBuilder cvvNumber = new StringBuilder();
+        for (int i = 0; i < 3; i++)
+            cvvNumber.append(random.nextInt(10));
+
+        creditCard.setCvvNumber(Integer.parseInt(cvvNumber.toString()));
 
         String cardNumber = "1099 20";
         do {
@@ -81,7 +85,7 @@ public class SystemService implements SystemFacade {
         } while(creditCardService.existsByCardNumber(cardNumber));
                 
         creditCard.setCardNumber(cardNumber);
-        
+        creditCard.setClient(creditCardModel.getClient());
         creditCardService.addCreditCard(creditCard.getClient().getClientId(),creditCard);
     }
 

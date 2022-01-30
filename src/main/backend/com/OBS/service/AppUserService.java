@@ -78,7 +78,7 @@ public class AppUserService implements UserDetailsService, AppUserServiceFacade 
     @Transactional
     public void resetPasswordToEmail(String email) {
         if (appUserRepository.existsByEmail(email)) {
-            Random random = new Random();
+            Random random = new Random(6L);
             AppUser appUser = appUserRepository.getByEmail(email);
             StringBuilder newPassword = new StringBuilder();
             for (int i = 0; i < 25; i++)
