@@ -9,6 +9,7 @@ import com.OBS.lab.BuilderSpecification;
 import com.OBS.lab.ImplementedSpecification;
 import com.OBS.repository.OrderRepository;
 import com.OBS.searchers.SearchCriteria;
+import com.OBS.searchers.specificators.Specifications;
 import com.OBS.service.interfaces.SystemFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -135,5 +136,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-
+    public List<Order> getOrdersBySpecification(Specifications<Order> orderSpecification) {
+        return orderRepository.findAll(orderSpecification);
+    }
 }
